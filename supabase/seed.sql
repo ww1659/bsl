@@ -1,5 +1,5 @@
 insert into
-public.customers (customer_name, customer_house_number, customer_street_name, customer_city, customer_postcode, customer_country, customer_email, reference, customer_discount)
+public.customers (customer_name, house_number, street_name, town, postcode, country, email, reference, discount)
 values
 ('Hillcrest', '', 'Park Avenue', 'St Ives', 'TR26 2DN', 'UK', '', 'Orange Roofs', 0),
 ('Parc Owles', '', 'Casita Serena', 'Parc Owles, Carbis Bay', 'TR26 2RE', 'UK', '', 'Parc Owles Design & Development Ltd', 0),
@@ -62,3 +62,29 @@ values
 ('Clodgy', '3', 'Clodgy View', 'St Ives', 'TR26 1JG', 'UK', '', 'Emma Smith', 0),
 ('8 Barnaloft', '8', 'Barnaloft', 'St Ives, ', '', 'UK', '', 'Tamsyn Williams', 0),
 ('Tinners Arms', '', 'The Tinners Arms', 'Zennor, St Ives', 'TR26 3BY', 'UK', '', 'The White House', 0);
+
+insert into
+public.items (item_name, price, stock, loaned_out)
+values
+('superking bed set', 11.89, 100, 20),
+('king bed set', 10.01, 90, 13),
+('double bed set', 10.01, 88, 12),
+('single bed set', 7.80, 120, 33),
+('pillow protectors', 2.25, 25, 2),
+('single mattress protectors', 2.50, 10, 2),
+('double mattress protectors', 3.50, 10, 2),
+('king mattress protectors', 3.50, 10, 2),
+('super king mattress protectors', 3.50, 10, 2),
+('bath sheet', 2.37, 50, 17),
+('bath mat', 2.25, 50, 13),
+('hand towel', 1.19, 112, 56),
+('tea towel', 0.71, 120, 73),
+('oven gloves', 1.19, 30, 5),
+('cushion cover', 2.70, 10, 0),
+('throw', 4.86, 12, 1),
+('dressing gown', 4.32, 20, 10),
+('dog towel', 2.05, 10, 5);
+
+
+
+
