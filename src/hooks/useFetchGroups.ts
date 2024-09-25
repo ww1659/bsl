@@ -7,9 +7,9 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 // Fetch data with Supabase
-const fetchCustomers = async () => {
+const fetchGroups = async () => {
   const { data, error } = await supabase
-    .from('customers')
+    .from('groups')
     .select('*');
 
   if (error) {
@@ -19,7 +19,7 @@ const fetchCustomers = async () => {
 };
 
 // Hook that wraps the query in React Query
-export const useFetchCustomers = () => {
-  return useQuery({queryKey: ['customers'], queryFn: fetchCustomers});
+export const useFetchGroups = () => {
+  return useQuery({queryKey: ['groups'], queryFn: fetchGroups});
 };
 

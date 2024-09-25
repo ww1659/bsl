@@ -9,6 +9,6 @@ create table customers (
     email varchar(255),
     reference varchar(255),
     discount decimal (10, 2), 
-    group_id uuid references groups(id) on delete set null,
+    group_id uuid default null references groups(id) on delete set null,
     created_at timestamptz default now()
 );

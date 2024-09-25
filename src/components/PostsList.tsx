@@ -5,7 +5,7 @@ export const PostsList = () => {
   const posts = useAppSelector((state) => state.posts);
 
   const renderedPosts = posts.map((post) => (
-    <article className="bg-black text-white" key={post.id}>
+    <article key={post.id}>
       <h3>{post.title}</h3>
       <p className="post-content">{post.content.substring(0, 100)}</p>
     </article>
