@@ -233,6 +233,83 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          created_at: string | null
+          custom_price: number | null
+          id: number
+          item_id: number | null
+          quantity: number
+          standard_order_id: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_price?: number | null
+          id?: never
+          item_id?: number | null
+          quantity: number
+          standard_order_id?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_price?: number | null
+          id?: never
+          item_id?: number | null
+          quantity?: number
+          standard_order_id?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_standard_order_id_fkey"
+            columns: ["standard_order_id"]
+            isOneToOne: false
+            referencedRelation: "standard_order"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      standard_order: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          id: number
+          order_name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          id?: never
+          order_name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          id?: never
+          order_name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "standard_order_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useFetchStandardOrder } from "@/hooks/useFetchStandardOrder";
+import { useFetchGroupedCustomers } from "@/hooks/useFetchCustomersByGroup";
 
 import {
   Breadcrumb,
@@ -9,19 +9,20 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import CustomerCard from "@/components/CustomerCard";
 
-function CustomerDetailPage() {
-  const { groupName, customerName } = useParams();
+function CustomerGroupPage() {
+  const { groupName } = useParams();
 
-  const formatCustomerName = (name: string) => {
+  const formatGroupName = (name: string) => {
     return name
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(" ");
   };
 
-  const { data, isLoading, isError, error } = useFetchStandardOrder(
-    formatCustomerName(customerName || "")
+  const { data, isLoading, isError, error } = useFetchGroupedCustomers(
+    formatGroupName(groupName || "")
   );
 
   if (isLoading) return <p>Loading...</p>;
@@ -30,7 +31,7 @@ function CustomerDetailPage() {
   if (data)
     return (
       <div>
-        <h1>{customerName}</h1>
+        <h1>Customers</h1>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -38,27 +39,23 @@ function CustomerDetailPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/customers/${groupName}`}>
-                {groupName}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{customerName}</BreadcrumbPage>
+              <BreadcrumbPage>{groupName}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {data.map((standardOrder) => (
-            <div className="grid" key={standardOrder.id}>
-              <h2>{standardOrder.id}</h2>
-              <h3>{standardOrder.order_name}</h3>
+          {data.map((customer) => (
+            <div className="grid" key={customer.id}>
+              <CustomerCard
+                groupName={groupName}
+                customerName={customer.customer_name}
+              />
             </div>
-          ))}
+          ))}{" "}
         </div>
       </div>
     );
 }
 
-export default CustomerDetailPage;
+export default CustomerGroupPage;

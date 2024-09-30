@@ -4,7 +4,6 @@ import HomePage from "./pages/HomePage";
 import InvoicesPage from "./pages/invoices/InvoicesPage";
 import OrdersPage from "./pages/orders/OrdersPage";
 import CustomersRoutes from "./routes/CustomerRoutes";
-import GroupsPage from "./pages/groups/GroupsPage";
 import { ThemeProvider } from "./components/ThemeProvider";
 import Layout from "./components/Layout/Layout";
 
@@ -18,7 +17,6 @@ const App: React.FC = () => {
 
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/customer-groups" element={<GroupsPage />} />
 
             {/* Grouped Customer routes */}
             <Route path="/customers/*" element={<CustomersRoutes />} />
