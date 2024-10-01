@@ -6,35 +6,35 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-const fetchStandardOrder = async (customerName: string) => {
+const fetchStandardOrder = async (customerId: string) => {
+  
+  const { data, error } = await supabase
+  .from('customers')
+  .select(`
+    id,
+    standard_order (
+      id,
+      order_name,
+      order_items (
+        quantity,
+        items ( id, item_name, price )
+      )
+    )
+  `)
+  .eq('id', customerId)
+  .single();
 
-    const { data: customerData, error: customerError } = await supabase
-    .from('customers')
-    .select('id')
-    .eq('customer_name', customerName)
-    .single(); 
+if (error) {
+  throw new Error(`Error fetching data: ${error.message}`);
+}
 
-  if (customerError) {
-    throw new Error(`Group not found: ${customerError.message}`);
-  }
-
-  const customerId = customerData?.id;  
-
-  const { data: orderData, error: orderError } = await supabase
-    .from('standard_order')
-    .select('*')
-    .eq('customer_id', customerId);
-
-  if (orderError) {
-    throw new Error(orderError.message);
-  }
-  return orderData;
+return data || []
 };
 
-export const useFetchStandardOrder = (customerName: string) => {
+export const useFetchStandardOrder = (customerId: string) => {
   return useQuery({
-    queryKey: ['customer-standard-order', customerName], 
-    queryFn: () => fetchStandardOrder(customerName),       
-    enabled: !!customerName, 
+    queryKey: ['customer-standard-order', customerId], 
+    queryFn: () => fetchStandardOrder(customerId),       
+    enabled: !!customerId, 
   });
 };

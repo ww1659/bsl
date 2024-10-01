@@ -1,7 +1,12 @@
 type GroupCardProps = {
   groupName: string;
-}; /* use `interface` if exporting so that consumers can extend */
+  groupId: string;
+};
+
 import { Link } from "react-router-dom";
+import { toTitleCase } from "@/lib/utils";
+import { setGroupId } from "@/redux/features/groups/groupSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
 import {
   Card,
@@ -10,15 +15,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-function GroupCard({ groupName }: GroupCardProps) {
+function GroupCard({ groupName, groupId }: GroupCardProps) {
+  const dispatch = useAppDispatch();
   const formattedGroupName = groupName.toLowerCase().replace(/\s+/g, "-");
 
+  const handleClick = () => {
+    dispatch(setGroupId(groupId));
+  };
+
   return (
-    <Link to={`/customers/${formattedGroupName}`}>
+    <Link to={`/customers/${formattedGroupName}`} onClick={handleClick}>
       <Card>
         <CardHeader>
-          <CardTitle>{groupName}</CardTitle>
-          <CardDescription>Group</CardDescription>
+          <CardTitle>{toTitleCase(groupName)}</CardTitle>
+          <CardDescription>
+            {groupId == "null" ? "Private Owners" : "Customer Group"}
+          </CardDescription>
         </CardHeader>
       </Card>
     </Link>

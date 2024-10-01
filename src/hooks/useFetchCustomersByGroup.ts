@@ -6,20 +6,9 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-const fetchGroupedCustomers = async (groupName: string) => {
+const fetchGroupedCustomers = async (groupId: string) => {
   
-  const { data: groupData, error: groupError } = await supabase
-    .from('groups')
-    .select('id')
-    .eq('group_name', groupName)
-    .single(); 
-
-  if (groupError) {
-    throw new Error(`Group not found: ${groupError.message}`);
-  }
-
-  const groupId = groupData?.id;  
-
+  if (groupId !== "null") { 
   const { data: customersData, error: customersError } = await supabase
     .from('customers')
     .select('*')
@@ -30,8 +19,20 @@ const fetchGroupedCustomers = async (groupName: string) => {
   }
 
   return customersData;
-};
+} else {
+    const { data: customersData, error: customersError } = await supabase
+      .from('customers')
+      .select('*')
+      .is('group_id', null);
 
+      if (customersError) {
+        throw new Error(`Error fetching customers: ${customersError.message}`);
+      }
+
+    return customersData;
+
+  };
+}
 
 export const useFetchGroupedCustomers = (groupName: string) => {
     return useQuery({
@@ -40,3 +41,4 @@ export const useFetchGroupedCustomers = (groupName: string) => {
       enabled: !!groupName, 
     });
   };
+  

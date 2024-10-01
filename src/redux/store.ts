@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-
-import postsSlice from './features/posts/postsSlice'
+import groupReducer from './features/groups/groupSlice'
+import customerReducer from './features/customers/customersSlice'
 
 export const store = configureStore({
   // Pass in the root reducer setup as the `reducer` argument
   reducer: {
-    // Declare that `state.counter` will be updated by the `counterReducer` function
-    posts: postsSlice
-  }
+    group: groupReducer,
+    customer: customerReducer
+  },
 })
 
 // Infer the type of `store`
@@ -16,3 +16,7 @@ export type AppStore = typeof store
 export type AppDispatch = typeof store.dispatch
 // Same for the `RootState` type
 export type RootState = ReturnType<typeof store.getState>
+
+export default store;
+
+

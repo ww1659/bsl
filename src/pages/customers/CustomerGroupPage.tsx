@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useFetchGroupedCustomers } from "@/hooks/useFetchCustomersByGroup";
+import { removeDashes } from "@/lib/utils";
+import { useAppSelector } from "@/redux/hooks";
 
 import {
   Breadcrumb,
@@ -14,15 +16,10 @@ import CustomerCard from "@/components/CustomerCard";
 function CustomerGroupPage() {
   const { groupName } = useParams();
 
-  const formatGroupName = (name: string) => {
-    return name
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-  };
+  const groupId = useAppSelector((state) => state.group.groupId);
 
   const { data, isLoading, isError, error } = useFetchGroupedCustomers(
-    formatGroupName(groupName || "")
+    groupId || ""
   );
 
   if (isLoading) return <p>Loading...</p>;
@@ -31,28 +28,29 @@ function CustomerGroupPage() {
   if (data)
     return (
       <div>
-        <h1>Customers</h1>
-        <Breadcrumb>
+        <h1 className="py-2">Customers</h1>
+        <Breadcrumb className="py-2">
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/customers">customers</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{groupName}</BreadcrumbPage>
+              <BreadcrumbPage>{removeDashes(groupName || "")}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-2">
           {data.map((customer) => (
             <div className="grid" key={customer.id}>
               <CustomerCard
                 groupName={groupName}
                 customerName={customer.customer_name}
+                customerId={customer.id}
               />
             </div>
-          ))}{" "}
+          ))}
         </div>
       </div>
     );
