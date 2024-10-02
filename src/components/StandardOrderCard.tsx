@@ -41,24 +41,26 @@ function StandardOrderCard({ orderData }: StandardOrderCard) {
   const orderName = orderData.standard_order[0].order_name;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Standard Orders</CardTitle>
-        <CardDescription>Create new standard orders here</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {sortedItems.map((item) => (
-          <div key={item.items?.id}>
-            <div className="flex flex-row align-center">
-              <p className="text-sm pr-1">
-                {toTitleCase(item.items?.item_name || "")}:
-              </p>
-              <p className="text-sm font-bold">{item.quantity}</p>
+    <Card className="flex flex-col justify-between">
+      <div>
+        <CardHeader>
+          <CardTitle>Standard Orders</CardTitle>
+          <CardDescription>Create new standard orders here</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {sortedItems.map((item) => (
+            <div key={item.items?.id}>
+              <div className="flex flex-row align-center">
+                <p className="text-sm pr-1">
+                  {toTitleCase(item.items?.item_name || "")}:
+                </p>
+                <p className="text-sm font-bold">{item.quantity}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </CardContent>
-      <CardFooter>
+          ))}
+        </CardContent>
+      </div>
+      <CardFooter className="flex justify-end align-end">
         <Button className="w-full">Update "{orderName}" Order</Button>
       </CardFooter>
     </Card>

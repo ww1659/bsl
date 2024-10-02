@@ -1,7 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useFetchGroupedCustomers } from "@/hooks/useFetchCustomersByGroup";
-import { removeDashes } from "@/lib/utils";
-import { useAppSelector } from "@/redux/hooks";
+import { removeDashes, toTitleCase } from "@/lib/utils";
 
 import {
   Breadcrumb,
@@ -11,49 +9,49 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import CustomerCard from "@/components/CustomerCard";
+import CustomerList from "@/components/CustomerList";
+import GroupDetailsCard from "@/components/GroupDetailsCard";
+import { useAppSelector } from "@/redux/hooks";
 
 function CustomerGroupPage() {
   const { groupName } = useParams();
-
   const groupId = useAppSelector((state) => state.group.groupId);
+  const formattedGroupName = toTitleCase(removeDashes(groupName || ""));
 
-  const { data, isLoading, isError, error } = useFetchGroupedCustomers(
-    groupId || ""
-  );
+  return (
+    <div>
+      <h1 className="py-2">{formattedGroupName}</h1>
+      <Breadcrumb className="py-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/customers">groups</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{removeDashes(groupName || "")}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+      <div
+        className={`${
+          groupId !== "null"
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 my-2"
+            : "grid grid-cols-1 gap-4 my-2"
+        }`}
+      >
+        {groupId !== "null" && (
+          <div className="grid">
+            <GroupDetailsCard />
+          </div>
+        )}
 
-  if (data)
-    return (
-      <div>
-        <h1 className="py-2">Customers</h1>
-        <Breadcrumb className="py-2">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/customers">customers</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{removeDashes(groupName || "")}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-2">
-          {data.map((customer) => (
-            <div className="grid" key={customer.id}>
-              <CustomerCard
-                groupName={groupName}
-                customerName={customer.customer_name}
-                customerId={customer.id}
-              />
-            </div>
-          ))}
+        <div className="grid">
+          <CustomerList groupName={groupName} />
         </div>
       </div>
-    );
+    </div>
+  );
 }
 
 export default CustomerGroupPage;

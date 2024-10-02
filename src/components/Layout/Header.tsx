@@ -89,7 +89,7 @@ export const Header: React.FC = () => {
               src="/placeholder-user.jpg"
               width="36"
               height="36"
-              alt="Avatar"
+              alt="CW"
               className="overflow-hidden rounded-full"
             />
           </Button>

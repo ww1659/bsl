@@ -42,7 +42,7 @@ function CustomerDetailPage() {
         <Breadcrumb className="py-2">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/customers">customers</BreadcrumbLink>
+              <BreadcrumbLink href="/customers">groups</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
