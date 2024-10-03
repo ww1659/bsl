@@ -1,6 +1,7 @@
 //Routing
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CustomersRoutes from "./routes/CustomerRoutes";
+import OrderRoutes from "./routes/OrderRoutes";
 
 //Providers
 import { ThemeProvider } from "./components/ThemeProvider";
@@ -9,10 +10,9 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import InvoicesPage from "./pages/invoices/InvoicesPage";
-import OrdersPage from "./pages/orders/OrdersPage";
 
 //Components
-import Layout from "./components/Layout/Layout";
+import Layout from "./components/layout/Layout";
 
 const App: React.FC = () => {
   return (
@@ -21,14 +21,13 @@ const App: React.FC = () => {
         <Layout>
           <Routes>
             {/* Top-level routes */}
-
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
 
             {/* Grouped Customer routes */}
             <Route path="/customers/*" element={<CustomersRoutes />} />
-            <Route path="/invoices" element={<InvoicesPage />} />
-            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/orders/*" element={<OrderRoutes />} />
+            <Route path="/invoices/*" element={<InvoicesPage />} />
           </Routes>
         </Layout>
       </Router>

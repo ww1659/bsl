@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { toTitleCase } from "@/lib/utils";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCustomerId } from "@/redux/features/customers/customersSlice";
-
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 function CustomerCard({
@@ -26,18 +25,20 @@ function CustomerCard({
   };
 
   return (
-    <Link
-      to={`/customers/${groupName}/${formattedCustomerName}`}
-      onClick={handleClick}
-    >
-      <Card>
-        <CardHeader className="p-4">
-          <CardTitle className="text-sm">
-            {toTitleCase(customerName || "")}
-          </CardTitle>
-        </CardHeader>
-      </Card>
-    </Link>
+    <div>
+      <Link
+        to={`/customers/${groupName}/${formattedCustomerName}`}
+        onClick={handleClick}
+      >
+        <Card>
+          <CardHeader className="p-4">
+            <CardTitle className="text-sm">
+              {toTitleCase(customerName || "")}
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      </Link>
+    </div>
   );
 }
 

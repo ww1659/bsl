@@ -31,7 +31,7 @@ function CustomerList({ groupName }: CustomerListProps) {
           <CardDescription>
             Select or search for a customer here.
           </CardDescription>
-          <CardContent className="grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 pt-4">
+          <CardContent className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-4">
             {data.map((customer) => (
               <CustomerCard
                 key={customer.id}

@@ -1,6 +1,14 @@
+//router
 import { useParams } from "react-router-dom";
-import { removeDashes, toTitleCase } from "@/lib/utils";
 
+//redux
+import { useAppSelector } from "@/redux/hooks";
+
+//components
+import CustomerList from "@/components/customers/CustomerList";
+import GroupDetailsCard from "@/components/customers/GroupDetailsCard";
+
+//ui
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,9 +17,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import CustomerList from "@/components/CustomerList";
-import GroupDetailsCard from "@/components/GroupDetailsCard";
-import { useAppSelector } from "@/redux/hooks";
+
+//utils
+import { removeDashes, toTitleCase } from "@/lib/utils";
 
 function CustomerGroupPage() {
   const { groupName } = useParams();

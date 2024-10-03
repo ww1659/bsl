@@ -11,8 +11,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { closeDialog } from "@/redux/features/customers/updateCustomerSlice";
+import CustomerDetailsForm from "./CustomerDetailsForm";
 
 function UpdateCustomerDetailsDialog({
   customerId,
@@ -33,15 +34,12 @@ function UpdateCustomerDetailsDialog({
         <DialogHeader>
           <DialogTitle> Update Customer Details</DialogTitle>
           <DialogDescription>
-            Update your customer details here. If you close the dialog no
-            changes will be saved.
+            Update your customer details here.
           </DialogDescription>
         </DialogHeader>
+        <CustomerDetailsForm customerId={customerId} />
         <DialogFooter>
-          <div className="flex flex-row w-full justify-between">
-            <Button onClick={handleCloseClick}>Close</Button>
-            <Button>Update</Button>
-          </div>
+          <div className="flex flex-row w-full justify-between"></div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

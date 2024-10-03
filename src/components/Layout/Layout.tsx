@@ -11,7 +11,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         {/* main used to have the className = 'grid', but I have removed */}
         <main className="flex flex-1 p-4 sm:px-6 sm:py-0 justify-center">
           <div className="w-9/12">
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+            <div className="grid auto-rows-max items-start gap-4 md:gap-10 lg:col-span-2">
               {children}
             </div>
           </div>

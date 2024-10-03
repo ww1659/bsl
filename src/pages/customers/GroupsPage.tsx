@@ -1,4 +1,7 @@
-import GroupCard from "@/components/GroupCard";
+//components
+import GroupCard from "@/components/customers/GroupCard";
+
+//database hooks
 import { useFetchGroups } from "@/hooks/useFetchGroups";
 
 function GroupsPage() {
