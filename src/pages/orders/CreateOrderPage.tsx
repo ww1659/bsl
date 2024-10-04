@@ -1,5 +1,14 @@
 import { useState } from "react";
 
+type OrderItem = {
+  quantity: number;
+  items: {
+    id: number;
+    item_name: string | null;
+    price: number | null;
+  } | null;
+};
+
 //components
 import CreateOrderCard from "@/components/orders/CreateOrderCard";
 
@@ -12,32 +21,35 @@ import { useFetchCustomers } from "@/hooks/useFetchCustomers";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
+import DeliveryDatePicker from "@/components/orders/DeliveryDatePicker";
 
 type CreateOrderPageProps = {};
 
 function CreateOrderPage({}: CreateOrderPageProps) {
   const { data, isLoading, isError, error } = useFetchCustomers();
 
-  // Step state
   const [currentStep, setCurrentStep] = useState(1);
-  // Customer ID or new customer state
   const [customerId, setCustomerId] = useState<string | null>(null);
-  // Standard order and customization
-  const [orderDetails, setOrderDetails] = useState(null);
+  const [customerName, setCustomerName] = useState<string | null>(null);
+  const [date, setDate] = useState<Date | undefined>();
+  const [currentOrderItems, setCurrentOrderItems] = useState<OrderItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  console.log(currentOrderItems);
 
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
 
-  const handleCustomerSelection = (id: string) => {
+  const handleCustomerSelection = (id: string, customerName: string) => {
     setCustomerId(id);
-    handleNextStep(); // Move to the next step
+    setCustomerName(customerName);
+    handleNextStep();
   };
 
   const handleOrderCustomization = (details: any) => {
-    setOrderDetails(details);
-    handleNextStep(); // Move to summary step
+    setCurrentOrderItems(details);
+    handleNextStep();
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +105,12 @@ function CreateOrderPage({}: CreateOrderPageProps) {
               {filteredCustomers?.map((customer) => (
                 <Button
                   key={customer.id}
-                  onClick={() => handleCustomerSelection(customer.id)}
+                  onClick={() =>
+                    handleCustomerSelection(
+                      customer.id,
+                      customer.customer_name || ""
+                    )
+                  }
                   variant="select"
                   className="p-10"
                 >
@@ -106,9 +123,15 @@ function CreateOrderPage({}: CreateOrderPageProps) {
 
         {currentStep === 3 && customerId && (
           <div>
-            <h3 className="pt-10">Step 3: Customise Order</h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-2">
-              <CreateOrderCard customerId={customerId} />{" "}
+            <h3 className="py-2">Step 3: Customise Order</h3>
+            <DeliveryDatePicker date={date} setDate={setDate} />
+            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-6 my-2">
+              <CreateOrderCard
+                customerId={customerId}
+                customerName={customerName}
+                currentOrderItems={currentOrderItems}
+                setCurrentOrderItems={setCurrentOrderItems}
+              />
             </div>
             <Button onClick={() => handleOrderCustomization({})}>
               Save Custom Order
