@@ -1,13 +1,5 @@
 import { useState } from "react";
-
-type OrderItem = {
-  quantity: number;
-  items: {
-    id: number;
-    item_name: string | null;
-    price: number | null;
-  } | null;
-};
+import { OrderItem } from "@/types";
 
 //components
 import CreateOrderCard from "@/components/orders/CreateOrderCard";
@@ -22,33 +14,36 @@ import { useFetchCustomers } from "@/hooks/useFetchCustomers";
 //utils
 import { toTitleCase } from "@/lib/utils";
 import DeliveryDatePicker from "@/components/orders/DeliveryDatePicker";
+import { MoveLeftIcon } from "lucide-react";
+import OrderSummaryCard from "@/components/orders/OrderSummaryCard";
 
-type CreateOrderPageProps = {};
-
-function CreateOrderPage({}: CreateOrderPageProps) {
+function CreateOrderPage() {
   const { data, isLoading, isError, error } = useFetchCustomers();
 
   const [currentStep, setCurrentStep] = useState(1);
   const [customerId, setCustomerId] = useState<string | null>(null);
   const [customerName, setCustomerName] = useState<string | null>(null);
+  const [customerDiscount, setCustomerDiscount] = useState<number | null>(0);
   const [date, setDate] = useState<Date | undefined>();
   const [currentOrderItems, setCurrentOrderItems] = useState<OrderItem[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  console.log(currentOrderItems);
 
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
 
-  const handleCustomerSelection = (id: string, customerName: string) => {
-    setCustomerId(id);
-    setCustomerName(customerName);
-    handleNextStep();
+  const handlePrevStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
   };
 
-  const handleOrderCustomization = (details: any) => {
-    setCurrentOrderItems(details);
+  const handleCustomerSelection = (
+    id: string,
+    customerName: string,
+    customerDiscount: number | null
+  ) => {
+    setCustomerId(id);
+    setCustomerName(customerName);
+    setCustomerDiscount(customerDiscount);
     handleNextStep();
   };
 
@@ -56,7 +51,21 @@ function CreateOrderPage({}: CreateOrderPageProps) {
     setSearchTerm(e.target.value.toLowerCase());
   };
 
-  const filteredCustomers = data?.filter((customer) =>
+  const handleOrderConfirmation = (
+    currentOrderItems: OrderItem[],
+    customerDiscount: number | null,
+    date: Date | undefined,
+    customerId: string | null,
+    customerName: string | null
+  ) => {
+    console.log(customerName);
+  };
+
+  const sortedCustomers = data?.sort((a, b) =>
+    (a.customer_name || "").localeCompare(b.customer_name || "")
+  );
+
+  const filteredCustomers = sortedCustomers?.filter((customer) =>
     (customer.customer_name || "").toLowerCase().includes(searchTerm)
   );
 
@@ -67,6 +76,11 @@ function CreateOrderPage({}: CreateOrderPageProps) {
     return (
       <div>
         <h1>Generate a new Order</h1>
+        {currentStep === 3 || currentStep === 4 ? (
+          <h4>{toTitleCase(customerName || "")}</h4>
+        ) : (
+          <h4 className="invisible">Null</h4>
+        )}
         {currentStep === 1 && (
           <div>
             <h3 className="pt-10">Step 1: New or Existing Customer</h3>
@@ -74,7 +88,7 @@ function CreateOrderPage({}: CreateOrderPageProps) {
               <Button
                 variant="select"
                 className="p-20"
-                onClick={() => handleCustomerSelection("existing")}
+                onClick={() => handleNextStep()}
               >
                 <p className="text-lg">Existing Customer</p>
               </Button>
@@ -91,7 +105,17 @@ function CreateOrderPage({}: CreateOrderPageProps) {
 
         {currentStep === 2 && (
           <div>
-            <h3 className="pt-10">Step 2: Select Customer</h3>
+            <div className="flex flex-row gap-2 items-center pt-10">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePrevStep()}
+              >
+                <MoveLeftIcon className="h-4 w-4" />
+              </Button>
+              <h3>Step 2: Select Customer</h3>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-2">
               <Input
                 placeholder="Search for an existing customer"
@@ -108,7 +132,8 @@ function CreateOrderPage({}: CreateOrderPageProps) {
                   onClick={() =>
                     handleCustomerSelection(
                       customer.id,
-                      customer.customer_name || ""
+                      customer.customer_name || "",
+                      customer.discount
                     )
                   }
                   variant="select"
@@ -123,29 +148,77 @@ function CreateOrderPage({}: CreateOrderPageProps) {
 
         {currentStep === 3 && customerId && (
           <div>
-            <h3 className="py-2">Step 3: Customise Order</h3>
+            <div className="flex flex-row gap-2 items-center pt-10">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePrevStep()}
+              >
+                <MoveLeftIcon className="h-4 w-4" />
+              </Button>
+              <h3>Step 3: Customise Order</h3>
+            </div>
+
             <DeliveryDatePicker date={date} setDate={setDate} />
-            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-6 my-2">
+            <div className="grid grid-cols-1 gap-6 my-2">
               <CreateOrderCard
                 customerId={customerId}
                 customerName={customerName}
                 currentOrderItems={currentOrderItems}
                 setCurrentOrderItems={setCurrentOrderItems}
+                customerDiscount={customerDiscount}
               />
             </div>
-            <Button onClick={() => handleOrderCustomization({})}>
-              Save Custom Order
-            </Button>
+            <div className="flex flex-row justify-end items-center gap-2">
+              <p className="text-xs">
+                This will take you to the Order Summary page
+              </p>
+              <Button
+                disabled={currentOrderItems.length === 0 || !date}
+                onClick={() => handleNextStep()}
+              >
+                Confirm Order
+              </Button>
+            </div>
           </div>
         )}
 
         {currentStep === 4 && (
           <div>
-            <h3 className="pt-10">Step 4: Summary and Confirmation</h3>
-            <p>Order summary here...</p>
-            <Button onClick={() => console.log("Order confirmed!")}>
-              Confirm Order
-            </Button>
+            <div className="flex flex-row gap-2 items-center pt-10">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePrevStep()}
+              >
+                <MoveLeftIcon className="h-4 w-4" />
+              </Button>
+              <h3>Step 4: Order Summary</h3>
+            </div>
+
+            <div className="my-2">
+              <OrderSummaryCard
+                currentOrderItems={currentOrderItems}
+                date={date}
+                customerName={customerName}
+                customerDiscount={customerDiscount}
+              />
+              <div className="flex flex-col justify-end p-3">
+                <Button
+                  onClick={() =>
+                    handleOrderConfirmation(
+                      currentOrderItems,
+                      customerDiscount,
+                      date,
+                      customerId,
+                      customerName
+                    )
+                  }
+                >
+                  Confirm Order
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </div>

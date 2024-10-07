@@ -1,20 +1,12 @@
-type OrderItem = {
-  quantity: number;
-  items: {
-    id: number;
-    item_name: string | null;
-    price: number | null;
-  } | null;
-};
+import { OrderItem } from "@/types";
 
 type CreateOrderCard = {
   customerId: string | null;
   customerName: string | null;
   currentOrderItems: OrderItem[];
   setCurrentOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
+  customerDiscount: number | null;
 };
-
-import { useState } from "react";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
@@ -23,7 +15,13 @@ import { toTitleCase } from "@/lib/utils";
 import { useFetchStandardOrder } from "@/hooks/useFetchStandardOrder";
 
 //ui
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -42,7 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal, Trash2Icon } from "lucide-react";
+import { MoreHorizontal, PlusIcon, Trash2Icon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,24 +51,44 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Button } from "../ui/button";
-import { PlusIcon } from "lucide-react";
+import AddItemsDropdown from "./AddItemsDropdown";
+import { Input } from "../ui/input";
 
 function CreateOrderCard({
   customerId,
   customerName,
   currentOrderItems,
   setCurrentOrderItems,
+  customerDiscount,
 }: CreateOrderCard) {
   const { data, isLoading, isError, error } = useFetchStandardOrder(
     customerId || ""
   );
 
+  console.log(data);
+
   const handleOrderChange = (selectedOrderName: string) => {
     const selectedOrderItems =
       data?.standard_order?.find(
         (order) => order.order_name === selectedOrderName
-      )?.order_items || [];
+      )?.standard_order_items || [];
     setCurrentOrderItems(selectedOrderItems);
+  };
+
+  const removeItem = (itemId: number) => {
+    setCurrentOrderItems((prevItems) =>
+      prevItems.filter((item) => item.items?.id !== itemId)
+    );
+  };
+
+  const updateQuantity = (itemId: number, newQuantity: number) => {
+    setCurrentOrderItems((prevItems) =>
+      prevItems.map((orderItem) =>
+        orderItem.items?.id === itemId
+          ? { ...orderItem, quantity: newQuantity > 0 ? newQuantity : 1 } // Ensure minimum quantity of 1
+          : orderItem
+      )
+    );
   };
 
   const standardOrderNames =
@@ -84,11 +102,14 @@ function CreateOrderCard({
     return 0;
   });
 
-  const orderTotal = currentOrderItems.reduce((total, item) => {
-    const itemPrice = item.items?.price || 0;
-    const quantity = item.quantity;
-    return total + itemPrice * quantity;
-  }, 0);
+  const orderTotal =
+    currentOrderItems.reduce((total, item) => {
+      const itemPrice = item.items?.price || 0;
+      const quantity = item.quantity;
+
+      return total + itemPrice * quantity;
+    }, 0) *
+    ((100 - (customerDiscount || 0)) / 100);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
@@ -99,33 +120,37 @@ function CreateOrderCard({
         <Card className="flex flex-col justify-between">
           <div>
             <CardHeader>
-              <div className="flex flex-row justify-between">
-                <div className="flex flex-col gap-2 justify-between items-center">
-                  <CardTitle>
-                    Item List: {toTitleCase(customerName || "")}
-                  </CardTitle>
-                  <Select onValueChange={handleOrderChange}>
-                    <SelectTrigger className="rounded-md">
-                      <SelectValue placeholder="Select Order" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>
-                          {toTitleCase(customerName || "")}: Orders
-                        </SelectLabel>
-                        {standardOrderNames.map((name, index) => (
-                          <SelectItem key={index} value={name || "default"}>
-                            {toTitleCase(name || "default")}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+              <div className="flex flex-row justify-between items-center">
+                <div className="w-1/2">
+                  <CardTitle>Item List</CardTitle>
+                  <CardDescription className="font-bold">
+                    {toTitleCase(customerName || "")}
+                  </CardDescription>
                 </div>
-                <div>
-                  <Button size="icon">
-                    <PlusIcon />
-                  </Button>
+                <div className="w-1/2">
+                  <div className="flex flex-row gap-2">
+                    <Select onValueChange={handleOrderChange}>
+                      <SelectTrigger className="rounded-md">
+                        <SelectValue placeholder="Select a standard order" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>
+                            {toTitleCase(customerName || "")} Standard Orders
+                          </SelectLabel>
+                          {standardOrderNames.map((name, index) => (
+                            <SelectItem key={index} value={name || "default"}>
+                              {toTitleCase(name || "default")}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <AddItemsDropdown
+                      currentOrderItems={currentOrderItems}
+                      setCurrentOrderItems={setCurrentOrderItems}
+                    />
+                  </div>
                 </div>
               </div>
             </CardHeader>
@@ -133,9 +158,16 @@ function CreateOrderCard({
               {sortedItems.length !== 0 ? (
                 <Table>
                   <TableHeader>
-                    <TableRow className="text-xs md:text-sm">
+                    <TableRow className="text-xs md:text-md">
                       <TableHead>Item Name</TableHead>
-                      <TableHead>List Price (£)</TableHead>
+                      <TableHead>
+                        <div className="flex flex-col">
+                          <span>Customer Price (£)</span>
+                          <span className="text-xs font-light">
+                            {customerDiscount}% discount
+                          </span>
+                        </div>
+                      </TableHead>
                       <TableHead>Quantity</TableHead>
                       <TableHead className="text-right">Amount (£)</TableHead>
                       <TableHead></TableHead>
@@ -144,19 +176,64 @@ function CreateOrderCard({
                   <TableBody className="text-xs md:text-sm">
                     {sortedItems?.map((item) => (
                       <TableRow key={item.items?.id}>
-                        <TableCell className="font-medium py-2">
+                        <TableCell className="font-medium py-1">
                           {toTitleCase(item.items?.item_name || "")}
                         </TableCell>
-                        <TableCell className="py-2">
-                          {item.items?.price?.toFixed(2)}
+                        <TableCell className="py-1">
+                          {customerDiscount
+                            ? (
+                                Number(item.items?.price) *
+                                ((100 - customerDiscount) / 100)
+                              ).toFixed(2)
+                            : item.items?.price?.toFixed(2)}
                         </TableCell>
-                        <TableCell className="py-2">{item.quantity}</TableCell>
-                        <TableCell className="py-2 text-right">
+                        <TableCell className="py-1 flex flex-row gap-1 items-center">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-10"
+                            onClick={() =>
+                              updateQuantity(
+                                item.items?.id || 0,
+                                item.quantity - 1
+                              )
+                            }
+                            disabled={item.quantity <= 1}
+                          >
+                            -
+                          </Button>
+                          <Input
+                            type="text"
+                            className="w-1/5 py-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1"
+                            value={item.quantity}
+                            onChange={(e) =>
+                              updateQuantity(
+                                item.items?.id || 0,
+                                Number(e.target.value)
+                              )
+                            }
+                            min={1}
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-10"
+                            onClick={() =>
+                              updateQuantity(
+                                item.items?.id || 0,
+                                item.quantity + 1
+                              )
+                            }
+                          >
+                            +
+                          </Button>
+                        </TableCell>
+                        <TableCell className="py-1 text-right">
                           {item.items?.price
                             ? (item.quantity * item.items?.price).toFixed(2)
                             : ""}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="py-1">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -167,7 +244,9 @@ function CreateOrderCard({
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => removeItem(item.items?.id || 0)}
+                              >
                                 Remove Item
                                 <Trash2Icon className="h-4 w-4 ml-1" />
                               </DropdownMenuItem>
@@ -183,6 +262,7 @@ function CreateOrderCard({
                       <TableCell className="text-right">
                         £{orderTotal.toFixed(2)}
                       </TableCell>
+                      <TableCell></TableCell>
                     </TableRow>
                   </TableFooter>
                 </Table>

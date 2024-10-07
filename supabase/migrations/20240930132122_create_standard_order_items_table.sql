@@ -1,4 +1,4 @@
-create table order_items (
+create table standard_order_items (
   id bigint primary key generated always as identity,
   standard_order_id bigint references standard_order(id) on delete cascade,
   item_id bigint references items(id) on delete RESTRICT,  

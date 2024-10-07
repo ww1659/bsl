@@ -126,86 +126,6 @@ export type Database = {
         }
         Relationships: []
       }
-      invoice_items: {
-        Row: {
-          created_at: string | null
-          id: number
-          invoice_id: string | null
-          item_id: number | null
-          price: number | null
-          quantity: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: never
-          invoice_id?: string | null
-          item_id?: number | null
-          price?: number | null
-          quantity?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: never
-          invoice_id?: string | null
-          item_id?: number | null
-          price?: number | null
-          quantity?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "invoice_items_invoice_id_fkey"
-            columns: ["invoice_id"]
-            isOneToOne: false
-            referencedRelation: "invoices"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "invoice_items_item_id_fkey"
-            columns: ["item_id"]
-            isOneToOne: false
-            referencedRelation: "items"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      invoices: {
-        Row: {
-          created_at: string | null
-          customer_id: string | null
-          due_date: string | null
-          id: string
-          number: number | null
-          status: Database["public"]["Enums"]["invoice_status"] | null
-          total: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          customer_id?: string | null
-          due_date?: string | null
-          id?: string
-          number?: number | null
-          status?: Database["public"]["Enums"]["invoice_status"] | null
-          total?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          customer_id?: string | null
-          due_date?: string | null
-          id?: string
-          number?: number | null
-          status?: Database["public"]["Enums"]["invoice_status"] | null
-          total?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "invoices_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       items: {
         Row: {
           created_at: string | null
@@ -236,30 +156,27 @@ export type Database = {
       order_items: {
         Row: {
           created_at: string | null
-          custom_price: number | null
           id: number
           item_id: number | null
-          quantity: number
-          standard_order_id: number | null
-          updated_at: string | null
+          order_id: string | null
+          price: number | null
+          quantity: number | null
         }
         Insert: {
           created_at?: string | null
-          custom_price?: number | null
           id?: never
           item_id?: number | null
-          quantity: number
-          standard_order_id?: number | null
-          updated_at?: string | null
+          order_id?: string | null
+          price?: number | null
+          quantity?: number | null
         }
         Update: {
           created_at?: string | null
-          custom_price?: number | null
           id?: never
           item_id?: number | null
-          quantity?: number
-          standard_order_id?: number | null
-          updated_at?: string | null
+          order_id?: string | null
+          price?: number | null
+          quantity?: number | null
         }
         Relationships: [
           {
@@ -270,10 +187,64 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_items_standard_order_id_fkey"
-            columns: ["standard_order_id"]
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
             isOneToOne: false
-            referencedRelation: "standard_order"
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          delivery_date: string | null
+          discount: number | null
+          group_id: string | null
+          id: string
+          notes: string | null
+          number: number | null
+          status: Database["public"]["Enums"]["order_status"] | null
+          total: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          delivery_date?: string | null
+          discount?: number | null
+          group_id?: string | null
+          id?: string
+          notes?: string | null
+          number?: number | null
+          status?: Database["public"]["Enums"]["order_status"] | null
+          total?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          delivery_date?: string | null
+          discount?: number | null
+          group_id?: string | null
+          id?: string
+          notes?: string | null
+          number?: number | null
+          status?: Database["public"]["Enums"]["order_status"] | null
+          total?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
             referencedColumns: ["id"]
           },
         ]
@@ -310,6 +281,51 @@ export type Database = {
           },
         ]
       }
+      standard_order_items: {
+        Row: {
+          created_at: string | null
+          custom_price: number | null
+          id: number
+          item_id: number | null
+          quantity: number
+          standard_order_id: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_price?: number | null
+          id?: never
+          item_id?: number | null
+          quantity: number
+          standard_order_id?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_price?: number | null
+          id?: never
+          item_id?: number | null
+          quantity?: number
+          standard_order_id?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "standard_order_items_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "standard_order_items_standard_order_id_fkey"
+            columns: ["standard_order_id"]
+            isOneToOne: false
+            referencedRelation: "standard_order"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -318,7 +334,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      invoice_status: "pending" | "paid" | "sent" | "overdue"
+      order_status: "pending" | "paid" | "sent" | "overdue"
     }
     CompositeTypes: {
       [_ in never]: never

@@ -105,7 +105,7 @@ values
 ('dog towel', 2.05, 10, 5);
 
 insert into
-public.order_items (standard_order_id, item_id, quantity)
+public.standard_order_items (standard_order_id, item_id, quantity)
 values
 (1, 5, 1),
 (1, 6, 1),

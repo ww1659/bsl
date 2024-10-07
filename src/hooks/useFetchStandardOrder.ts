@@ -15,7 +15,7 @@ const fetchStandardOrder = async (customerId: string) => {
     standard_order (
       id,
       order_name,
-      order_items (
+      standard_order_items (
         quantity,
         items ( id, item_name, price )
       )
