@@ -22,6 +22,7 @@ function CreateOrderPage() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [customerId, setCustomerId] = useState<string | null>(null);
+  const [groupId, setGroupId] = useState<string | null>(null);
   const [customerName, setCustomerName] = useState<string | null>(null);
   const [customerDiscount, setCustomerDiscount] = useState<number | null>(0);
   const [date, setDate] = useState<Date | undefined>();
@@ -39,26 +40,18 @@ function CreateOrderPage() {
   const handleCustomerSelection = (
     id: string,
     customerName: string,
-    customerDiscount: number | null
+    customerDiscount: number | null,
+    groupId: string
   ) => {
     setCustomerId(id);
     setCustomerName(customerName);
     setCustomerDiscount(customerDiscount);
+    setGroupId(groupId);
     handleNextStep();
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value.toLowerCase());
-  };
-
-  const handleOrderConfirmation = (
-    currentOrderItems: OrderItem[],
-    customerDiscount: number | null,
-    date: Date | undefined,
-    customerId: string | null,
-    customerName: string | null
-  ) => {
-    console.log(customerName);
   };
 
   const sortedCustomers = data?.sort((a, b) =>
@@ -133,7 +126,8 @@ function CreateOrderPage() {
                     handleCustomerSelection(
                       customer.id,
                       customer.customer_name || "",
-                      customer.discount
+                      customer.discount,
+                      customer.group_id || ""
                     )
                   }
                   variant="select"
@@ -202,22 +196,9 @@ function CreateOrderPage() {
                 date={date}
                 customerName={customerName}
                 customerDiscount={customerDiscount}
+                customerId={customerId}
+                groupId={groupId}
               />
-              <div className="flex flex-col justify-end p-3">
-                <Button
-                  onClick={() =>
-                    handleOrderConfirmation(
-                      currentOrderItems,
-                      customerDiscount,
-                      date,
-                      customerId,
-                      customerName
-                    )
-                  }
-                >
-                  Confirm Order
-                </Button>
-              </div>
             </div>
           </div>
         )}

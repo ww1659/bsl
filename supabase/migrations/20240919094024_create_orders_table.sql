@@ -2,9 +2,9 @@ create type order_status as enum ('pending', 'paid', 'sent', 'overdue');
 
 create table orders (
   id uuid default uuid_generate_v4() primary key,
-  number integer UNIQUE,
+  number integer generated always as identity UNIQUE,  
   total decimal(10, 2),
-  delivery_date timestamp,
+  delivery_date timestamptz,
   status order_status,
   customer_id uuid references customers(id),
   discount decimal (10, 2),

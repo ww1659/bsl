@@ -4,11 +4,12 @@ type OrderSummaryCard = {
   date: Date | undefined;
   customerName: string | null;
   customerDiscount: number | null;
+  customerId: string | null;
+  groupId: string | null;
 };
 
-//redux
-
 //supabase hooks
+import { useCreateOrder } from "@/hooks/create/useCreateOrder";
 
 //ui
 import {
@@ -20,20 +21,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "../ui/button";
-
-//components
+import { Separator } from "../ui/separator";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
 import { format } from "date-fns";
-import { Separator } from "../ui/separator";
 
 function OrderSummaryCard({
   currentOrderItems,
   date,
   customerName,
   customerDiscount,
+  customerId,
+  groupId,
 }: OrderSummaryCard) {
+  const { mutate: createOrder } = useCreateOrder();
+
   const formattedDate = format(date || "", "EEEE do MMMM");
 
   const orderTotal =
@@ -43,6 +46,43 @@ function OrderSummaryCard({
       return total + itemPrice * quantity;
     }, 0) *
     ((100 - (customerDiscount || 0)) / 100);
+
+  const handleOrderConfirmation = (
+    currentOrderItems: OrderItem[],
+    customerDiscount: number | null,
+    date: Date | undefined,
+    customerId: string | null,
+    groupId: string | null
+  ) => {
+    const orderData = {
+      total: orderTotal,
+      delivery_date: date?.toISOString(),
+      status: "pending" as "pending" | "paid" | "sent" | "overdue",
+      customer_id: customerId,
+      discount: customerDiscount,
+      notes: "",
+      group_id: groupId,
+    };
+    const orderItems = currentOrderItems.map((item) => {
+      return {
+        item_id: item.items?.id,
+        quantity: item.quantity,
+        price: item.items?.price,
+      };
+    });
+
+    createOrder(
+      { orderData, orderItems },
+      {
+        onSuccess: (order) => {
+          console.log("Order created:", order);
+        },
+        onError: (error) => {
+          console.error("Error creating order:", error.message);
+        },
+      }
+    );
+  };
 
   return (
     <div className="grid sm:grid-cols-2 gap-6">
@@ -54,13 +94,13 @@ function OrderSummaryCard({
                 <CardTitle>Details</CardTitle>
                 <CardDescription>View and Update</CardDescription>
               </div>
-              <Button
+              {/* <Button
                 size="sm"
                 variant="outline"
                 onClick={() => console.log("Boom")}
               >
                 Edit
-              </Button>
+              </Button> */}
             </div>
           </CardHeader>
           <CardContent>
@@ -102,7 +142,7 @@ function OrderSummaryCard({
           <CardContent className="text-right">
             <div className="flex flex-row gap-1 justify-end">
               <p className="text-base">Item Costs</p>
-              <p className="text-base font-bold">£{orderTotal}</p>
+              <p className="text-base font-bold">£{orderTotal.toFixed(2)}</p>
             </div>
             <div className="flex flex-row gap-1 justify-end mb-2 text-muted-foreground text-xs">
               <p>Customer Discount</p>
@@ -126,12 +166,26 @@ function OrderSummaryCard({
             <Separator />
           </CardContent>
         </div>
-        <CardFooter className="justify-end">
+        <CardFooter className="justify-end pb-0">
           <div className="flex flex-col items-end">
             <p className="text-muted-foreground">Order Total</p>
             <h3>£{(orderTotal * 1.2).toFixed(2)}</h3>
           </div>
         </CardFooter>
+        <Button
+          className="mx-6"
+          onClick={() =>
+            handleOrderConfirmation(
+              currentOrderItems,
+              customerDiscount,
+              date,
+              customerId,
+              groupId
+            )
+          }
+        >
+          Confirm Order
+        </Button>
       </Card>
     </div>
   );

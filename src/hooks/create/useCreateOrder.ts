@@ -1,33 +1,37 @@
 import { useMutation } from '@tanstack/react-query';
 import { createClient } from '@supabase/supabase-js';
-import { Database } from '../../database.types';
+import { Database } from '../../../database.types';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-interface OrderItem {
-  item_id: number;
-  quantity: number;
-  price: number;
-}
+type CreateOrderMutation = {
+  orderData: {
+    total: number;
+    delivery_date: string;
+    status: "pending" | "paid" | "sent" | "overdue";
+    customer_id: string | null;
+    discount: number;
+    notes: string;
+    group_id: string | undefined;
+  
+  };
+  orderItems: {  
+    item_id: number | null | undefined;
+    quantity: number;
+    price: number | null | undefined;
+    }[];
+};
+
 
 // Mutation to insert an order and its items
 const createOrder = async ({
   orderData,
   orderItems,
-}: {
-  orderData: {
-    total: number;
-    delivery_date: Date;
-    status: string;
-    customer_id: string;
-    discount: number;
-    notes: string;
-    group_id?: string | null;
-  };
-  orderItems: OrderItem[];
-}) => {
+}: CreateOrderMutation) => {
+
+  
   const { data: order, error: orderError } = await supabase
     .from('orders')
     .insert(orderData)
@@ -38,13 +42,12 @@ const createOrder = async ({
     throw new Error(orderError.message);
   }
 
-  // Insert order items into the order_items table
+  // add order_id to each order item
   const orderItemsData = orderItems.map((item) => ({
+    ...item,
     order_id: order.id,
-    item_id: item.item_id,
-    quantity: item.quantity,
-    price: item.price,
   }));
+
 
   const { error: orderItemsError } = await supabase
     .from('order_items')
@@ -59,5 +62,5 @@ const createOrder = async ({
 
 // Hook to handle the mutation
 export const useCreateOrder = () => {
-  return useMutation(createOrder);
+  return useMutation({mutationFn: createOrder})
 };
