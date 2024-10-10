@@ -1,9 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistReducer, persistStore } from 'redux-persist';
+
 import storage from 'redux-persist/lib/storage';
+
 import groupReducer from './features/groups/groupSlice'
 import customerReducer from './features/customers/customersSlice'
 import updateCustomerReducer from './features/customers/updateCustomerSlice'
+import authReducer from './features/auth/authslice'
 
 // Create a persist config
 const persistConfig = {
@@ -12,9 +15,12 @@ const persistConfig = {
   whitelist: ['group', 'customer'], // Specify which reducers to persist
 };
 
-const rootReducer = combineReducers({  group: groupReducer,
+const rootReducer = combineReducers({  
+  group: groupReducer,
   customer: customerReducer,
-  customerDetailsDialog: updateCustomerReducer,}) 
+  customerDetailsDialog: updateCustomerReducer,
+  auth: authReducer,
+}) 
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

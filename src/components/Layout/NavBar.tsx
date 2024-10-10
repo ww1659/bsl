@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Link } from "react-router-dom";
+import SignOutButton from "../SignOutButton";
 
 export const NavBar: React.FC = () => {
   return (
@@ -70,6 +71,7 @@ export const NavBar: React.FC = () => {
         </nav>
 
         <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+          <SignOutButton />
           <DarkModeToggle />
           <Tooltip>
             <TooltipTrigger asChild>
