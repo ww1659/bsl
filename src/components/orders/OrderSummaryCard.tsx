@@ -26,6 +26,8 @@ import { Separator } from "../ui/separator";
 //utils
 import { toTitleCase } from "@/lib/utils";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 function OrderSummaryCard({
   currentOrderItems,
@@ -36,6 +38,9 @@ function OrderSummaryCard({
   groupId,
 }: OrderSummaryCard) {
   const { mutate: createOrder } = useCreateOrder();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  console.log(date?.toISOString());
 
   const formattedDate = format(date || "", "EEEE do MMMM");
 
@@ -52,7 +57,8 @@ function OrderSummaryCard({
     customerDiscount: number | null,
     date: Date | undefined,
     customerId: string | null,
-    groupId: string | null
+    groupId: string | null,
+    customerName: string | null
   ) => {
     const orderData = {
       total: orderTotal,
@@ -75,7 +81,11 @@ function OrderSummaryCard({
       { orderData, orderItems },
       {
         onSuccess: (order) => {
-          console.log("Order created:", order);
+          toast({
+            title: "Success!",
+            description: `Order created for ${customerName}, £${order.total}`,
+          });
+          navigate("/");
         },
         onError: (error) => {
           console.error("Error creating order:", error.message);
@@ -85,7 +95,7 @@ function OrderSummaryCard({
   };
 
   return (
-    <div className="grid sm:grid-cols-2 gap-6">
+    <div className="grid lg:grid-cols-2 gap-6">
       <Card className="flex flex-col justify-between">
         <div>
           <CardHeader>
@@ -94,13 +104,6 @@ function OrderSummaryCard({
                 <CardTitle>Details</CardTitle>
                 <CardDescription>View and Update</CardDescription>
               </div>
-              {/* <Button
-                size="sm"
-                variant="outline"
-                onClick={() => console.log("Boom")}
-              >
-                Edit
-              </Button> */}
             </div>
           </CardHeader>
           <CardContent>
@@ -120,7 +123,7 @@ function OrderSummaryCard({
                 <p className="text-sm font-bold">Price</p>
               </div>
               {currentOrderItems.map((item) => (
-                <div key={item.items?.id} className="grid grid-cols-3">
+                <div key={item.items?.id} className="grid grid-cols-3 gap-2">
                   <p className="text-sm">
                     {toTitleCase(item.items?.item_name || "")}
                   </p>
@@ -180,7 +183,8 @@ function OrderSummaryCard({
               customerDiscount,
               date,
               customerId,
-              groupId
+              groupId,
+              customerName
             )
           }
         >

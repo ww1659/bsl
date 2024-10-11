@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 function NewOrderButton() {
   return (
     <Link to="/orders/create">
-      <Button>Create a New Order</Button>
+      <Button>Create New Order</Button>
     </Link>
   );
 }

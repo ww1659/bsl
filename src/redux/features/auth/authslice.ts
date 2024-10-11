@@ -1,6 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Session, AuthApiError } from "@supabase/supabase-js";
 
-const initialState = {
+interface AuthState {
+  session: Session | null;
+  error: AuthApiError | null;
+}
+
+const initialState: AuthState = {
   session: null,
   error: null,
 };
@@ -9,13 +15,13 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setSession: (state, action) => {
+    setSession: (state, action: PayloadAction<Session | null>) => {
       state.session = action.payload;
     },
     clearSession: (state) => {
       state.session = null;
     },
-    setError: (state, action) => {
+    setError: (state, action: PayloadAction<AuthApiError | null>) => {
       state.error = action.payload;
     },
   },

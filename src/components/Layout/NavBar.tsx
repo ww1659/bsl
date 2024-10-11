@@ -1,6 +1,13 @@
 import React from "react";
 
-import { Home, LineChart, Settings, ShoppingCart, Users2 } from "lucide-react";
+import {
+  Home,
+  LineChart,
+  List,
+  Settings,
+  ShoppingCart,
+  Users2,
+} from "lucide-react";
 
 import {
   Tooltip,
@@ -67,6 +74,19 @@ export const NavBar: React.FC = () => {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Invoices</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/picking-list"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              >
+                <List className="h-5 w-5" />
+                <span className="sr-only">Picking List</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">Picking List</TooltipContent>
           </Tooltip>
         </nav>
 

@@ -15,11 +15,14 @@ import InvoicesPage from "./pages/invoices/InvoicesPage";
 //Components
 import Layout from "./components/layout/Layout";
 import WelcomePage from "./pages/WelcomePage";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { useAppDispatch } from "./redux/hooks";
 import { useEffect } from "react";
 import { supabase } from "./services/supabase";
 import { clearSession, setSession } from "./redux/features/auth/authslice";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NotFoundPage from "./pages/NotFoundPage";
+import PublicRoute from "./components/PublicRoute";
+import PickingListPage from "./pages/pickingList/PickingListPage";
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -46,25 +49,27 @@ const App: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [dispatch]);
 
-  const session = useAppSelector((state) => state.auth.session);
-  console.log(session);
-
   return (
     <ThemeProvider>
       <Router>
         <Layout>
           <Routes>
-            {/* Unauthenticated routes */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="/welcome" element={<WelcomePage />} />
-
+            {/* Routes accessible only when the user is NOT logged in */}
+            <Route element={<PublicRoute />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+            </Route>
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<HomePage />} />
+              <Route path="/welcome" element={<WelcomePage />} />
+              <Route path="/picking-list" element={<PickingListPage />} />
               <Route path="/customers/*" element={<CustomersRoutes />} />
               <Route path="/orders/*" element={<OrderRoutes />} />
               <Route path="/invoices/*" element={<InvoicesPage />} />
+
+              {/* 404 Not Found Page */}
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
         </Layout>

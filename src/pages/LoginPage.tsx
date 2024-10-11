@@ -1,5 +1,5 @@
 //router
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 //redux
 import { useAppDispatch } from "@/redux/hooks";
@@ -28,13 +28,11 @@ import { supabase } from "@/services/supabase";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }).min(2).max(50),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long" })
-    .max(32),
+  password: z.string().max(32),
 });
 
 function LoginPage() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loginError, setLoginError] = useState("");
 
@@ -55,17 +53,18 @@ function LoginPage() {
       setLoginError(error.message);
     } else if (data.session) {
       dispatch(setSession(data.session));
+      navigate("/");
     }
   }
 
   return (
-    <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
+          <div className="grid gap-2 text-left">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-balance text-muted-foreground">
-              Enter your email below to login to your account
+              Enter your email and password to log in
             </p>
           </div>
           <div className="grid gap-4">
@@ -83,12 +82,13 @@ function LoginPage() {
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Input
+                            className="focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1"
                             type="email"
                             placeholder="e.g. youremail@hotmail.com"
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
@@ -99,27 +99,43 @@ function LoginPage() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input
+                            className="focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1"
+                            type="password"
+                            {...field}
+                          />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs" />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit">Submit</Button>
-                  {loginError && <p className="text-red-500">{loginError}</p>}
+                  <Button className="w-full" type="submit">
+                    Log in
+                  </Button>
+                  {loginError && (
+                    <p className="text-red-500 text-sm text-center font-bold">
+                      {loginError}
+                    </p>
+                  )}
                 </form>
               </Form>
             </div>
           </div>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link to="/" className="ml-auto inline-block text-sm underline">
-              Forgot your password?
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="m-auto inline-block text-sm underline"
+            >
+              Sign Up
             </Link>
           </div>
         </div>
       </div>
-      <div className="hidden bg-secondary lg:block"></div>
+      <div className="flex flex-col justify-between p-4 bg-secondary">
+        <h4 className="text-balance">Black Swan Linen</h4>
+        <h4 className="text-balance italic">Created by Billy</h4>
+      </div>
     </div>
   );
 }

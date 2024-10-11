@@ -9,12 +9,12 @@ const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 type CreateOrderMutation = {
   orderData: {
     total: number;
-    delivery_date: string;
+    delivery_date: string | undefined;
     status: "pending" | "paid" | "sent" | "overdue";
     customer_id: string | null;
-    discount: number;
+    discount: number | null;
     notes: string;
-    group_id: string | undefined;
+    group_id: string | null;
   
   };
   orderItems: {  
@@ -31,14 +31,13 @@ const createOrder = async ({
   orderItems,
 }: CreateOrderMutation) => {
 
-  
   const { data: order, error: orderError } = await supabase
     .from('orders')
     .insert(orderData)
     .select('*')
     .single();
 
-  if (orderError) {
+  if (orderError) {    
     throw new Error(orderError.message);
   }
 

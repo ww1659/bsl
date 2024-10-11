@@ -8,8 +8,30 @@ const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 const fetchOrders = async () => {
   const { data, error } = await supabase
-    .from('orders')
-    .select('*');
+  .from('orders')
+  .select(`
+    total,
+    number,
+    delivery_date,
+    status,
+    notes,
+    group_id,
+    id,
+    order_items (
+      quantity,
+      items (
+        id,
+        item_name,
+        price
+      )
+    ),
+    groups (
+      group_name
+    ), 
+    customers (
+      customer_name
+    )
+  `);
 
   if (error) {
     throw new Error(error.message);

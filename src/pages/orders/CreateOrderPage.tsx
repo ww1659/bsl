@@ -197,7 +197,7 @@ function CreateOrderPage() {
                 customerName={customerName}
                 customerDiscount={customerDiscount}
                 customerId={customerId}
-                groupId={groupId}
+                groupId={groupId ? groupId : null}
               />
             </div>
           </div>

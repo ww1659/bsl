@@ -40,7 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal, PlusIcon, Trash2Icon } from "lucide-react";
+import { MoreHorizontal, Trash2Icon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,8 +64,6 @@ function CreateOrderCard({
   const { data, isLoading, isError, error } = useFetchStandardOrder(
     customerId || ""
   );
-
-  console.log(data);
 
   const handleOrderChange = (selectedOrderName: string) => {
     const selectedOrderItems =

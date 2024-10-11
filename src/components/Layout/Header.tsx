@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Session } from "@supabase/supabase-js";
 
 import {
   Home,
@@ -24,6 +25,8 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 
 export const Header: React.FC = () => {
+  // const session: Session | null = useAppSelector((state) => state.auth.session);
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <Sheet>
