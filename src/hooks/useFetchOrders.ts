@@ -7,6 +7,8 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 const fetchOrders = async () => {
+  //if fetching orders only from today onwards
+  const today = new Date().toISOString().split("T")[0]; 
   const { data, error } = await supabase
   .from('orders')
   .select(`
@@ -31,7 +33,9 @@ const fetchOrders = async () => {
     customers (
       customer_name
     )
-  `);
+  `)
+  .gte('delivery_date', today)
+  .order('delivery_date', { ascending: true }); 
 
   if (error) {
     throw new Error(error.message);

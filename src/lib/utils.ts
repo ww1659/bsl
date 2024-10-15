@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { addDays, format } from "date-fns";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -22,7 +23,6 @@ export function toTitleCase(input: string) {
     .join(' ');
 }
 
-
 export function toSentenceCase(input: string) {
   if (!input) return '';
   return input
@@ -33,3 +33,29 @@ export function toSentenceCase(input: string) {
 export function removeDashes(input: string) {
   return input.replace(/-/g, ' ');
 }
+
+export function getStartOfWeek (date: string, display?: boolean) {
+  const d = new Date(date);
+  const day = d.getDay(); 
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  return display 
+  ? format (new Date(d.setDate(diff)).toISOString().split("T")[0], 'eee dd-MMM')
+  : new Date(d.setDate(diff)).toISOString().split("T")[0]
+};
+
+export function getEndOfWeek (date: string, display?: boolean) {
+  const startOfWeek = getStartOfWeek(date);
+  const endOfWeek = new Date(new Date(startOfWeek).setDate(new Date(startOfWeek).getDate() + 6));
+  return display 
+  ?  format(endOfWeek.toISOString(), 'eee dd-MMM')
+  :  endOfWeek.toISOString().split("T")[0]
+};
+
+export function getWeekRange (date = new Date()) {
+  const dayOfWeek = date.getDay();
+  const differenceToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const dateFrom = new Date(date);
+  dateFrom.setDate(date.getDate() + differenceToMonday);
+  const dateTo = addDays(dateFrom, 6);
+  return { dateFrom, dateTo };
+};

@@ -40,7 +40,6 @@ function OrderSummaryCard({
   const { mutate: createOrder } = useCreateOrder();
   const navigate = useNavigate();
   const { toast } = useToast();
-  console.log(date?.toISOString());
 
   const formattedDate = format(date || "", "EEEE do MMMM");
 
