@@ -57,7 +57,6 @@ function OrderCard({
           </CardContent>
           <CardFooter>
             <Badge>
-              {" "}
               {groupName ? toTitleCase(groupName || "") : "Private Owner"}
             </Badge>
           </CardFooter>

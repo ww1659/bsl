@@ -8,7 +8,7 @@ type ListByItemProps = {
 import { useFetchPickingListByItem } from "@/hooks/useFetchPickingListByItems";
 
 //utils
-import { getEndOfWeek, getStartOfWeek, toTitleCase } from "@/lib/utils";
+import { toTitleCase } from "@/lib/utils";
 
 //ui
 import {
@@ -27,20 +27,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { format, parseISO } from "date-fns";
 
 function ListByItem({ date }: ListByItemProps) {
-  const startDate = date?.from?.toISOString().split("T")[0] || "";
-  const endDate = date?.to?.toISOString().split("T")[0] || "";
+  const startDate = date?.from?.toISOString();
+  const endDate = date?.to?.toISOString();
 
   const { data, isLoading, isError, error } = useFetchPickingListByItem(
-    startDate,
-    endDate
+    startDate || "",
+    endDate || ""
   );
-
-  const today = new Date().toISOString().split("T")[0];
-  const startOfWeek = getStartOfWeek(today, true);
-  const endOfWeek = getEndOfWeek(today, true);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
@@ -48,14 +43,11 @@ function ListByItem({ date }: ListByItemProps) {
   if (data)
     return (
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-        <Card className="md:col-span-3 xl:col-span-4">
+        <Card className="md:col-span-4 xl:col-span-2">
           <CardHeader>
             <CardTitle>
               <div className="flex flex-row justify-between">
                 <span>Picking List By Item</span>
-                <span className="text-base">
-                  {startOfWeek} to {endOfWeek}
-                </span>
               </div>
             </CardTitle>
             <CardDescription className="max-w-lg text-balance leading-relaxed">
@@ -66,45 +58,47 @@ function ListByItem({ date }: ListByItemProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Item Name</TableHead>
-                  <TableHead className="hidden sm:table-cell">
-                    Order Nunber
+                  <TableHead className="px-2">Item Name</TableHead>
+                  <TableHead className="hidden sm:table-cell px-2">
+                    Number of Items
                   </TableHead>
-                  <TableHead className="hidden sm:table-cell">Status</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Required Date
+                  <TableHead className="hidden sm:table-cell px-2">
+                    Status
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((list) => (
-                  <TableRow className="bg-accent" key={list.id}>
-                    <TableCell>
-                      <div className="font-medium">
-                        {toTitleCase(list.items?.item_name || "")}
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      {list.orders?.number}
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Badge
-                        className="text-xs"
-                        variant={list.picked ? "outline" : "destructive"}
-                      >
-                        {list.picked ? "Picked" : "Not Picked"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {list.orders?.delivery_date
-                        ? format(
-                            parseISO(list.orders.delivery_date),
-                            "dd-MM-yyyy"
-                          )
-                        : "N/A"}
+                {Array.isArray(data) && data.length !== 0 ? (
+                  data.map((item) => (
+                    <TableRow className="bg-accent" key={item.item_id}>
+                      <TableCell className="p-2">
+                        <div className="font-medium">
+                          {toTitleCase(item.item_name || "")}
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell p-2">
+                        {item.item_count}
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell p-2">
+                        <Badge
+                          className="text-xs"
+                          variant={item.picked ? "outline" : "destructive"}
+                        >
+                          {item.picked ? "Picked" : "Not Picked"}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow className="bg-accent" key="1">
+                    <TableCell colSpan={3} className="hidden sm:table-cell">
+                      No Items to be picked for the selected date range:{" "}
+                      <span className="font-bold">
+                        {startDate} to {endDate}
+                      </span>
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </CardContent>

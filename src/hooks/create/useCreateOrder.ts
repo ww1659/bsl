@@ -54,24 +54,6 @@ const createOrder = async ({
     throw new Error(orderItemsError.message);
   }
 
-  // Step 3: Prepare and insert data into 'picking_list' table
-  const pickingListData = orderItems.map((item) => ({
-    order_id: order.id,
-    item_id: item.item_id,
-    quantity: item.quantity,
-    customer_id: orderData.customer_id,  
-    group_id: orderData.group_id || null, 
-    picked: false, 
-  }));
-
-  const { error: pickingListError } = await supabase
-    .from('picking_list')
-    .insert(pickingListData);
-
-  if (pickingListError) {
-    throw new Error(pickingListError.message);
-  }
-
   return order;
 };
 

@@ -9,7 +9,7 @@ const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 const fetchPickingListItems = async (startDate: string, endDate: string) => {
 
   const { data, error } = await supabase
-  .rpc('get_picking_list_by_item_range', {
+  .rpc('get_picking_list_by_date_range', {
     start_date: startDate,
     end_date: endDate,
   });
@@ -18,8 +18,7 @@ const fetchPickingListItems = async (startDate: string, endDate: string) => {
       console.log(error);
       throw new Error(error.message);
     }
-
-    console.log(data);
+    
     return data;
 };
 

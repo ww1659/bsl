@@ -1,4 +1,5 @@
-import NewOrderButton from "@/components/orders/newOrderButton";
+import NewOrderButton from "@/components/orders/NewOrderButton";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 function HomePage() {
@@ -6,11 +7,9 @@ function HomePage() {
     <>
       <h1>Home Page</h1>
       <div className="flex flex-row flex-wrap gap-5">
-        <div className="border rounded-lg py-1 px-3 bg-primary text-primary-foreground hover:bg-primary/90">
-          <Link to="customers">
-            <p>Customer Page</p>
-          </Link>
-        </div>
+        <Button>
+          <Link to="customers">Customers</Link>
+        </Button>
         <NewOrderButton />
       </div>
     </>

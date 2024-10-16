@@ -29,12 +29,12 @@ import { toTitleCase } from "@/lib/utils";
 import { useFetchPickingListByOrder } from "@/hooks/useFetchPickingListByOrder";
 
 function ListByOrder({ date }: ListByOrderProps) {
-  const startDate = date?.from?.toISOString().split("T")[0] || "";
-  const endDate = date?.to?.toISOString().split("T")[0] || "";
+  const startDate = date?.from?.toISOString();
+  const endDate = date?.to?.toISOString();
 
   const { data, isLoading, isError, error } = useFetchPickingListByOrder(
-    startDate,
-    endDate
+    startDate || "",
+    endDate || ""
   );
 
   if (isLoading) return <p>Loading...</p>;
@@ -43,7 +43,7 @@ function ListByOrder({ date }: ListByOrderProps) {
   if (data)
     return (
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-        <Card className="md:col-span-3 xl:col-span-4">
+        <Card className="md:col-span-4 xl:col-span-2">
           <CardHeader>
             <CardTitle>
               <div className="flex flex-row justify-between items-center">
@@ -60,20 +60,17 @@ function ListByOrder({ date }: ListByOrderProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Customer</TableHead>
-                  <TableHead className="hidden sm:table-cell">
+                  <TableHead className="px-2">Customer</TableHead>
+                  <TableHead className="hidden sm:table-cell px-2">
                     Order Number
                   </TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Delivery Date
-                  </TableHead>
-                  <TableHead className="text-right">Notes</TableHead>
+                  <TableHead className="px-2">Delivery Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {data.map((order) => (
                   <TableRow className="bg-accent" key={order.id}>
-                    <TableCell>
+                    <TableCell className="p-2">
                       <div className="font-medium">
                         {toTitleCase(order.groups?.group_name || "") ||
                           "Private"}
@@ -82,15 +79,14 @@ function ListByOrder({ date }: ListByOrderProps) {
                         {toTitleCase(order.customers?.customer_name || "")}
                       </div>
                     </TableCell>
-                    <TableCell className="hidden sm:table-cell">
+                    <TableCell className="hidden sm:table-cell p-2">
                       {order.number}
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">
+                    <TableCell className="p-2">
                       {order.delivery_date
                         ? format(parseISO(order.delivery_date), "dd-MM-yyyy")
                         : "N/A"}
                     </TableCell>
-                    <TableCell className="text-right">{order.notes}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

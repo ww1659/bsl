@@ -7,8 +7,20 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 const fetchOrders = async () => {
-  //if fetching orders only from today onwards
-  const today = new Date().toISOString().split("T")[0]; 
+  const today = new Date();
+
+  const startOfDayLocal = new Date(
+    today.getUTCFullYear(),
+    today.getUTCMonth(),
+    today.getUTCDate(),
+    0, 
+    0, 
+    0, 
+    0  
+  );
+
+    const dateQuery = startOfDayLocal.toISOString();
+
   const { data, error } = await supabase
   .from('orders')
   .select(`
@@ -34,7 +46,7 @@ const fetchOrders = async () => {
       customer_name
     )
   `)
-  .gte('delivery_date', today)
+  .gte('delivery_date', dateQuery)
   .order('delivery_date', { ascending: true }); 
 
   if (error) {

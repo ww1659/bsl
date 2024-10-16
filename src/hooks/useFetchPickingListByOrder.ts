@@ -6,7 +6,11 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
+const fetchPickingListByOrder = async (startDate: string, endDate: string) => {  
+console.log(startDate, endDate);
+
+
+
   const { data, error } = await supabase
     .from('orders')
     .select(`
@@ -18,7 +22,7 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
       group_id,
       customers (customer_name),
       groups (group_name),
-      picking_list (
+      order_items (
         item_id,
         quantity,
         picked,
@@ -39,7 +43,6 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
   }
 
   return data;
-
 };
 
 export const useFetchPickingListByOrder = (startDate: string, endDate: string) => {

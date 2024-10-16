@@ -69,6 +69,7 @@ function PickingListPage() {
                   selected={date}
                   onSelect={setDate}
                   numberOfMonths={1}
+                  disabled={(date) => date < getWeekRange().dateFrom}
                 />
               </PopoverContent>
             </Popover>
