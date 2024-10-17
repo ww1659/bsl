@@ -159,24 +159,30 @@ export type Database = {
           id: number
           item_id: number | null
           order_id: string | null
+          picked: boolean | null
           price: number | null
           quantity: number | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           id?: never
           item_id?: number | null
           order_id?: string | null
+          picked?: boolean | null
           price?: number | null
           quantity?: number | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           id?: never
           item_id?: number | null
           order_id?: string | null
+          picked?: boolean | null
           price?: number | null
           quantity?: number | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -245,71 +251,6 @@ export type Database = {
             columns: ["group_id"]
             isOneToOne: false
             referencedRelation: "groups"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      picking_list: {
-        Row: {
-          created_at: string | null
-          customer_id: string | null
-          group_id: string | null
-          id: number
-          item_id: number | null
-          order_id: string | null
-          picked: boolean | null
-          quantity: number
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          customer_id?: string | null
-          group_id?: string | null
-          id?: number
-          item_id?: number | null
-          order_id?: string | null
-          picked?: boolean | null
-          quantity: number
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          customer_id?: string | null
-          group_id?: string | null
-          id?: number
-          item_id?: number | null
-          order_id?: string | null
-          picked?: boolean | null
-          quantity?: number
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "picking_list_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "picking_list_group_id_fkey"
-            columns: ["group_id"]
-            isOneToOne: false
-            referencedRelation: "groups"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "picking_list_item_id_fkey"
-            columns: ["item_id"]
-            isOneToOne: false
-            referencedRelation: "items"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "picking_list_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
             referencedColumns: ["id"]
           },
         ]
@@ -396,7 +337,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_picking_list_by_item_range: {
+      get_picking_list_by_date_range: {
         Args: {
           start_date: string
           end_date: string
@@ -405,13 +346,7 @@ export type Database = {
           item_id: number
           item_name: string
           item_count: number
-          price: number
-          order_number: number
-          delivery_date: string
-          order_status: string
-          order_notes: string
-          customer_name: string
-          group_name: string
+          picked: boolean
         }[]
       }
       get_weekly_total: {
