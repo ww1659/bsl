@@ -2,6 +2,17 @@ import { clsx, type ClassValue } from "clsx"
 import { addDays, format } from "date-fns";
 import { twMerge } from "tailwind-merge"
 
+type Items = {
+  items: {
+    id: number;
+    item_name: string | null;
+    price: number | null;
+  } | null;
+  picked: boolean | null;
+  item_id: number | null;
+  quantity: number | null;
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -58,4 +69,13 @@ export function getWeekRange (date = new Date()) {
   dateFrom.setDate(date.getDate() + differenceToMonday);
   const dateTo = addDays(dateFrom, 6);
   return { dateFrom, dateTo };
+};
+
+export function calculateOrderPickedStatus (items: Items[]) {
+  const allPicked = items.every((item) => item.picked === true);
+  const nonePicked = items.every((item) => item.picked === false);
+
+  if (allPicked) return "picked";
+  if (!nonePicked) return "partial";
+  return "not picked";
 };

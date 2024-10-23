@@ -19,40 +19,40 @@ const fetchOrders = async () => {
     0  
   );
 
-    const dateQuery = startOfDayLocal.toISOString();
+  const dateQuery = startOfDayLocal.toISOString();
 
-  const { data, error } = await supabase
-  .from('orders')
-  .select(`
-    total,
-    number,
-    delivery_date,
-    status,
-    notes,
-    group_id,
-    id,
-    order_items (
-      quantity,
-      items (
-        id,
-        item_name,
-        price
+    const { data, error } = await supabase
+    .from('orders')
+    .select(`
+      total,
+      number,
+      delivery_date,
+      status,
+      notes,
+      group_id,
+      id,
+      order_items (
+        quantity,
+        items (
+          id,
+          item_name,
+          price
+        )
+      ),
+      groups (
+        group_name
+      ), 
+      customers (
+        customer_name
       )
-    ),
-    groups (
-      group_name
-    ), 
-    customers (
-      customer_name
-    )
-  `)
-  .gte('delivery_date', dateQuery)
-  .order('delivery_date', { ascending: true }); 
+    `)
+    .gte('delivery_date', dateQuery)
+    .order('delivery_date', { ascending: true }); 
 
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data;
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data;
 };
 
 export const useFetchOrders = () => {

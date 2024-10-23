@@ -7,9 +7,6 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 const fetchPickingListByOrder = async (startDate: string, endDate: string) => {  
-console.log(startDate, endDate);
-
-
 
   const { data, error } = await supabase
     .from('orders')

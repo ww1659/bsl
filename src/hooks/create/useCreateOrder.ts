@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '../../../database.types';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../use-toast';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -39,7 +41,6 @@ const createOrder = async ({
     throw new Error(orderError.message);
   }
 
-  // add order_id to each order item
   const orderItemsData = orderItems.map((item) => ({
     ...item,
     order_id: order.id,
@@ -57,7 +58,21 @@ const createOrder = async ({
   return order;
 };
 
-// Hook to handle the mutation
 export const useCreateOrder = () => {
-  return useMutation({mutationFn: createOrder})
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: createOrder,
+    onSuccess: (order) => {
+        toast({
+          title: "Success!",
+          description: `Order number ${order.number} created, £${order.total}`,
+        });
+        navigate("/");
+      },
+      onError: (error) => {
+        console.error("Error creating order:", error.message);
+      },
+    }
+  )
 };

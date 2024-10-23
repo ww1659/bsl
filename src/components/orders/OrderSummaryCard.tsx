@@ -26,8 +26,6 @@ import { Separator } from "../ui/separator";
 //utils
 import { toTitleCase } from "@/lib/utils";
 import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
 
 function OrderSummaryCard({
   currentOrderItems,
@@ -38,8 +36,6 @@ function OrderSummaryCard({
   groupId,
 }: OrderSummaryCard) {
   const { mutate: createOrder } = useCreateOrder();
-  const navigate = useNavigate();
-  const { toast } = useToast();
 
   const formattedDate = format(date || "", "EEEE do MMMM");
 
@@ -56,8 +52,7 @@ function OrderSummaryCard({
     customerDiscount: number | null,
     date: Date | undefined,
     customerId: string | null,
-    groupId: string | null,
-    customerName: string | null
+    groupId: string | null
   ) => {
     const orderData = {
       total: orderTotal,
@@ -76,21 +71,7 @@ function OrderSummaryCard({
       };
     });
 
-    createOrder(
-      { orderData, orderItems },
-      {
-        onSuccess: (order) => {
-          toast({
-            title: "Success!",
-            description: `Order created for ${customerName}, £${order.total}`,
-          });
-          navigate("/");
-        },
-        onError: (error) => {
-          console.error("Error creating order:", error.message);
-        },
-      }
-    );
+    createOrder({ orderData, orderItems });
   };
 
   return (
@@ -182,8 +163,7 @@ function OrderSummaryCard({
               customerDiscount,
               date,
               customerId,
-              groupId,
-              customerName
+              groupId
             )
           }
         >
