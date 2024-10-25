@@ -6,9 +6,7 @@ function CreateNewGroupPage() {
       <div className="flex flex-row justify-between items-center">
         <h1 className="py-2">Create New Group</h1>
       </div>
-      <div>
-        <NewGroupForm />
-      </div>
+      <NewGroupForm />
     </>
   );
 }

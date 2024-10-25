@@ -28,7 +28,10 @@ if (error) {
   throw new Error(`Error fetching data: ${error.message}`);
 }
 
-return data || []
+console.log(data, "IN HOOK");
+
+
+return data
 };
 
 export const useFetchStandardOrder = (customerId: string) => {

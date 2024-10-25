@@ -19,16 +19,19 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
     customerId || ""
   );
 
-  const sortedItems = data?.standard_order[0].order_items.sort((a, b) => {
-    const nameA = a.items?.item_name?.toLowerCase();
-    const nameB = b.items?.item_name?.toLowerCase();
-    if (nameA && nameB && nameA < nameB) return -1;
-    if (nameA && nameB && nameA > nameB) return 1;
+  let sortedItems: any[] = [];
+  let orderName;
 
-    return 0;
-  });
-
-  const orderName = data?.standard_order[0].order_name;
+  if (data && data.standard_order.length !== 0) {
+    orderName = data.standard_order[0].order_name;
+    sortedItems = data?.standard_order[0].standard_order_items.sort((a, b) => {
+      const nameA = a.items?.item_name?.toLowerCase();
+      const nameB = b.items?.item_name?.toLowerCase();
+      if (nameA && nameB && nameA < nameB) return -1;
+      if (nameA && nameB && nameA > nameB) return 1;
+      return 0;
+    });
+  }
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
