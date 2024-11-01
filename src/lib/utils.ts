@@ -74,8 +74,8 @@ export function getWeekRange (date = new Date()) {
 export function calculateOrderPickedStatus (items: Items[]) {
   const allPicked = items.every((item) => item.picked === true);
   const nonePicked = items.every((item) => item.picked === false);
-
   if (allPicked) return "picked";
   if (!nonePicked) return "partial";
   return "not picked";
 };
+

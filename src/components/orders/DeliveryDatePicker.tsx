@@ -16,13 +16,14 @@ import { Button } from "../ui/button";
 
 function DeliveryDatePicker({ date, setDate }: DeliveryDatePickerProps) {
   return (
-    <div className="my-2 flex flex-row items-center gap-4">
+    <div className="my-2 flex flex-row items-center gap-4 justify-end">
+      <p className="text-xs">Please select a date for delivery</p>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
             className={cn(
-              "justify-start text-left font-normal",
+              "justify-start text-left font-normal w-1/4",
               !date && "text-muted-foreground"
             )}
           >
@@ -36,10 +37,12 @@ function DeliveryDatePicker({ date, setDate }: DeliveryDatePickerProps) {
             selected={date}
             onSelect={setDate}
             initialFocus
+            disabled={(date) =>
+              date.getTime() < new Date().setHours(0, 0, 0, 0)
+            }
           />
         </PopoverContent>
       </Popover>
-      <p className="text-xs">Please select a date for delivery</p>
     </div>
   );
 }

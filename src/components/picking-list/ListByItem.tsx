@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Check, X } from "lucide-react";
 
 function ListByItem({ date }: ListByItemProps) {
   const startDate = date?.from?.toISOString();
@@ -37,12 +37,14 @@ function ListByItem({ date }: ListByItemProps) {
     endDate || ""
   );
 
+  console.log(data);
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
   if (data)
     return (
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-1">
         <Card className="md:col-span-4 xl:col-span-2">
           <CardHeader>
             <CardTitle>
@@ -57,35 +59,34 @@ function ListByItem({ date }: ListByItemProps) {
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead className="px-2">Item Name</TableHead>
-                  <TableHead className="hidden sm:table-cell px-2">
-                    Number of Items
-                  </TableHead>
-                  <TableHead className="hidden sm:table-cell px-2">
-                    Status
-                  </TableHead>
+                <TableRow className="bg-0 hover:bg-0 text-xs">
+                  <TableHead className="py-1 h-6">Item Name</TableHead>
+                  <TableHead className="py-1 h-6">Picked Count</TableHead>
+                  <TableHead className="py-1 h-6">Unpicked Count</TableHead>
+                  <TableHead className="py-1 h-6">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {Array.isArray(data) && data.length !== 0 ? (
                   data.map((item) => (
-                    <TableRow className="bg-accent" key={item.item_id}>
-                      <TableCell className="p-2">
+                    <TableRow className="bg-accent text-xs" key={item.item_id}>
+                      <TableCell className="py-1">
                         <div className="font-medium">
                           {toTitleCase(item.item_name || "")}
                         </div>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell p-2">
-                        {item.item_count}
+                      <TableCell className="py-1">
+                        {item.picked_count}
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell p-2">
-                        <Badge
-                          className="text-xs"
-                          variant={item.picked ? "outline" : "destructive"}
-                        >
-                          {item.picked ? "Picked" : "Not Picked"}
-                        </Badge>
+                      <TableCell className="py-1">
+                        {item.unpicked_count}
+                      </TableCell>
+                      <TableCell className="py-1">
+                        {item.unpicked_count > 0 ? (
+                          <X className="h-5 w-5 text-destructive" />
+                        ) : (
+                          <Check className="h-5 w-5 text-success" />
+                        )}
                       </TableCell>
                     </TableRow>
                   ))

@@ -63,8 +63,6 @@ function LoginPage() {
         emailRedirectTo: "/",
       },
     });
-    console.log(data);
-    console.log(error);
 
     if (data.session !== null && data.user !== null) {
       navigate("/");

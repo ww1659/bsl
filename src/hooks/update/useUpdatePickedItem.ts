@@ -6,25 +6,28 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-type UpdatePickedMutation = {
+type UpdatePickedItemMutation = {
+    itemId: number;
     orderId: string;
     currentPickedStatus: boolean;
 };
 
-const updatePickedOrder = async ({ orderId, currentPickedStatus }: UpdatePickedMutation) => {
+const updatePickedItem = async ({ itemId, orderId, currentPickedStatus }: UpdatePickedItemMutation) => {    
+
     const { data, error } = await supabase
         .from('order_items')
         .update({ picked: !currentPickedStatus })
+        .eq('item_id', itemId)
         .eq('order_id', orderId);
 
     if (error) throw new Error(error.message);
     return data;
 };
 
-export const useUpdatePickedOrder = () => {
+export const useUpdatePickedItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: updatePickedOrder,
+        mutationFn: updatePickedItem,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['picking-list-orders'] });
         },
@@ -33,5 +36,3 @@ export const useUpdatePickedOrder = () => {
         }
     });
 };
-
-

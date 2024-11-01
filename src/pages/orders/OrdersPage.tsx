@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 //supabase queries
 import { useFetchOrders } from "@/hooks/useFetchOrders";
 
@@ -9,7 +11,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -21,121 +22,155 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 //utils
-import { getEndOfWeek, getStartOfWeek, toTitleCase } from "@/lib/utils";
+import { toTitleCase } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
-import { useFetchWeeklyTotal } from "@/hooks/useFetchWeeklyTotal";
+import { Button } from "@/components/ui/button";
+import { useFetchGroups } from "@/hooks/useFetchGroups";
 
 function OrdersPage() {
-  const today = new Date().toISOString().split("T")[0];
-  const startOfWeek = getStartOfWeek(today, true);
-  const endOfWeek = getEndOfWeek(today, true);
+  const [filters, setFilters] = useState({
+    startDate: new Date(new Date().setUTCHours(0, 0, 0, 0)).toISOString(),
+    groupId: "",
+    orderId: "",
+    status: "",
+  });
 
+  const { data, isLoading, isError, error } = useFetchOrders(filters);
   const {
-    data: ordersData,
-    isLoading: ordersLoading,
-    isError: ordersError,
-    error: ordersFetchError,
-  } = useFetchOrders();
+    data: groupsData,
+    isLoading: isGroupsLoading,
+    isError: isGroupsError,
+    error: groupsError,
+  } = useFetchGroups();
 
-  // Fetching weekly total revenue
-  const {
-    data: weeklyTotalData,
-    isLoading: weeklyTotalLoading,
-    isError: weeklyTotalError,
-    error: weeklyTotalFetchError,
-  } = useFetchWeeklyTotal();
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
 
-  if (ordersLoading || weeklyTotalLoading) return <p>Loading...</p>;
-  if (ordersError || weeklyTotalError)
-    return (
-      <p>
-        Error: {ordersFetchError?.message || weeklyTotalFetchError?.message}
-      </p>
-    );
+  if (isLoading || isGroupsLoading) return <p>Loading...</p>;
+  if (isError || isGroupsError)
+    return <p>Error: {error?.message || groupsError?.message}</p>;
 
-  if (ordersData)
-    return (
-      <>
-        <div className="flex flex-row gap-4 items-center">
-          <h1>Orders Page</h1>
-          <NewOrderButton />
+  return (
+    <>
+      <div className="flex flex-row gap-4 items-center justify-between">
+        <h1>Orders</h1>
+        <NewOrderButton />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild className="justify-start">
+            <Button variant="outline">Filter by Group Name</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuLabel>Groups</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {groupsData?.map((group) => (
+              <DropdownMenuCheckboxItem
+                key={group.id}
+                checked={filters.groupId === group.id}
+                onCheckedChange={() =>
+                  handleFilterChange({
+                    target: {
+                      name: "groupId",
+                      value: filters.groupId === group.id ? "" : group.id,
+                    },
+                  } as React.ChangeEvent<HTMLInputElement>)
+                }
+              >
+                {toTitleCase(group.group_name || "")}
+              </DropdownMenuCheckboxItem>
+            ))}
+            <DropdownMenuCheckboxItem
+              key="private"
+              checked={filters.groupId === "private"}
+              onCheckedChange={() =>
+                handleFilterChange({
+                  target: {
+                    name: "groupId",
+                    value: filters.groupId === "private" ? "" : "private",
+                  },
+                } as React.ChangeEvent<HTMLInputElement>)
+              }
+            >
+              Private Property
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <div className="flex flex-row gap-2 col-span-4">
+          {Object.entries(filters).map(([key, value]) => {
+            if (value) {
+              if (key === "startDate") {
+                return (
+                  <Badge key={key} variant="outline">
+                    Start Date: {format(parseISO(value), "dd-MM-yyyy")}
+                  </Badge>
+                );
+              }
+              if (key === "groupId") {
+                const groupName =
+                  groupsData?.find((group) => group.id === value)?.group_name ||
+                  "Private Property";
+                return (
+                  <Badge key={key} variant="outline">
+                    Group: {toTitleCase(groupName)}
+                  </Badge>
+                );
+              }
+              return (
+                <Badge key={key} variant="outline">
+                  {toTitleCase(key)}: {toTitleCase(value)}
+                </Badge>
+              );
+            }
+            return null;
+          })}
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3">
-          <Card className="md:col-span-1">
-            <CardHeader className="pb-2">
-              <CardDescription>
-                This Week: {startOfWeek}-{endOfWeek}
-              </CardDescription>
-              <CardTitle className="text-4xl">£{weeklyTotalData}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-muted-fo reground">
-                +25% from last week
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Progress value={25} aria-label="25% increase" />
-            </CardFooter>
-          </Card>
-          <Card className="md:col-span-1">
-            <CardHeader className="pb-2">
-              <CardDescription>This Week</CardDescription>
-              <CardTitle className="text-4xl">$1,329</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-muted-fo reground">
-                +25% from last week
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Progress value={25} aria-label="25% increase" />
-            </CardFooter>
-          </Card>
-          <Card className="md:col-span-1">
-            <CardHeader className="pb-2">
-              <CardDescription>This Week</CardDescription>
-              <CardTitle className="text-4xl">$1,329</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-muted-foreground">
-                +25% from last week
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Progress value={25} aria-label="25% increase" />
-            </CardFooter>
-          </Card>
-          <Card className="md:col-span-3 xl:col-span-2">
-            <CardHeader className="pb-3">
-              <CardTitle>Upcoming Orders</CardTitle>
-              <CardDescription className="max-w-lg text-balance leading-relaxed">
-                Your upcoming orders listed below.
-              </CardDescription>
-              <CardContent className="p-0">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Order Number
-                      </TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Status
-                      </TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Delivery Date
-                      </TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {ordersData.map((order) => (
-                      <TableRow className="bg-accent" key={order.id}>
+        <Card className="col-span-4">
+          <CardHeader className="pb-3">
+            <CardTitle>All Orders</CardTitle>
+            <CardDescription className="max-w-lg text-balance leading-relaxed">
+              Filter or search for orders here
+            </CardDescription>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-0 hover:bg-0">
+                    <TableHead>Customer</TableHead>
+                    <TableHead className="hidden sm:table-cell">
+                      Order Number
+                    </TableHead>
+                    <TableHead className="hidden sm:table-cell">
+                      Status
+                    </TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Delivery Date
+                    </TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data && data.length !== 0 ? (
+                    data.map((order) => (
+                      <TableRow className="bg-0 hover:bg-accent" key={order.id}>
                         <TableCell>
                           <div className="font-medium">
                             {toTitleCase(order.groups?.group_name || "") ||
@@ -161,19 +196,26 @@ function OrdersPage() {
                               )
                             : "N/A"}
                         </TableCell>
-                        <TableCell className="text-right">
-                          £{order.total}
+                        <TableCell className="text-right font-bold">
+                          £{order.total?.toFixed(2)}
                         </TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </CardHeader>
-          </Card>
-        </div>
-      </>
-    );
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5}>
+                        Sorry, no orders can be found
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </CardHeader>
+        </Card>
+      </div>
+    </>
+  );
 }
 
 export default OrdersPage;

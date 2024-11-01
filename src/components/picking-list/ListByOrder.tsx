@@ -1,8 +1,8 @@
-import { DateRange } from "react-day-picker";
-
 type ListByOrderProps = {
   date: DateRange | undefined;
 };
+import { DateRange } from "react-day-picker";
+import { useState } from "react";
 
 //ui
 import {
@@ -20,6 +20,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge } from "../ui/badge";
+import { Switch } from "../ui/switch";
 
 //utils
 import { format, parseISO } from "date-fns";
@@ -27,13 +29,18 @@ import { calculateOrderPickedStatus, toTitleCase } from "@/lib/utils";
 
 //supabase hooks
 import { useFetchPickingListByOrder } from "@/hooks/useFetchPickingListByOrder";
-import { useState } from "react";
+import { useUpdatePickedItem } from "@/hooks/update/useUpdatePickedItem";
+import { useUpdatePickedOrder } from "@/hooks/update/useUpdatePickedOrder";
+
+//components
 import ItemsSheet from "./ItemsSheet";
-import { Badge } from "../ui/badge";
-import { Check, X } from "lucide-react";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 
 function ListByOrder({ date }: ListByOrderProps) {
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+  const { mutate: updatePickedItem } = useUpdatePickedItem();
+  const { mutate: updatePickedOrder } = useUpdatePickedOrder();
 
   const handleRowClick = (orderId: string) => {
     setSelectedOrder(orderId === selectedOrder ? null : orderId);
@@ -51,6 +58,39 @@ function ListByOrder({ date }: ListByOrderProps) {
   if (selectedOrder) {
     orderNumber = data?.filter((order) => order.id === selectedOrder)[0].number;
   }
+
+  const items = data
+    ? data
+        .filter((order) => order.id === selectedOrder)
+        .flatMap((order) => order.order_items)
+    : [];
+
+  const sortedItems = items.sort((a, b) => {
+    const nameA = a.items?.item_name?.toLowerCase() || "";
+    const nameB = b.items?.item_name?.toLowerCase() || "";
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0;
+  });
+
+  const orderPicked = calculateOrderPickedStatus(items);
+
+  const handleIndividualPicked = (itemId: number | null, orderId: string) => {
+    const currentItem = items.filter((item) => item.item_id === itemId)[0];
+    const currentPickedStatus = currentItem.picked;
+    if (itemId !== null) {
+      updatePickedItem({
+        itemId,
+        orderId,
+        currentPickedStatus: !!currentPickedStatus,
+      });
+    }
+  };
+
+  const handleAllPicked = (orderId: string) => {
+    const currentPickedStatus = orderPicked === "picked" ? true : false;
+    updatePickedOrder({ orderId, currentPickedStatus });
+  };
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
@@ -110,12 +150,12 @@ function ListByOrder({ date }: ListByOrderProps) {
                     <TableCell className="p-2">
                       {calculateOrderPickedStatus(order.order_items) ===
                       "picked" ? (
-                        <Badge>Picked</Badge>
+                        <Badge variant="success">Picked</Badge>
                       ) : calculateOrderPickedStatus(order.order_items) ===
                         "partial" ? (
-                        <Badge>Partially Picked</Badge>
+                        <Badge variant="warning">Partial</Badge>
                       ) : (
-                        <Badge variant="destructive">Not Picked</Badge>
+                        <Badge variant="destructive">TBP</Badge>
                       )}
                     </TableCell>
                   </TableRow>
@@ -126,15 +166,32 @@ function ListByOrder({ date }: ListByOrderProps) {
         </Card>
 
         <Card className="hidden xl:block xl:col-span-2">
-          <CardHeader>
-            <CardTitle>
-              <div className="flex flex-row justify-between items-center">
-                Items
+          <CardHeader className="flex flex-row justify-between">
+            <div>
+              <CardTitle>
+                <div className="flex flex-row justify-between items-center">
+                  Items
+                </div>
+              </CardTitle>
+              <CardDescription className="max-w-lg text-balance leading-relaxed">
+                Items for Order Number {orderNumber}
+              </CardDescription>
+            </div>
+            {selectedOrder && (
+              <div className="flex items-center space-x-2">
+                <Switch
+                  onCheckedChange={() =>
+                    selectedOrder && handleAllPicked(selectedOrder)
+                  }
+                  checked={orderPicked === "picked"}
+                />
+                <Label htmlFor="all-picked">
+                  {orderPicked === "picked"
+                    ? "Unpick All Items"
+                    : "Pick All Items"}
+                </Label>
               </div>
-            </CardTitle>
-            <CardDescription className="max-w-lg text-balance leading-relaxed">
-              Items for Order Number {orderNumber}
-            </CardDescription>
+            )}
           </CardHeader>
           <CardContent>
             <Table>
@@ -142,32 +199,30 @@ function ListByOrder({ date }: ListByOrderProps) {
                 <TableRow className="bg-0 hover:bg-0">
                   <TableHead className="p-1">Item Name</TableHead>
                   <TableHead className="p-1">Quantity</TableHead>
-                  <TableHead className="p-1">Picked</TableHead>
+                  <TableHead className="p-1 text-center">Picked</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {selectedOrder ? (
-                  data
-                    .filter((order) => order.id === selectedOrder)
-                    .flatMap((order) => order.order_items)
-                    .map((item) => (
-                      <TableRow
-                        className="text-xs bg-0 hover:bg-0"
-                        key={item.item_id}
-                      >
-                        <TableCell className="p-1">
-                          {toTitleCase(item.items?.item_name || "")}
-                        </TableCell>
-                        <TableCell className="p-1"> {item.quantity}</TableCell>
-                        <TableCell className="p-1">
-                          {item.picked ? (
-                            <Check className="h-4 w-4 text-green-800" />
-                          ) : (
-                            <X className="h-4 w-4 text-destructive" />
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))
+                  sortedItems.map((item) => (
+                    <TableRow
+                      className="text-sm bg-0 hover:bg-0"
+                      key={item.item_id}
+                    >
+                      <TableCell className="p-1">
+                        {toTitleCase(item.items?.item_name || "")}
+                      </TableCell>
+                      <TableCell className="p-1"> {item.quantity}</TableCell>
+                      <TableCell className="p-1 text-center">
+                        <Switch
+                          onCheckedChange={() =>
+                            handleIndividualPicked(item.item_id, selectedOrder)
+                          }
+                          checked={item.picked || false}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))
                 ) : (
                   <TableRow>
                     <TableCell colSpan={3} className="text-center">
@@ -184,7 +239,10 @@ function ListByOrder({ date }: ListByOrderProps) {
           selectedOrder={selectedOrder}
           setSelectedOrder={setSelectedOrder}
           orderNumber={orderNumber}
-          orderData={data.filter((order) => order.id === selectedOrder)}
+          orderItems={items}
+          onAllPicked={handleAllPicked}
+          onIndividualPicked={handleIndividualPicked}
+          orderPicked={orderPicked}
         />
       </div>
     );

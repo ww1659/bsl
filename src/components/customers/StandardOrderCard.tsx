@@ -13,13 +13,14 @@ import {
 import { Button } from "../ui/button";
 import { toTitleCase } from "@/lib/utils";
 import { useFetchStandardOrder } from "@/hooks/useFetchStandardOrder";
+import { OrderItem } from "@/types";
 
 function StandardOrderCard({ customerId }: StandardOrderCard) {
   const { data, isLoading, isError, error } = useFetchStandardOrder(
     customerId || ""
   );
 
-  let sortedItems: any[] = [];
+  let sortedItems: OrderItem[] = [];
   let orderName;
 
   if (data && data.standard_order.length !== 0) {

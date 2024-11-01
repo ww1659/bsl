@@ -13,26 +13,15 @@ type ItemsSheetProps = {
   selectedOrder: string | null;
   setSelectedOrder: (orderId: string | null) => void;
   orderNumber: number | null | undefined;
-  orderData: {
-    id: string;
-    number: number;
-    delivery_date: string | null;
-    status: "pending" | "paid" | "sent" | "overdue" | null;
-    notes: string | null;
-    group_id: string | null;
-    customers: {
-      customer_name: string | null;
-    } | null;
-    groups: {
-      group_name: string | null;
-    } | null;
-    order_items: Items[];
-  }[];
+  orderItems: Items[];
+  onIndividualPicked: (itemId: number | null, orderId: string) => void;
+  onAllPicked: (orderId: string) => void;
+  orderPicked: string | null;
 };
 
 import { useEffect, useState } from "react";
 
-//conponents
+//components
 import {
   Sheet,
   SheetContent,
@@ -49,20 +38,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "../ui/button";
 
 //utils
-import { calculateOrderPickedStatus, toTitleCase } from "@/lib/utils";
-import { useUpdatePickedOrder } from "@/hooks/update/useUpdatePickedOrder";
-import { Check, X } from "lucide-react";
+import { toTitleCase } from "@/lib/utils";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
 
 function ItemsSheet({
   selectedOrder,
   setSelectedOrder,
   orderNumber,
-  orderData,
+  orderItems,
+  onAllPicked,
+  onIndividualPicked,
+  orderPicked,
 }: ItemsSheetProps) {
-  const { mutate: updatePickedOrder } = useUpdatePickedOrder();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -85,23 +75,19 @@ function ItemsSheet({
     }
   }, [isSmallScreen, selectedOrder]);
 
-  const items = orderData
-    .filter((order) => order.id === selectedOrder)
-    .flatMap((order) => order.order_items);
+  const sortedItems = orderItems.sort((a, b) => {
+    const nameA = a.items?.item_name?.toLowerCase() || "";
+    const nameB = b.items?.item_name?.toLowerCase() || "";
+    if (nameA < nameB) return -1;
+    if (nameA > nameB) return 1;
+    return 0;
+  });
 
   const handleSheetOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
     if (!isOpen) {
       setSelectedOrder(null);
     }
-  };
-
-  const orderPicked = calculateOrderPickedStatus(items);
-
-  const handlePicked = () => {
-    const orderId = orderData[0].id;
-    const currentPickedStatus = orderPicked === "picked" ? true : false;
-    updatePickedOrder({ orderId, currentPickedStatus });
   };
 
   return (
@@ -112,7 +98,7 @@ function ItemsSheet({
             <SheetTitle>Order Number: {orderNumber}</SheetTitle>
           </SheetHeader>
           <SheetDescription>
-            Items to be picked for this order shown below. Click{" "}
+            Items to be picked for this order shown below. Click
             <span className="font-bold">Picked</span> when you have prepared the
             order
           </SheetDescription>
@@ -125,7 +111,7 @@ function ItemsSheet({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((item) => (
+              {sortedItems.map((item) => (
                 <TableRow
                   className="text-xs bg-0 hover:bg-0"
                   key={item.item_id}
@@ -135,24 +121,33 @@ function ItemsSheet({
                   </TableCell>
                   <TableCell className="p-1"> {item.quantity}</TableCell>
                   <TableCell className="p-1">
-                    {item.picked ? (
-                      <Check className="h-4 w-4 text-green-800" />
-                    ) : (
-                      <X className="h-4 w-4 text-destructive" />
-                    )}
+                    <Switch
+                      onCheckedChange={() =>
+                        selectedOrder &&
+                        onIndividualPicked(item.item_id, selectedOrder)
+                      }
+                      checked={item.picked || false}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           <SheetFooter>
-            <div className="flex flex-col gap-2 w-full">
-              <Button size="sm" onClick={() => handlePicked()}>
-                Picked
-              </Button>
-              <p className="text-xs text-center">
-                Click here when you are done
-              </p>
+            <div className="flex flex-col gap-2 w-full items-center mt-5">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="all-picked">
+                  {orderPicked === "picked"
+                    ? "Unpick All Items"
+                    : "Pick All Items"}
+                </Label>
+                <Switch
+                  onCheckedChange={() =>
+                    selectedOrder && onAllPicked(selectedOrder)
+                  }
+                  checked={orderPicked === "picked"}
+                />
+              </div>
             </div>
           </SheetFooter>
         </SheetContent>

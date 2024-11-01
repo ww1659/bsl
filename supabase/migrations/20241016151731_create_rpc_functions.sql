@@ -13,16 +13,16 @@ CREATE OR REPLACE FUNCTION get_picking_list_by_date_range(start_date DATE, end_d
 RETURNS TABLE (
   item_id BIGINT,
   item_name VARCHAR,
-  item_count BIGINT,
-  picked BOOLEAN
+  picked_count BIGINT,
+  unpicked_count BIGINT
 ) AS $$
 BEGIN
   RETURN QUERY
   SELECT
     oi.item_id,
     i.item_name,
-    SUM(oi.quantity) AS item_count,
-    BOOL_OR(oi.picked) AS picked
+    SUM(CASE WHEN oi.picked THEN oi.quantity ELSE 0 END) AS picked_count,
+    SUM(CASE WHEN NOT oi.picked THEN oi.quantity ELSE 0 END) AS unpicked_count
   FROM
     order_items oi
   JOIN items i ON oi.item_id = i.id

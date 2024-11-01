@@ -6,22 +6,17 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-const fetchOrders = async () => {
-  const today = new Date();
+type FetchOrdersParams = {
+  startDate?: string;
+  groupId?: string;
+  orderId?: string;
+  status?: string;
+};
 
-  const startOfDayLocal = new Date(
-    today.getUTCFullYear(),
-    today.getUTCMonth(),
-    today.getUTCDate(),
-    0, 
-    0, 
-    0, 
-    0  
-  );
-
-  const dateQuery = startOfDayLocal.toISOString();
-
-    const { data, error } = await supabase
+const fetchOrders = async ({ startDate, groupId, orderId, status }: FetchOrdersParams) => {
+console.log(startDate, groupId);
+  
+  let query = supabase
     .from('orders')
     .select(`
       total,
@@ -46,16 +41,33 @@ const fetchOrders = async () => {
         customer_name
       )
     `)
-    .gte('delivery_date', dateQuery)
-    .order('delivery_date', { ascending: true }); 
+    .order('delivery_date', { ascending: true });
 
-    if (error) {
-      throw new Error(error.message);
-    }
-    return data;
+  if (groupId) {
+    query = groupId === 'private' ? query.is('group_id', null) : query.eq('group_id', groupId);
+  }
+
+  if (orderId) {
+    query = query.eq('id', orderId);
+  }
+
+  if (status) {
+    query = query.eq('status', status);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  console.log(data);
+  
+  return data;
 };
 
-export const useFetchOrders = () => {
-  return useQuery({queryKey: ['orders'], queryFn: fetchOrders});
+export const useFetchOrders = (params: FetchOrdersParams) => {
+  return useQuery({
+    queryKey: ['orders', params],
+    queryFn: () => fetchOrders(params)
+  });
 };
-
