@@ -30,12 +30,12 @@ function PickingListPage() {
     <>
       <h1>Picking List</h1>
       <Tabs defaultValue="order">
-        <div className="flex flex-row justify-between xl:w-1/2 xl:pr-2">
+        <div className="flex flex-row justify-between xl:pr-2">
           <TabsList>
             <TabsTrigger value="order">Group by Order</TabsTrigger>
             <TabsTrigger value="item">Group by Items</TabsTrigger>
           </TabsList>
-          <div className={cn("grid gap-2")}>
+          <div className={cn("grid gap-2 justify-end")}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button

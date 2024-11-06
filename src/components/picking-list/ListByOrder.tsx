@@ -34,7 +34,6 @@ import { useUpdatePickedOrder } from "@/hooks/update/useUpdatePickedOrder";
 
 //components
 import ItemsSheet from "./ItemsSheet";
-import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 
 function ListByOrder({ date }: ListByOrderProps) {

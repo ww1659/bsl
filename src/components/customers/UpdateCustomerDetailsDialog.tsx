@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { Button } from "../ui/button";
 import { closeDialog } from "@/redux/features/customers/updateCustomerSlice";
 import CustomerDetailsForm from "./CustomerDetailsForm";
 
