@@ -1,0 +1,77 @@
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useFetchOrders } from "@/hooks/useFetchOrders";
+import { toTitleCase } from "@/lib/utils";
+import { useAppSelector } from "@/redux/hooks";
+import { format } from "date-fns";
+
+function GroupPendingOrdersCard() {
+  const groupId = useAppSelector((state) => state.group.groupId);
+  const startDate = new Date(new Date().setUTCHours(0, 0, 0, 0)).toISOString();
+
+  const { data, isLoading, isError, error } = useFetchOrders({
+    startDate,
+    groupId: groupId ?? undefined,
+  });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const sortedData = data
+    ?.sort((a, b) => {
+      const dateA = a.delivery_date ? new Date(a.delivery_date).getTime() : 0;
+      const dateB = b.delivery_date ? new Date(b.delivery_date).getTime() : 0;
+      return dateA - dateB;
+    })
+    .slice(0, 3);
+
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Pending Orders</CardTitle>
+      </CardHeader>
+      <CardContent className="grid gap-2 p-0">
+        {sortedData && sortedData.length > 0 ? (
+          sortedData.map((order) => (
+            <Card
+              key={order.id}
+              className="w-full border-y-1 border-x-0 rounded-none"
+            >
+              <CardContent className="px-4 py-2 flex flex-row gap-4">
+                <p className="font-bold">#{order.number}</p>
+                <div className="flex flex-col">
+                  {" "}
+                  <p className="text-xs text-muted-foreground">
+                    Delivery Date:{" "}
+                    <span className="font-bold text-primary">
+                      {format(
+                        new Date(order.delivery_date ?? new Date()),
+                        "MMM d, yyyy"
+                      )}
+                    </span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Customer:{" "}
+                    <span className="font-bold text-primary">
+                      {toTitleCase(order.customers?.customer_name || "")}
+                    </span>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p>No pending orders</p>
+        )}
+      </CardContent>
+      <CardFooter></CardFooter>
+    </Card>
+  );
+}
+
+export default GroupPendingOrdersCard;

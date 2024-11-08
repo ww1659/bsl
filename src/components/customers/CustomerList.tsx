@@ -23,25 +23,29 @@ function CustomerList({ groupName }: CustomerListProps) {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
+  const sortedData = data?.sort((a, b) =>
+    (a.customer_name ?? "").localeCompare(b.customer_name ?? "")
+  );
+
   if (data)
     return (
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Customers</CardTitle>
           <CardDescription>
             Select or search for a customer here.
           </CardDescription>
-          <CardContent className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-4">
-            {data.map((customer) => (
-              <CustomerCard
-                key={customer.id}
-                customerId={customer.id}
-                customerName={customer.customer_name}
-                groupName={groupName}
-              />
-            ))}
-          </CardContent>
         </CardHeader>
+        <CardContent className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-4">
+          {sortedData?.map((customer) => (
+            <CustomerCard
+              key={customer.id}
+              customerId={customer.id}
+              customerName={customer.customer_name}
+              groupName={groupName}
+            />
+          ))}
+        </CardContent>
       </Card>
     );
 }

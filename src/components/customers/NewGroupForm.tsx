@@ -69,7 +69,6 @@ function NewGroupForm() {
       postcode: values.postcode?.toLowerCase(),
       country: "uk",
     };
-    console.log(groupData);
     createGroup({ groupData });
   }
 

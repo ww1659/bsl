@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 //Redux
 import { useAppSelector } from "@/redux/hooks";
 
@@ -5,71 +7,128 @@ import { useAppSelector } from "@/redux/hooks";
 import { useFetchGroupById } from "@/hooks/useFetchGroupById";
 
 //UI
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Button } from "../ui/button";
+import { Ellipsis } from "lucide-react";
 
 //Utils
 import { toTitleCase } from "@/lib/utils";
 
+//Components
+import UpdateGroupForm from "./UpdateGroupForm";
+
 function GroupDetailsCard() {
+  const [isOpen, setIsOpen] = useState(false);
   const groupId = useAppSelector((state) => state.group.groupId);
   const { data, isLoading, isError, error } = useFetchGroupById(groupId || "");
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
+  const handleEditGroup = () => {
+    setIsOpen(true);
+  };
+
   if (data)
     return (
       <>
-        <Card className="flex flex-col justify-between">
-          <div>
-            <CardHeader>
-              <CardTitle>Group Details</CardTitle>
-              <CardDescription>Update or view here</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-row">
-                <h4 className="underline">Name</h4>
-              </div>
-              <div className="flex flex-row align-center flex-wrap">
-                <p className="pr-1 text-sm">Group Name:</p>
-                <p className="font-bold text-sm">
-                  {toTitleCase(data.group_name || "")}
+        <Card className="w-full">
+          <CardHeader>
+            <div className="flex flex-row justify-between items-center">
+              <CardTitle>Details</CardTitle>
+              <Button
+                size="xs"
+                variant="outline"
+                className="border-0"
+                onClick={handleEditGroup}
+              >
+                <Ellipsis className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {data.group_name && (
+              <div className="flex flex-row align-center flex-wrap py-1">
+                <p className="pr-1 text-sm text-muted-foreground">
+                  Group Name:
+                </p>
+                <p className="text-sm font-bold">
+                  {toTitleCase(data.group_name)}
                 </p>
               </div>
-              <div className="flex flex-row">
-                <h4 className="underline">Address</h4>
-              </div>
-              <div className="flex flex-row align-center flex-wrap">
-                <p className="pr-1 text-sm">House Number:</p>
+            )}
+
+            {data.house_number && (
+              <div className="flex flex-row align-center flex-wrap py-1">
+                <p className="pr-1 text-sm text-muted-foreground">
+                  House Number:
+                </p>
                 <p className="font-bold text-sm">{data.house_number}</p>
               </div>
-              <div className="flex flex-row align-center flex-wrap">
-                <p className="pr-1 text-sm">Street:</p>
+            )}
+
+            {data.street_name && (
+              <div className="flex flex-row align-center flex-wrap py-1">
+                <p className="pr-1 text-sm text-muted-foreground">Street:</p>
                 <p className="font-bold text-sm">
                   {toTitleCase(data?.street_name || "")}
                 </p>
               </div>
-              <div className="flex flex-row align-center flex-wrap">
-                <p className="pr-1 text-sm">Postcode:</p>
+            )}
+
+            {data.postcode && (
+              <div className="flex flex-row align-center flex-wrap py-1">
+                <p className="pr-1 text-sm text-muted-foreground">Postcode:</p>
                 <p className="font-bold text-sm">
                   {data.postcode?.toUpperCase()}
                 </p>
               </div>
-              <div className="flex flex-row align-center flex-wrap">
-                <p className="pr-1 text-sm">Email:</p>
+            )}
+
+            {data.email && (
+              <div className="flex flex-row align-center flex-wrap py-1">
+                <p className="pr-1 text-sm text-muted-foreground">Email:</p>
                 <p className="font-bold text-sm">{data.email}</p>
               </div>
-            </CardContent>
-          </div>
-          <CardFooter></CardFooter>
+            )}
+
+            {data.standard_discount && (
+              <div className="flex flex-row align-center flex-wrap py-1">
+                <p className="pr-1 text-sm text-muted-foreground">
+                  Standard Discount:
+                </p>
+                <p className="font-bold text-sm">{data.standard_discount}%</p>
+              </div>
+            )}
+          </CardContent>
         </Card>
+
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Edit Group Details</SheetTitle>
+              <SheetDescription>
+                Make changes to the group here. Click save when you're done.
+              </SheetDescription>
+            </SheetHeader>
+            <UpdateGroupForm
+              groupId={data.id}
+              groupName={data.group_name}
+              groupHouseNumber={data.house_number}
+              groupStreet={data.street_name}
+              groupPostcode={data.postcode}
+              groupEmail={data.email}
+              groupStandardDiscount={data.standard_discount}
+            />
+          </SheetContent>
+        </Sheet>
       </>
     );
 }

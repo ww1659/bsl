@@ -20,7 +20,7 @@ const fetchGroupById = async (groupId: string) => {
 
 export const useFetchGroupById = (groupId: string) => {
   return useQuery({
-    queryKey: ['customerById', groupId], 
+    queryKey: ['groups-id', groupId], 
     queryFn: () => fetchGroupById(groupId), 
     enabled: !!groupId
 });

@@ -10,8 +10,8 @@ async function handleSignOut() {
 
 function SignOutButton() {
   return (
-    <Button size="icon" onClick={handleSignOut}>
-      LO
+    <Button className="w-full" onClick={handleSignOut}>
+      Logout
     </Button>
   );
 }

@@ -14,7 +14,6 @@ type FetchOrdersParams = {
 };
 
 const fetchOrders = async ({ startDate, groupId, orderId, status }: FetchOrdersParams) => {
-console.log(startDate, groupId);
   
   let query = supabase
     .from('orders')
@@ -43,6 +42,8 @@ console.log(startDate, groupId);
     `)
     .order('delivery_date', { ascending: true });
 
+  if (startDate) {query = query.gte('delivery_date', startDate);}
+
   if (groupId) {
     query = groupId === 'private' ? query.is('group_id', null) : query.eq('group_id', groupId);
   }
@@ -60,7 +61,6 @@ console.log(startDate, groupId);
   if (error) {
     throw new Error(error.message);
   }
-  console.log(data);
   
   return data;
 };
