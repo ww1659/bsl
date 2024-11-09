@@ -41,7 +41,7 @@ function OrderSummaryCard({
 
   const orderTotal =
     currentOrderItems.reduce((total, item) => {
-      const itemPrice = item.items?.price || 0;
+      const itemPrice = item.price || 0;
       const quantity = item.quantity;
       return total + itemPrice * quantity;
     }, 0) *
@@ -65,9 +65,9 @@ function OrderSummaryCard({
     };
     const orderItems = currentOrderItems.map((item) => {
       return {
-        item_id: item.items?.id,
+        item_id: item.id,
         quantity: item.quantity,
-        price: item.items?.price,
+        price: item.price,
       };
     });
 
@@ -103,13 +103,11 @@ function OrderSummaryCard({
                 <p className="text-sm font-bold">Price</p>
               </div>
               {currentOrderItems.map((item) => (
-                <div key={item.items?.id} className="grid grid-cols-3 gap-2">
-                  <p className="text-sm">
-                    {toTitleCase(item.items?.item_name || "")}
-                  </p>
+                <div key={item.id} className="grid grid-cols-3 gap-2">
+                  <p className="text-sm">{toTitleCase(item.item_name || "")}</p>
                   <p className="text-sm"> x{item.quantity}</p>
                   <p className="text-sm">
-                    £{(Number(item.items?.price) * item.quantity).toFixed(2)}
+                    £{(Number(item.price) * item.quantity).toFixed(2)}
                   </p>
                 </div>
               ))}

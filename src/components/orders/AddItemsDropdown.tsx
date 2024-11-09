@@ -18,7 +18,7 @@ import { useFetchItems } from "@/hooks/useFetchAllItems";
 
 import { toTitleCase } from "@/lib/utils";
 import { SelectSeparator } from "@radix-ui/react-select";
-import { Check, Plus, PlusCircleIcon, PlusIcon } from "lucide-react";
+import { Plus } from "lucide-react";
 
 function AddItemsDropdown({
   currentOrderItems,
@@ -30,17 +30,19 @@ function AddItemsDropdown({
     (a.item_name || "").localeCompare(b.item_name || "")
   );
 
+  console.log(currentOrderItems, "SELECT STATEMENT");
+
   const handleItemAdd = (itemId: string) => {
     const selectedItem = allItems?.find((item) => item.id === Number(itemId));
     if (selectedItem) {
       const itemExists = currentOrderItems.some(
-        (orderItem) => orderItem.items?.id === selectedItem.id
+        (orderItem) => orderItem.id === selectedItem.id
       );
 
       if (!itemExists) {
         setCurrentOrderItems((prevItems) => [
           ...prevItems,
-          { items: selectedItem, quantity: 1 },
+          { ...selectedItem, quantity: 1 },
         ]);
       }
     }
@@ -61,7 +63,7 @@ function AddItemsDropdown({
             <SelectSeparator />
             {sortedItems?.map((item) => {
               const itemExists = currentOrderItems.some(
-                (orderItem) => orderItem.items?.id === item.id
+                (orderItem) => orderItem.id === item.id
               );
 
               return (

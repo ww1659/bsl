@@ -13,7 +13,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
       {!hideNav && <NavBar />}
       <div
         className={`flex flex-col sm:gap-4 ${
-          !hideNav ? "sm:pl-32 sm:py-4" : ""
+          !hideNav ? "sm:pl-40 sm:py-4" : ""
         }`}
       >
         {!hideNav && <Header />}

@@ -39,11 +39,13 @@ export type Database = {
           country: string | null
           created_at: string | null
           customer_name: string | null
+          deactivated_at: string | null
           discount: number | null
           email: string | null
           group_id: string | null
           house_number: string | null
           id: string
+          is_active: boolean | null
           postcode: string | null
           reference: string | null
           street_name: string | null
@@ -53,11 +55,13 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           customer_name?: string | null
+          deactivated_at?: string | null
           discount?: number | null
           email?: string | null
           group_id?: string | null
           house_number?: string | null
           id?: string
+          is_active?: boolean | null
           postcode?: string | null
           reference?: string | null
           street_name?: string | null
@@ -67,11 +71,13 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           customer_name?: string | null
+          deactivated_at?: string | null
           discount?: number | null
           email?: string | null
           group_id?: string | null
           house_number?: string | null
           id?: string
+          is_active?: boolean | null
           postcode?: string | null
           reference?: string | null
           street_name?: string | null
@@ -345,8 +351,9 @@ export type Database = {
         Returns: {
           item_id: number
           item_name: string
-          item_count: number
-          picked: boolean
+          total_number: number
+          orders_unpicked: Json
+          orders_picked: Json
         }[]
       }
       get_weekly_total: {
@@ -446,5 +453,20 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 

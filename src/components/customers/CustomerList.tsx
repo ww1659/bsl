@@ -1,7 +1,4 @@
-type CustomerListProps = {
-  groupName: string | undefined;
-};
-
+import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { useFetchGroupedCustomers } from "@/hooks/useFetchCustomersByGroup";
 import CustomerCard from "./CustomerCard";
@@ -12,32 +9,56 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "../ui/input";
+import debounce from "lodash.debounce";
+
+type CustomerListProps = {
+  groupName: string | undefined;
+};
 
 function CustomerList({ groupName }: CustomerListProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const groupId = useAppSelector((state) => state.group.groupId);
 
   const { data, isLoading, isError, error } = useFetchGroupedCustomers(
-    groupId || ""
+    groupId || "",
+    debouncedSearchTerm
   );
-
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
 
   const sortedData = data?.sort((a, b) =>
     (a.customer_name ?? "").localeCompare(b.customer_name ?? "")
   );
 
-  if (data)
-    return (
-      <Card className="w-full">
-        <CardHeader>
+  const debouncedSetSearchTerm = useCallback((value: string) => {
+    debounce(() => setDebouncedSearchTerm(value), 300)();
+  }, []);
+
+  useEffect(() => {
+    debouncedSetSearchTerm(searchTerm);
+  }, [searchTerm, debouncedSetSearchTerm]);
+
+  return (
+    <Card className="w-full">
+      <CardHeader className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div>
           <CardTitle>Customers</CardTitle>
           <CardDescription>
             Select or search for a customer here.
           </CardDescription>
-        </CardHeader>
-        <CardContent className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-4">
-          {sortedData?.map((customer) => (
+        </div>
+        <Input
+          placeholder="Search for Customer"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </CardHeader>
+      <CardContent className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-4">
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error: {error.message}</p>}
+        {sortedData &&
+          sortedData.length > 0 &&
+          sortedData.map((customer) => (
             <CustomerCard
               key={customer.id}
               customerId={customer.id}
@@ -45,9 +66,9 @@ function CustomerList({ groupName }: CustomerListProps) {
               groupName={groupName}
             />
           ))}
-        </CardContent>
-      </Card>
-    );
+      </CardContent>
+    </Card>
+  );
 }
 
 export default CustomerList;

@@ -32,7 +32,7 @@ function CustomerCard({
       >
         <Card>
           <CardHeader className="p-4">
-            <CardTitle className="text-sm">
+            <CardTitle className="text-lg">
               {toTitleCase(customerName || "")}
             </CardTitle>
           </CardHeader>

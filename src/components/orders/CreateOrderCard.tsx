@@ -12,7 +12,7 @@ type CreateOrderCard = {
 import { toTitleCase } from "@/lib/utils";
 
 //supabase hooks
-import { useFetchStandardOrder } from "@/hooks/useFetchStandardOrder";
+import { useFetchStandardOrders } from "@/hooks/useFetchStandardOrder";
 
 //ui
 import {
@@ -61,40 +61,38 @@ function CreateOrderCard({
   setCurrentOrderItems,
   customerDiscount,
 }: CreateOrderCard) {
-  const { data, isLoading, isError, error } = useFetchStandardOrder(
+  const { data, isLoading, isError, error } = useFetchStandardOrders(
     customerId || ""
   );
 
   const handleOrderChange = (selectedOrderName: string) => {
     const selectedOrderItems =
-      data?.standard_order?.find(
-        (order) => order.order_name === selectedOrderName
-      )?.standard_order_items || [];
+      data?.find((order) => order.order_name === selectedOrderName)
+        ?.order_items || [];
     setCurrentOrderItems(selectedOrderItems);
   };
 
   const removeItem = (itemId: number) => {
     setCurrentOrderItems((prevItems) =>
-      prevItems.filter((item) => item.items?.id !== itemId)
+      prevItems.filter((item) => item.id !== itemId)
     );
   };
 
   const updateQuantity = (itemId: number, newQuantity: number) => {
     setCurrentOrderItems((prevItems) =>
       prevItems.map((orderItem) =>
-        orderItem.items?.id === itemId
-          ? { ...orderItem, quantity: newQuantity > 0 ? newQuantity : 1 } // Ensure minimum quantity of 1
+        orderItem.id === itemId
+          ? { ...orderItem, quantity: newQuantity > 0 ? newQuantity : 1 }
           : orderItem
       )
     );
   };
 
-  const standardOrderNames =
-    data?.standard_order?.map((order) => order.order_name) || [];
+  const standardOrderNames = data?.map((order) => order.order_name) || [];
 
   const sortedItems = currentOrderItems.sort((a, b) => {
-    const nameA = a.items?.item_name?.toLowerCase();
-    const nameB = b.items?.item_name?.toLowerCase();
+    const nameA = a.item_name?.toLowerCase();
+    const nameB = b.item_name?.toLowerCase();
     if (nameA && nameB && nameA < nameB) return -1;
     if (nameA && nameB && nameA > nameB) return 1;
     return 0;
@@ -102,7 +100,7 @@ function CreateOrderCard({
 
   const orderTotal =
     currentOrderItems.reduce((total, item) => {
-      const itemPrice = item.items?.price || 0;
+      const itemPrice = item.price || 0;
       const quantity = item.quantity;
 
       return total + itemPrice * quantity;
@@ -173,17 +171,17 @@ function CreateOrderCard({
                   </TableHeader>
                   <TableBody className="text-xs md:text-sm">
                     {sortedItems?.map((item) => (
-                      <TableRow key={item.items?.id}>
+                      <TableRow key={item.id}>
                         <TableCell className="font-medium py-1">
-                          {toTitleCase(item.items?.item_name || "")}
+                          {toTitleCase(item.item_name || "")}
                         </TableCell>
                         <TableCell className="py-1">
                           {customerDiscount
                             ? (
-                                Number(item.items?.price) *
+                                Number(item.price) *
                                 ((100 - customerDiscount) / 100)
                               ).toFixed(2)
-                            : item.items?.price?.toFixed(2)}
+                            : item.price?.toFixed(2)}
                         </TableCell>
                         <TableCell className="py-1 flex flex-row gap-1 items-center">
                           <Button
@@ -191,10 +189,7 @@ function CreateOrderCard({
                             size="sm"
                             className="h-10"
                             onClick={() =>
-                              updateQuantity(
-                                item.items?.id || 0,
-                                item.quantity - 1
-                              )
+                              updateQuantity(item.id || 0, item.quantity - 1)
                             }
                             disabled={item.quantity <= 1}
                           >
@@ -206,7 +201,7 @@ function CreateOrderCard({
                             value={item.quantity}
                             onChange={(e) =>
                               updateQuantity(
-                                item.items?.id || 0,
+                                item.id || 0,
                                 Number(e.target.value)
                               )
                             }
@@ -217,18 +212,15 @@ function CreateOrderCard({
                             size="sm"
                             className="h-10"
                             onClick={() =>
-                              updateQuantity(
-                                item.items?.id || 0,
-                                item.quantity + 1
-                              )
+                              updateQuantity(item.id || 0, item.quantity + 1)
                             }
                           >
                             +
                           </Button>
                         </TableCell>
                         <TableCell className="py-1 text-right">
-                          {item.items?.price
-                            ? (item.quantity * item.items?.price).toFixed(2)
+                          {item.price
+                            ? (item.quantity * item.price).toFixed(2)
                             : ""}
                         </TableCell>
                         <TableCell className="py-1">
@@ -243,7 +235,7 @@ function CreateOrderCard({
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
-                                onClick={() => removeItem(item.items?.id || 0)}
+                                onClick={() => removeItem(item.id || 0)}
                               >
                                 Remove Item
                                 <Trash2Icon className="h-4 w-4 ml-1" />

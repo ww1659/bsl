@@ -36,7 +36,6 @@ function CustomerGroupPage() {
 
   return (
     <div>
-      <h1 className="py-2">{formattedGroupName}</h1>
       <Breadcrumb className="py-2">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -48,6 +47,7 @@ function CustomerGroupPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+      <h1 className="py-2">{formattedGroupName}</h1>
 
       <div className="space-y-4 my-2">
         <div

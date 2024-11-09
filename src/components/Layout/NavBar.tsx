@@ -14,8 +14,8 @@ import { Link } from "react-router-dom";
 
 export const NavBar: React.FC = () => {
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-32 flex-col border-r bg-background sm:flex">
-      <nav className="flex flex-col items-start px-0 sm:py-5">
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background sm:flex">
+      <nav className="flex flex-col items-start px-2 sm:py-5">
         <Link
           to="/"
           className="flex flex-row w-full px-3 py-1 my-1 font-medium"
@@ -99,18 +99,3 @@ export const NavBar: React.FC = () => {
     </aside>
   );
 };
-
-{
-  /* <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                to="/picking-list"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >
-                <List className="h-5 w-5" />
-                <span className="sr-only">Picking List</span>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">Picking List</TooltipContent>
-          </Tooltip> */
-}

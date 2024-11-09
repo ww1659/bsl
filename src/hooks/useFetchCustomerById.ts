@@ -20,7 +20,7 @@ const fetchCustomerById = async (customerId: string) => {
 
 export const useFetchCustomerById = (customerId: string) => {
   return useQuery({
-    queryKey: ['customerById', customerId], 
+    queryKey: ['customer-by-id', customerId], 
     queryFn: () => fetchCustomerById(customerId), 
     enabled: !!customerId
 });

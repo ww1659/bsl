@@ -5,13 +5,18 @@ import {Database} from '../../database.types'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
-
-const fetchGroupedCustomers = async (groupId: string) => {
-  const { data: customersData, error: customersError } = await supabase
+const fetchGroupedCustomers = async (groupId: string, customerName?: string) => {
+  let query = supabase
     .from('customers')
     .select('*')
     .filter('group_id', groupId === "null" ? 'is' : 'eq', groupId === "null" ? null : groupId)
     .eq('is_active', true);
+
+  if (customerName) {
+    query = query.ilike('customer_name', `%${customerName}%`);
+  }
+
+  const { data: customersData, error: customersError } = await query;
 
   if (customersError) {
     throw new Error(`Error fetching customers: ${customersError.message}`);
@@ -20,11 +25,11 @@ const fetchGroupedCustomers = async (groupId: string) => {
   return customersData;
 };
 
-export const useFetchGroupedCustomers = (groupName: string) => {
+export const useFetchGroupedCustomers = (groupId: string, customerName?: string) => {
     return useQuery({
-      queryKey: ['customer-groups', groupName],
-      queryFn: () => fetchGroupedCustomers(groupName),
-      enabled: !!groupName, 
+      queryKey: ['customer-groups', groupId, customerName],
+      queryFn: () => fetchGroupedCustomers(groupId, customerName),
+      enabled: !!groupId, 
     });
   };
   

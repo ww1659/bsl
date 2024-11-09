@@ -12,7 +12,7 @@ import authReducer from './features/auth/authslice'
 const persistConfig = {
   key: 'root', // Key in storage
   storage, // Default is localStorage, can use sessionStorage or other options
-  whitelist: ['group', 'customer'], // Specify which reducers to persist
+  whitelist: ['group', 'customer', 'auth'], // Specify which reducers to persist
 };
 
 const rootReducer = combineReducers({  

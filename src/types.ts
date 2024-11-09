@@ -11,13 +11,12 @@ export type Customer = {
     reference: string | null
     street_name: string | null
     town: string | null
-}
+  }
 
 export type  OrderItem = {
     quantity: number;
-    items: {
-      id: number;
-      item_name: string | null;
-      price: number | null;
-    } | null;
-  };
+    id: number;
+    item_name: string | null;
+    price: number | null;
+    }
+  
