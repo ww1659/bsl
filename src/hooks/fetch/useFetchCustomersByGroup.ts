@@ -5,7 +5,7 @@ const fetchGroupedCustomers = async (groupId: string, customerName?: string) => 
   let query = supabase
     .from('customers')
     .select('*')
-    .filter('group_id', groupId === "null" ? 'is' : 'eq', groupId === "null" ? null : groupId)
+    .filter('group_id', groupId === "private" ? 'is' : 'eq', groupId === "private" ? null : groupId)
     .eq('is_active', true);
 
   if (customerName) {

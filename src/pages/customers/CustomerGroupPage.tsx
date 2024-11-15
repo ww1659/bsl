@@ -27,12 +27,17 @@ import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
 function CustomerGroupPage() {
   const { groupName } = useParams();
   const groupId = useAppSelector((state) => state.group.groupId);
+
   const { data, isLoading, isError, error } = useFetchGroupById(groupId || "");
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
-  const formattedGroupName = toTitleCase(removeDashes(data?.group_name || ""));
+  const formattedGroupName = toTitleCase(
+    removeDashes(
+      Array.isArray(data) ? "Private Customers" : data?.group_name || ""
+    )
+  );
 
   return (
     <div>
@@ -57,9 +62,9 @@ function CustomerGroupPage() {
               : ""
           }`}
         >
-          {groupId !== "null" && <GroupDetailsCard />}
-          {groupId !== "null" && <GroupOrdersCard />}
-          {groupId !== "null" && <GroupPendingOrdersCard />}
+          {groupId !== "private" && <GroupDetailsCard />}
+          {groupId !== "private" && <GroupOrdersCard />}
+          {groupId !== "private" && <GroupPendingOrdersCard />}
         </div>
 
         <CustomerList groupName={groupName} />

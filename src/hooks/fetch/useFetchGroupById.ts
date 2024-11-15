@@ -2,15 +2,24 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../connection';
 
 const fetchGroupById = async (groupId: string) => {
-  const { data, error } = await supabase
-    .from('groups')
-    .select('*')
-    .eq('id', groupId);
+  console.log(groupId, typeof groupId);
+  
 
-  if (error) {
-    throw new Error(error.message);
+  if (groupId !== 'private') {
+    console.log('IN HERE');
+    
+    const { data, error } = await supabase
+      .from('groups')
+      .select('*')
+      .eq('id', groupId);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return data[0];
+  } else {
+    return [];
   }
-  return data[0];
 };
 
 export const useFetchGroupById = (groupId: string) => {

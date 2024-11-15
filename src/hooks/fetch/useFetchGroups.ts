@@ -13,6 +13,8 @@ const fetchGroups = async () => {
 };
 
 export const useFetchGroups = () => {
-  return useQuery({queryKey: ['groups'], queryFn: fetchGroups});
+  return useQuery({
+    queryKey: ['groups'], 
+    queryFn: fetchGroups});
 };
 

@@ -29,7 +29,7 @@ function GroupCard({ groupName, groupId }: GroupCardProps) {
         <CardHeader>
           <CardTitle>{toTitleCase(groupName)}</CardTitle>
           <CardDescription>
-            {groupId == "null" ? "Private Owners" : "Customer Group"}
+            {groupId == "private" ? "Private Owners" : "Customer Group"}
           </CardDescription>
         </CardHeader>
       </Card>

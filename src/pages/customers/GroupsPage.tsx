@@ -43,7 +43,7 @@ function GroupsPage() {
             </div>
           ))}
           <div className="grid">
-            <GroupCard groupName={"privates"} groupId="null" />
+            <GroupCard groupName={"privates"} groupId="private" />
           </div>
         </div>
       </>
