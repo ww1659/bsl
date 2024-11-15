@@ -38,7 +38,7 @@ function GroupPendingOrdersCard() {
       {sortedData && sortedData.length > 0 ? (
         sortedData.map((order) => (
           <CardContent className="grid gap-2 p-0" key={order.id}>
-            <Card className="w-full border-y-1 border-x-0 rounded-none">
+            <Card className="rounded-lg mx-2 hover:bg-accent hover:cursor-pointer">
               <CardContent className="px-4 py-2 flex flex-row gap-4">
                 <p className="font-bold">#{order.number}</p>
                 <div className="flex flex-col">

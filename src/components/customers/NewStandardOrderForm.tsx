@@ -24,6 +24,7 @@ import { toTitleCase } from "@/lib/utils";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useCreateStandardOrder } from "@/hooks/create/useCreateNewStandardOrder";
+import { useToast } from "@/hooks/use-toast";
 
 type StandardOrderForm = {
   customerId: string;
@@ -49,6 +50,7 @@ function NewStandardOrderForm({
   customerId,
   handleSaveNewOrder,
 }: StandardOrderForm) {
+  const { toast } = useToast();
   const [selectedItemNames, setSelectedItemNames] = useState<{
     [key: string]: string;
   }>({});
@@ -108,7 +110,13 @@ function NewStandardOrderForm({
       },
       {
         onSuccess: (data) => {
-          console.log(data);
+          toast({
+            title: "Order Created",
+            description: `Order "${toTitleCase(
+              data.order.order_name || ""
+            )}" created successfully`,
+            duration: 5000,
+          });
           handleSaveNewOrder();
         },
       }
@@ -155,7 +163,7 @@ function NewStandardOrderForm({
             </div>
             {fields.map((field, index) => (
               <div key={field.id} className="grid grid-cols-6 items-end gap-4">
-                <div className="grid col-span-2">
+                <div className="grid col-span-3">
                   <FormField
                     control={form.control}
                     name={`orderItems.${index}.id`}
@@ -213,7 +221,7 @@ function NewStandardOrderForm({
                   />
                 </div>
 
-                <div className="grid col-span-1 justify-center">
+                <div className="grid col-span-2 justify-center">
                   <FormField
                     control={form.control}
                     name={`orderItems.${index}.quantity`}
@@ -242,7 +250,7 @@ function NewStandardOrderForm({
                   <Button
                     type="button"
                     variant="destructive"
-                    size="icon"
+                    size="xs"
                     onClick={() => handleRemoveItem(index)}
                   >
                     <Trash2 className="h-4 w-4" />

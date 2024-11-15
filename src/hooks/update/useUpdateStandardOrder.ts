@@ -40,7 +40,7 @@ export const useUpdateStandardOrder = () => {
             queryClient.invalidateQueries({ queryKey: ['customer-standard-orders'] });
         },
         onError: (error) => {
-            console.error('Failed to toggle picked status:', error);
+            console.error('Failed to update standard Order:', error);
         }
     });
 };
