@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 //supabase queries
-import { useFetchOrders } from "@/hooks/useFetchOrders";
+import { useFetchOrders } from "@/hooks/fetch/useFetchOrders";
 
 //components
 import NewOrderButton from "@/components/orders/NewOrderButton";
@@ -36,7 +36,7 @@ import {
 import { toTitleCase } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { useFetchGroups } from "@/hooks/useFetchGroups";
+import { useFetchGroups } from "@/hooks/fetch/useFetchGroups";
 
 function OrdersPage() {
   const [filters, setFilters] = useState({

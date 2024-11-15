@@ -12,7 +12,7 @@ type CreateOrderCard = {
 import { toTitleCase } from "@/lib/utils";
 
 //supabase hooks
-import { useFetchStandardOrders } from "@/hooks/useFetchStandardOrder";
+import { useFetchStandardOrders } from "@/hooks/fetch/useFetchStandardOrder";
 
 //ui
 import {
@@ -69,7 +69,9 @@ function CreateOrderCard({
     const selectedOrderItems =
       data?.find((order) => order.order_name === selectedOrderName)
         ?.order_items || [];
-    setCurrentOrderItems(selectedOrderItems);
+    setCurrentOrderItems(
+      selectedOrderItems.filter((item) => item.id !== undefined) as OrderItem[]
+    );
   };
 
   const removeItem = (itemId: number) => {

@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useFetchGroups } from "@/hooks/useFetchGroups";
+import { useFetchGroups } from "@/hooks/fetch/useFetchGroups";
 import { toTitleCase } from "@/lib/utils";
 import { useCreateCustomer } from "@/hooks/create/useCreateCustomer";
 

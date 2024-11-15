@@ -22,7 +22,7 @@ import {
 
 //utils
 import { removeDashes, toTitleCase } from "@/lib/utils";
-import { useFetchGroupById } from "@/hooks/useFetchGroupById";
+import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
 
 function CustomerGroupPage() {
   const { groupName } = useParams();

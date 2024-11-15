@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setGroupId } from "@/redux/features/groups/groupSlice";
 
 //components
-import AnalyticsCard from "@/components/customers/AnalyticsCard";
 import StandardOrderCard from "@/components/customers/StandardOrderCard";
 import UpdateCustomerForm from "@/components/customers/UpdateCustomerForm";
 
@@ -29,22 +28,36 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/loading";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
 
 //supabase hooks
-import { useFetchCustomerById } from "@/hooks/useFetchCustomerById";
-import { useFetchGroupById } from "@/hooks/useFetchGroupById";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { Ellipsis } from "lucide-react";
+import { useFetchCustomerById } from "@/hooks/fetch/useFetchCustomerById";
+import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
+import { useToggleActiveCustomer } from "@/hooks/update/useToggleActiveCustomer";
 
 function CustomerDetailPage() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const { groupName, customerName } = useParams();
+
   const customerId = useAppSelector((state) => state.customer.customerId);
   const groupId = useAppSelector((state) => state.group.groupId);
+
+  const toggleActiveCustomer = useToggleActiveCustomer();
 
   const {
     data: customerData,
@@ -64,6 +77,27 @@ function CustomerDetailPage() {
 
   const handleClick = () => {
     dispatch(setGroupId(groupId));
+  };
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleToggleActive = () => {
+    toggleActiveCustomer.mutate(
+      {
+        customerId: customerId || "",
+        isActive: customerData?.is_active || false,
+      },
+      {
+        onSuccess: () => {
+          setDialogOpen(false);
+        },
+        onError: (error) => {
+          console.log("Error:", error);
+        },
+      }
+    );
   };
 
   if (isCustomerLoading || isGroupLoading) return <p>Loading...</p>;
@@ -121,30 +155,36 @@ function CustomerDetailPage() {
           )}
         </div>
         <div className="flex flex-row items-start gap-4">
-          <Badge
-            variant={customerData.is_active ? "success" : "destructive"}
-            className="my-2"
-          >
-            {customerData.is_active ? "Active" : "Archived"}{" "}
-          </Badge>
-          <Switch className="my-2"></Switch>
-          <Button variant="outline" onClick={() => setIsOpen(true)}>
+          <div className="flex flex-row gap-2 items-center my-2">
+            <Label className="text-xs" htmlFor="active-customer">
+              Active Customer
+            </Label>
+            <Switch
+              id="active-customer"
+              className="data-[state=checked]:bg-success"
+              checked={customerData?.is_active ?? false}
+              onCheckedChange={handleDialogOpen}
+            />
+          </div>
+          <Button variant="outline" onClick={() => setIsSheetOpen(true)}>
             Update
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-        <div className="grid">
-          <StandardOrderCard customerId={customerId} />
+        {/* <div className="grid">
+          <AnalyticsCard customerId={customerId} />
         </div>
-
         <div className="grid">
           <AnalyticsCard customerId={customerId} />
+        </div> */}
+        <div className="grid col-span-2">
+          <StandardOrderCard customerId={customerId} />
         </div>
       </div>
 
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent>
           <SheetHeader>
             <SheetTitle>Edit Customer Details</SheetTitle>
@@ -163,6 +203,41 @@ function CustomerDetailPage() {
           />
         </SheetContent>
       </Sheet>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Set the customer {toTitleCase(customerData?.customer_name || "")}{" "}
+              to {customerData?.is_active ? "inactive" : "active"}?
+            </DialogTitle>
+            {customerData?.is_active ? (
+              <DialogDescription>
+                The customer will no longer be able to place orders, however,
+                their old orders will still be visible.
+              </DialogDescription>
+            ) : (
+              <DialogDescription>
+                The customer will now be able to place orders.
+              </DialogDescription>
+            )}
+          </DialogHeader>
+          <DialogFooter>
+            <div className="flex flex-row gap-4 justify-between w-full">
+              <Button variant="secondary" onClick={() => setDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleToggleActive}>
+                {toggleActiveCustomer.isPending ? (
+                  <Spinner className="text-secondary" size="sm" />
+                ) : (
+                  "Confirm"
+                )}
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

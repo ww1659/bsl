@@ -17,7 +17,9 @@ function AnalyticsCard({ customerId }: AnalyticsCardProps) {
         <CardDescription>{customerId}</CardDescription>
       </CardHeader>
       <CardFooter className="flex justify-end align-end">
-        <Button className="w-full">Update Order</Button>
+        <Button className="w-full" variant="outline">
+          Update Order
+        </Button>
       </CardFooter>
     </Card>
   );

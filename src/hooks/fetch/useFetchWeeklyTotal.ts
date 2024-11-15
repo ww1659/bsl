@@ -1,7 +1,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { createClient } from '@supabase/supabase-js'
-import {Database} from '../../database.types'
+import {Database} from '../../../database.types'
 import { getEndOfWeek, getStartOfWeek } from '@/lib/utils';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;

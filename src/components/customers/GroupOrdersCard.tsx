@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { useFetchOrderStatsByGroup } from "@/hooks/useFetchOrderStatsByGroup";
+import { useFetchOrderStatsByGroup } from "@/hooks/fetch/useFetchOrderStatsByGroup";
 import { useAppSelector } from "@/redux/hooks";
 import { Progress } from "../ui/progress";
 

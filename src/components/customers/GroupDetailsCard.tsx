@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 
 //Supabase Hooks
-import { useFetchGroupById } from "@/hooks/useFetchGroupById";
+import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
 
 //UI
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -99,7 +99,7 @@ function GroupDetailsCard() {
               </div>
             )}
 
-            {data.standard_discount && (
+            {data.standard_discount !== null && (
               <div className="flex flex-row align-center flex-wrap py-1">
                 <p className="pr-1 text-sm text-muted-foreground">
                   Standard Discount:

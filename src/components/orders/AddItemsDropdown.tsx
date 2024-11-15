@@ -14,7 +14,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 
-import { useFetchItems } from "@/hooks/useFetchAllItems";
+import { useFetchItems } from "@/hooks/fetch/useFetchAllItems";
 
 import { toTitleCase } from "@/lib/utils";
 import { SelectSeparator } from "@radix-ui/react-select";
@@ -29,8 +29,6 @@ function AddItemsDropdown({
   const sortedItems = allItems?.sort((a, b) =>
     (a.item_name || "").localeCompare(b.item_name || "")
   );
-
-  console.log(currentOrderItems, "SELECT STATEMENT");
 
   const handleItemAdd = (itemId: string) => {
     const selectedItem = allItems?.find((item) => item.id === Number(itemId));

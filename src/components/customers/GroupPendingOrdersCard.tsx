@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useFetchOrders } from "@/hooks/useFetchOrders";
+import { useFetchOrders } from "@/hooks/fetch/useFetchOrders";
 import { toTitleCase } from "@/lib/utils";
 import { useAppSelector } from "@/redux/hooks";
 import { format } from "date-fns";
@@ -31,21 +31,17 @@ function GroupPendingOrdersCard() {
     .slice(0, 3);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full col-span-1 sm:col-span-2 xl:col-span-1">
       <CardHeader>
         <CardTitle>Pending Orders</CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-2 p-0">
-        {sortedData && sortedData.length > 0 ? (
-          sortedData.map((order) => (
-            <Card
-              key={order.id}
-              className="w-full border-y-1 border-x-0 rounded-none"
-            >
+      {sortedData && sortedData.length > 0 ? (
+        sortedData.map((order) => (
+          <CardContent className="grid gap-2 p-0" key={order.id}>
+            <Card className="w-full border-y-1 border-x-0 rounded-none">
               <CardContent className="px-4 py-2 flex flex-row gap-4">
                 <p className="font-bold">#{order.number}</p>
                 <div className="flex flex-col">
-                  {" "}
                   <p className="text-xs text-muted-foreground">
                     Delivery Date:{" "}
                     <span className="font-bold text-primary">
@@ -64,12 +60,14 @@ function GroupPendingOrdersCard() {
                 </div>
               </CardContent>
             </Card>
-          ))
-        ) : (
+          </CardContent>
+        ))
+      ) : (
+        <div className="flex justify-center items-center">
           <p>No pending orders</p>
-        )}
-      </CardContent>
-      <CardFooter></CardFooter>
+        </div>
+      )}
+      <CardFooter />
     </Card>
   );
 }

@@ -1,28 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import { createClient } from '@supabase/supabase-js'
-import {Database} from '../../database.types'
+import {Database} from '../../../database.types'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-const fetchCustomerById = async (customerId: string) => {
+// Fetch data with Supabase
+const fetchCustomers = async () => {
   const { data, error } = await supabase
     .from('customers')
-    .select('*')
-    .eq('id', customerId);
+    .select('*');
 
   if (error) {
     throw new Error(error.message);
   }
-  return data[0];
+  return data;
 };
 
-export const useFetchCustomerById = (customerId: string) => {
-  return useQuery({
-    queryKey: ['customer-by-id', customerId], 
-    queryFn: () => fetchCustomerById(customerId), 
-    enabled: !!customerId
-});
-}
+// Hook that wraps the query in React Query
+export const useFetchCustomers = () => {
+  return useQuery({queryKey: ['customers'], queryFn: fetchCustomers});
+};
 

@@ -28,7 +28,7 @@ import { format, parseISO } from "date-fns";
 import { calculateOrderPickedStatus, toTitleCase } from "@/lib/utils";
 
 //supabase hooks
-import { useFetchPickingListByOrder } from "@/hooks/useFetchPickingListByOrder";
+import { useFetchPickingListByOrder } from "@/hooks/fetch/useFetchPickingListByOrder";
 import { useUpdatePickedItem } from "@/hooks/update/useUpdatePickedItem";
 import { useUpdatePickedOrder } from "@/hooks/update/useUpdatePickedOrder";
 

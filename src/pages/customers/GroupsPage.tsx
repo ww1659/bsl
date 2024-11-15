@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button-link";
 
 //database hooks
-import { useFetchGroups } from "@/hooks/useFetchGroups";
+import { useFetchGroups } from "@/hooks/fetch/useFetchGroups";
 
 function GroupsPage() {
   const { data, isLoading, isError, error } = useFetchGroups();
