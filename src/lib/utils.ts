@@ -45,7 +45,7 @@ export function removeDashes(input: string) {
   return input.replace(/-/g, ' ');
 }
 
-export function getStartOfWeek (date: string, display?: boolean) {
+export function getStartOfWeek (date: Date, display?: boolean) {
   const d = new Date(date);
   const day = d.getDay(); 
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
@@ -54,7 +54,7 @@ export function getStartOfWeek (date: string, display?: boolean) {
   : new Date(d.setDate(diff)).toISOString().split("T")[0]
 };
 
-export function getEndOfWeek (date: string, display?: boolean) {
+export function getEndOfWeek (date: Date, display?: boolean) {
   const startOfWeek = getStartOfWeek(date);
   const endOfWeek = new Date(new Date(startOfWeek).setDate(new Date(startOfWeek).getDate() + 6));
   return display 

@@ -1,12 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '../../../database.types';
+import { supabase } from '../../connection';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../use-toast';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 type CreateOrderMutation = {
   orderData: {

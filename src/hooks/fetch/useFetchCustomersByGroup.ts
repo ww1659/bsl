@@ -1,10 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { createClient } from '@supabase/supabase-js'
-import {Database} from '../../../database.types'
+import { supabase } from '../../connection';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;;
-const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 const fetchGroupedCustomers = async (groupId: string, customerName?: string) => {
   let query = supabase
     .from('customers')
