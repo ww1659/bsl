@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Session } from "@supabase/supabase-js";
 
 import {
+  AlignStartVertical,
   Home,
   LineChart,
   List,
@@ -23,7 +24,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 
 export const Header: React.FC = () => {
   // const session: Session | null = useAppSelector((state) => state.auth.session);
@@ -37,40 +45,54 @@ export const Header: React.FC = () => {
             <span className="sr-only">Toggle Menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="sm:max-w-xs">
-          <nav className="grid gap-6 text-lg font-medium">
-            <Link
-              to="/"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-            >
-              <Home className="h-5 w-5" />
-              Home
-            </Link>
+        <SheetContent side="left" className="sm:max-w-xs gap-2">
+          <div className="flex flex-col gap-2">
+            <SheetHeader className="text-left">
+              <SheetTitle>Black Swan Linen</SheetTitle>
+            </SheetHeader>
+            <SheetDescription aria-description="Navigation bar" />
+            <nav className="grid gap-6 text-lg font-medium">
+              <Link
+                to="/"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Home className="h-5 w-5" />
+                Home
+              </Link>
 
-            <Link
-              to="/customers"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-            >
-              <Users2 className="h-5 w-5" />
-              Customers
-            </Link>
+              <Link
+                to="/customers"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <Users2 className="h-5 w-5" />
+                Customers
+              </Link>
 
-            <Link
-              to="/orders"
-              className="flex items-center gap-4 px-2.5 text-foreground"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              Orders
-            </Link>
+              <Link
+                to="/orders"
+                className="flex items-center gap-4 px-2.5 text-foreground"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                Orders
+              </Link>
 
-            <Link
-              to="/picking-list"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-            >
-              <List className="h-5 w-5" />
-              Picking List
-            </Link>
-          </nav>
+              <Link
+                to="/picking-list"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <List className="h-5 w-5" />
+                Picking List
+              </Link>
+
+              <Link
+                to="/inventory"
+                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              >
+                <AlignStartVertical className="h-5 w-5" />
+                Inventory
+              </Link>
+            </nav>
+          </div>
         </SheetContent>
       </Sheet>
 

@@ -8,7 +8,6 @@ type FetchOrdersParams = {
 };
 
 const fetchOrders = async ({ startDate, groupId, customerName }: FetchOrdersParams) => {  
-  console.log(customerName);
   
   let query = supabase
     .from('orders')
@@ -76,8 +75,6 @@ const fetchOrders = async ({ startDate, groupId, customerName }: FetchOrdersPara
     groupName: order.groups?.group_name,
     customerName: order.customers?.customer_name,
   }));
-
-  console.log(orderData);
   
   return orderData;
 

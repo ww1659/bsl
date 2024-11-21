@@ -24,8 +24,8 @@ function GroupPendingOrdersCard() {
 
   const sortedData = data
     ?.sort((a, b) => {
-      const dateA = a.delivery_date ? new Date(a.delivery_date).getTime() : 0;
-      const dateB = b.delivery_date ? new Date(b.delivery_date).getTime() : 0;
+      const dateA = a.deliveryDate ? new Date(a.deliveryDate).getTime() : 0;
+      const dateB = b.deliveryDate ? new Date(b.deliveryDate).getTime() : 0;
       return dateA - dateB;
     })
     .slice(0, 3);
@@ -46,7 +46,7 @@ function GroupPendingOrdersCard() {
                     Delivery Date:{" "}
                     <span className="font-bold text-primary">
                       {format(
-                        new Date(order.delivery_date ?? new Date()),
+                        new Date(order.deliveryDate ?? new Date()),
                         "MMM d, yyyy"
                       )}
                     </span>
@@ -54,7 +54,7 @@ function GroupPendingOrdersCard() {
                   <p className="text-xs text-muted-foreground">
                     Customer:{" "}
                     <span className="font-bold text-primary">
-                      {toTitleCase(order.customers?.customer_name || "")}
+                      {toTitleCase(order.customerName || "")}
                     </span>
                   </p>
                 </div>

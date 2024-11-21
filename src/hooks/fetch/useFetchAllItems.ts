@@ -4,12 +4,26 @@ import { supabase } from '../../connection';
 const fetchItems = async () => {
   const { data, error } = await supabase
     .from('items')
-    .select('*');
+    .select('*')
+    .order('item_name', { ascending: true });
 
   if (error) {
     throw new Error(error.message);
   }
-  return data;
+  
+  return data;  
+  // const itemsData = data.map((item) => {
+  //   return {
+  //     id: item.id,
+  //     name: item.item_name,
+  //     loanedOut: item.loaned_out,
+  //     price: item.price,
+  //     stock: item.stock,
+  //     createdAt: item.created_at,
+  //   };
+  // })
+  
+  // return itemsData;
 };
 
 export const useFetchItems = () => {

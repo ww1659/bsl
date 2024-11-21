@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  AlignStartVertical,
   Home,
   List,
   Origami,
@@ -77,6 +78,18 @@ export const NavBar: React.FC = () => {
             <List className="h-5 w-5" />
             <p className="text-sm overflow-hidden whitespace-nowrap">
               Picking List
+            </p>
+          </div>
+        </Link>
+
+        <Link
+          to="/inventory"
+          className="flex flex-row w-full p-3 my-1 text-muted-foreground hover:text-primary hover:font-medium hover:bg-accent"
+        >
+          <div className="flex flex-row w-full gap-2">
+            <AlignStartVertical className="h-5 w-5" />
+            <p className="text-sm overflow-hidden whitespace-nowrap">
+              Inventory
             </p>
           </div>
         </Link>
