@@ -2,7 +2,6 @@ import React from "react";
 
 import {
   Home,
-  LineChart,
   List,
   Origami,
   Settings,
@@ -58,7 +57,7 @@ export const NavBar: React.FC = () => {
           </div>
         </Link>
 
-        <Link
+        {/* <Link
           to="/invoices"
           className="flex flex-row w-full p-3 my-1 text-muted-foreground hover:text-primary hover:font-medium hover:bg-accent"
         >
@@ -68,7 +67,7 @@ export const NavBar: React.FC = () => {
               Invoices
             </p>
           </div>
-        </Link>
+        </Link> */}
 
         <Link
           to="/picking-list"

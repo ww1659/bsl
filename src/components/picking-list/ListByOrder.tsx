@@ -61,12 +61,12 @@ function ListByOrder({ date }: ListByOrderProps) {
   const items = data
     ? data
         .filter((order) => order.id === selectedOrder)
-        .flatMap((order) => order.order_items)
+        .flatMap((order) => order.orderItems)
     : [];
 
   const sortedItems = items.sort((a, b) => {
-    const nameA = a.items?.item_name?.toLowerCase() || "";
-    const nameB = b.items?.item_name?.toLowerCase() || "";
+    const nameA = a?.itemName?.toLowerCase() || "";
+    const nameB = b?.itemName?.toLowerCase() || "";
     if (nameA < nameB) return -1;
     if (nameA > nameB) return 1;
     return 0;
@@ -75,7 +75,7 @@ function ListByOrder({ date }: ListByOrderProps) {
   const orderPicked = calculateOrderPickedStatus(items);
 
   const handleIndividualPicked = (itemId: number | null, orderId: string) => {
-    const currentItem = items.filter((item) => item.item_id === itemId)[0];
+    const currentItem = items.filter((item) => item.id === itemId)[0];
     const currentPickedStatus = currentItem.picked;
     if (itemId !== null) {
       updatePickedItem({
@@ -96,8 +96,8 @@ function ListByOrder({ date }: ListByOrderProps) {
 
   if (data)
     return (
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-        <Card className="md:col-span-4 xl:col-span-2">
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4">
+        <Card className="md:col-span-4 2xl:col-span-2">
           <CardHeader>
             <CardTitle>
               <div className="flex flex-row justify-between items-center">
@@ -131,26 +131,25 @@ function ListByOrder({ date }: ListByOrderProps) {
                   >
                     <TableCell className="p-2">
                       <div className="font-medium">
-                        {toTitleCase(order.groups?.group_name || "") ||
-                          "Private"}
+                        {toTitleCase(order.groupName || "") || "Private"}
                       </div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
-                        {toTitleCase(order.customers?.customer_name || "")}
+                        {toTitleCase(order.customerName || "")}
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell p-2">
                       {order.number}
                     </TableCell>
                     <TableCell className="p-2">
-                      {order.delivery_date
-                        ? format(parseISO(order.delivery_date), "dd-MM-yyyy")
+                      {order.deliveryDate
+                        ? format(parseISO(order.deliveryDate), "dd-MM-yyyy")
                         : "N/A"}
                     </TableCell>
                     <TableCell className="p-2">
-                      {calculateOrderPickedStatus(order.order_items) ===
+                      {calculateOrderPickedStatus(order.orderItems) ===
                       "picked" ? (
                         <Badge variant="success">Picked</Badge>
-                      ) : calculateOrderPickedStatus(order.order_items) ===
+                      ) : calculateOrderPickedStatus(order.orderItems) ===
                         "partial" ? (
                         <Badge variant="warning">Partial</Badge>
                       ) : (
@@ -163,8 +162,7 @@ function ListByOrder({ date }: ListByOrderProps) {
             </Table>
           </CardContent>
         </Card>
-
-        <Card className="hidden xl:block xl:col-span-2">
+        <Card className="hidden 2xl:block 2xl:col-span-2">
           <CardHeader className="flex flex-row justify-between">
             <div>
               <CardTitle>
@@ -204,18 +202,15 @@ function ListByOrder({ date }: ListByOrderProps) {
               <TableBody>
                 {selectedOrder ? (
                   sortedItems.map((item) => (
-                    <TableRow
-                      className="text-sm bg-0 hover:bg-0"
-                      key={item.item_id}
-                    >
+                    <TableRow className="text-sm bg-0 hover:bg-0" key={item.id}>
                       <TableCell className="p-1">
-                        {toTitleCase(item.items?.item_name || "")}
+                        {toTitleCase(item.itemName || "")}
                       </TableCell>
                       <TableCell className="p-1"> {item.quantity}</TableCell>
                       <TableCell className="p-1 text-center">
                         <Switch
                           onCheckedChange={() =>
-                            handleIndividualPicked(item.item_id, selectedOrder)
+                            handleIndividualPicked(item.id, selectedOrder)
                           }
                           checked={item.picked || false}
                         />
@@ -233,7 +228,6 @@ function ListByOrder({ date }: ListByOrderProps) {
             </Table>
           </CardContent>
         </Card>
-
         <ItemsSheet
           selectedOrder={selectedOrder}
           setSelectedOrder={setSelectedOrder}

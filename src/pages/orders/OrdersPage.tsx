@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 //supabase queries
 import { useFetchOrders } from "@/hooks/fetch/useFetchOrders";
 
@@ -7,22 +5,6 @@ import { useFetchOrders } from "@/hooks/fetch/useFetchOrders";
 import NewOrderButton from "@/components/orders/NewOrderButton";
 
 //ui
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -34,37 +16,53 @@ import {
 
 //utils
 import { toTitleCase } from "@/lib/utils";
-import { format, parseISO } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { useFetchGroups } from "@/hooks/fetch/useFetchGroups";
+import { OrdersTable } from "@/components/orders/OrdersTable";
+import { ordersTableColumns } from "@/components/orders/OrdersTableColumns";
+import { useSearchParams } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { useCallback, useEffect, useState } from "react";
+import debounce from "lodash.debounce";
 
 function OrdersPage() {
-  const [filters, setFilters] = useState({
-    startDate: new Date(new Date().setUTCHours(0, 0, 0, 0)).toISOString(),
-    groupId: "",
-    orderId: "",
-    status: "",
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  const { data, isLoading, isError, error } = useFetchOrders(filters);
   const {
     data: groupsData,
     isLoading: isGroupsLoading,
     isError: isGroupsError,
     error: groupsError,
   } = useFetchGroups();
+  const {
+    data: ordersData,
+    isLoading: isOrdersLoading,
+    isError: isOrdersError,
+    error: ordersError,
+  } = useFetchOrders({
+    startDate: searchParams.get("startDate") || undefined,
+    groupId: searchParams.get("groupId") || undefined,
+    customerName: debouncedSearchTerm,
+  });
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (value) {
+      searchParams.set(name, value);
+    } else {
+      searchParams.delete(name);
+    }
+    setSearchParams(searchParams);
   };
 
-  if (isLoading || isGroupsLoading) return <p>Loading...</p>;
-  if (isError || isGroupsError)
-    return <p>Error: {error?.message || groupsError?.message}</p>;
+  const debouncedSetSearchTerm = useCallback((value: string) => {
+    debounce(() => setDebouncedSearchTerm(value), 300)();
+  }, []);
+
+  useEffect(() => {
+    debouncedSetSearchTerm(searchParams.get("customerName") || "");
+  }, [searchParams, debouncedSetSearchTerm]);
 
   return (
     <>
@@ -73,78 +71,101 @@ function OrdersPage() {
         <NewOrderButton />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-x-4 gap-y-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild className="justify-start">
-            <Button variant="outline">Filter by Group Name</Button>
+            <Button variant="outline">
+              {toTitleCase(
+                searchParams.get("groupId")
+                  ? groupsData?.find(
+                      (group) => group.id === searchParams.get("groupId")
+                    )?.group_name || "Private Property"
+                  : "Select Group"
+              )}
+            </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Groups</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {groupsData?.map((group) => (
+          {groupsData && !isGroupsLoading && !isGroupsError && (
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Groups</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {groupsData.map((group) => (
+                <DropdownMenuCheckboxItem
+                  key={group.id}
+                  checked={searchParams.get("groupId") === group.id}
+                  onCheckedChange={() =>
+                    handleFilterChange({
+                      target: {
+                        name: "groupId",
+                        value:
+                          searchParams.get("groupId") === group.id
+                            ? ""
+                            : group.id,
+                      },
+                    } as React.ChangeEvent<HTMLInputElement>)
+                  }
+                >
+                  {toTitleCase(group.group_name || "")}
+                </DropdownMenuCheckboxItem>
+              ))}
               <DropdownMenuCheckboxItem
-                key={group.id}
-                checked={filters.groupId === group.id}
+                key="private"
+                checked={searchParams.get("groupId") === "private"}
                 onCheckedChange={() =>
                   handleFilterChange({
                     target: {
                       name: "groupId",
-                      value: filters.groupId === group.id ? "" : group.id,
+                      value:
+                        searchParams.get("groupId") === "private"
+                          ? ""
+                          : "private",
                     },
                   } as React.ChangeEvent<HTMLInputElement>)
                 }
               >
-                {toTitleCase(group.group_name || "")}
+                Private Property
               </DropdownMenuCheckboxItem>
-            ))}
-            <DropdownMenuCheckboxItem
-              key="private"
-              checked={filters.groupId === "private"}
-              onCheckedChange={() =>
-                handleFilterChange({
-                  target: {
-                    name: "groupId",
-                    value: filters.groupId === "private" ? "" : "private",
-                  },
-                } as React.ChangeEvent<HTMLInputElement>)
-              }
-            >
-              Private Property
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
+            </DropdownMenuContent>
+          )}
         </DropdownMenu>
 
-        <div className="flex flex-row gap-2 col-span-4">
-          {Object.entries(filters).map(([key, value]) => {
-            if (value) {
-              if (key === "startDate") {
-                return (
-                  <Badge key={key} variant="outline">
-                    Start Date: {format(parseISO(value), "dd-MM-yyyy")}
-                  </Badge>
-                );
-              }
-              if (key === "groupId") {
-                const groupName =
-                  groupsData?.find((group) => group.id === value)?.group_name ||
-                  "Private Property";
-                return (
-                  <Badge key={key} variant="outline">
-                    Group: {toTitleCase(groupName)}
-                  </Badge>
-                );
-              }
-              return (
-                <Badge key={key} variant="outline">
-                  {toTitleCase(key)}: {toTitleCase(value)}
-                </Badge>
-              );
+        <Input
+          placeholder="Customer Name"
+          name="customerName"
+          value={searchParams.get("customerName") || ""}
+          onChange={handleFilterChange}
+        />
+        {/* <div className="flex flex-row gap-2 col-span-4">
+          {Array.from(searchParams.entries()).map(([key, value]) => {
+            if (!value) return null;
+            let displayValue = value;
+            if (key === "startDate") {
+              displayValue = format(parseISO(value), "dd-MM-yyyy");
+            } else if (key === "groupId") {
+              displayValue =
+                groupsData?.find((group) => group.id === value)?.group_name ||
+                "Private Property";
             }
-            return null;
-          })}
-        </div>
 
-        <Card className="col-span-4">
+            return (
+              <Badge key={key} variant="outline">
+                {toTitleCase(key)}: {toTitleCase(displayValue)}
+              </Badge>
+            );
+          })}
+        </div> */}
+
+        <div className="container col-span-4">
+          {isOrdersLoading ? (
+            <div>Orders Loading</div>
+          ) : isOrdersError ? (
+            <div>Error fetching Orders: {ordersError.message}</div>
+          ) : (
+            ordersData && (
+              <OrdersTable columns={ordersTableColumns} data={ordersData} />
+            )
+          )}
+        </div>
+        {/* <Card className="col-span-4">
           <CardHeader className="pb-3">
             <CardTitle>All Orders</CardTitle>
             <CardDescription className="max-w-lg text-balance leading-relaxed">
@@ -212,7 +233,7 @@ function OrdersPage() {
               </Table>
             </CardContent>
           </CardHeader>
-        </Card>
+        </Card> */}
       </div>
     </>
   );

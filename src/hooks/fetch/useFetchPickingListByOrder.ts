@@ -15,7 +15,6 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
       customers (customer_name),
       groups (group_name),
       order_items (
-        item_id,
         quantity,
         picked,
         items (
@@ -34,7 +33,25 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
     throw new Error(error.message);
   }
 
-  return data;
+  const orderData = data.map((order) => ({
+    id: order.id,
+    number: order.number,
+    deliveryDate: order.delivery_date,
+    status: order.status,
+    notes: order.notes,
+    groupId: order.group_id,
+    customerName: order.customers?.customer_name,
+    groupName: order.groups?.group_name,
+    orderItems: order.order_items.map((item) => ({
+      id: item.items?.id ?? null,
+      itemName: item.items?.item_name ?? '',
+      price: item.items?.price ?? 0,
+      quantity: item.quantity,
+      picked: item.picked,
+    })),    
+  }));
+
+  return orderData;
 };
 
 export const useFetchPickingListByOrder = (startDate: string, endDate: string) => {

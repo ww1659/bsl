@@ -83,14 +83,15 @@ function CreateOrderPage() {
                 className="p-20"
                 onClick={() => handleNextStep()}
               >
-                <p className="text-lg">Existing Customer</p>
+                <p className="text-2xl">Existing Customer</p>
               </Button>
               <Button
                 variant="select"
+                disabled={true}
                 className="p-20"
                 onClick={() => handleNextStep()}
               >
-                <p className="text-lg">New Customer</p>
+                <p className="text-2xl">New Customer</p>
               </Button>
             </div>
           </div>
@@ -133,7 +134,9 @@ function CreateOrderPage() {
                   variant="select"
                   className="p-10"
                 >
-                  {toTitleCase(customer.customer_name || "")}
+                  <p className="text-lg">
+                    {toTitleCase(customer.customer_name || "")}
+                  </p>
                 </Button>
               ))}
             </div>

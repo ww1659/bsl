@@ -2,15 +2,12 @@ import { clsx, type ClassValue } from "clsx"
 import { addDays, format } from "date-fns";
 import { twMerge } from "tailwind-merge"
 
-type Items = {
-  items: {
-    id: number;
-    item_name: string | null;
-    price: number | null;
-  } | null;
-  picked: boolean | null;
-  item_id: number | null;
+export type OrderItem = {
+  id: number | null;
+  itemName: string | null;
+  price: number | null;
   quantity: number | null;
+  picked: boolean | null;
 };
 
 export function cn(...inputs: ClassValue[]) {
@@ -71,7 +68,7 @@ export function getWeekRange (date = new Date()) {
   return { dateFrom, dateTo };
 };
 
-export function calculateOrderPickedStatus (items: Items[]) {
+export function calculateOrderPickedStatus (items: OrderItem[]) {
   const allPicked = items.every((item) => item.picked === true);
   const nonePicked = items.every((item) => item.picked === false);
   if (allPicked) return "picked";

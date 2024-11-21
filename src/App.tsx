@@ -66,7 +66,7 @@ const App: React.FC = () => {
               <Route path="/picking-list" element={<PickingListPage />} />
               <Route path="/customers/*" element={<CustomersRoutes />} />
               <Route path="/orders/*" element={<OrderRoutes />} />
-              <Route path="/invoices/*" element={<InvoicesPage />} />
+              {/* <Route path="/invoices/*" element={<InvoicesPage />} /> */}
 
               {/* 404 Not Found Page */}
               <Route path="*" element={<NotFoundPage />} />

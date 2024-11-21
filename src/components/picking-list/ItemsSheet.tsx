@@ -1,19 +1,16 @@
-type Items = {
-  items: {
-    id: number;
-    item_name: string | null;
-    price: number | null;
-  } | null;
-  picked: boolean | null;
-  item_id: number | null;
+type OrderItem = {
+  id: number | null;
+  itemName: string | null;
+  price: number | null;
   quantity: number | null;
+  picked: boolean | null;
 };
 
 type ItemsSheetProps = {
   selectedOrder: string | null;
   setSelectedOrder: (orderId: string | null) => void;
   orderNumber: number | null | undefined;
-  orderItems: Items[];
+  orderItems: OrderItem[];
   onIndividualPicked: (itemId: number | null, orderId: string) => void;
   onAllPicked: (orderId: string) => void;
   orderPicked: string | null;
@@ -58,7 +55,7 @@ function ItemsSheet({
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 1280);
+      setIsSmallScreen(window.innerWidth < 1536);
     };
 
     checkScreenSize();
@@ -76,8 +73,8 @@ function ItemsSheet({
   }, [isSmallScreen, selectedOrder]);
 
   const sortedItems = orderItems.sort((a, b) => {
-    const nameA = a.items?.item_name?.toLowerCase() || "";
-    const nameB = b.items?.item_name?.toLowerCase() || "";
+    const nameA = a?.itemName?.toLowerCase() || "";
+    const nameB = b?.itemName?.toLowerCase() || "";
     if (nameA < nameB) return -1;
     if (nameA > nameB) return 1;
     return 0;
@@ -93,7 +90,10 @@ function ItemsSheet({
   return (
     <div>
       <Sheet open={open} onOpenChange={handleSheetOpenChange}>
-        <SheetContent className="block xl:hidden" aria-description="Items List">
+        <SheetContent
+          className="block 2xl:hidden"
+          aria-description="Items List"
+        >
           <SheetHeader>
             <SheetTitle>Order Number: {orderNumber}</SheetTitle>
           </SheetHeader>
@@ -112,19 +112,16 @@ function ItemsSheet({
             </TableHeader>
             <TableBody>
               {sortedItems.map((item) => (
-                <TableRow
-                  className="text-xs bg-0 hover:bg-0"
-                  key={item.item_id}
-                >
+                <TableRow className="text-xs bg-0 hover:bg-0" key={item.id}>
                   <TableCell className="p-1">
-                    {toTitleCase(item.items?.item_name || "")}
+                    {toTitleCase(item.itemName || "")}
                   </TableCell>
                   <TableCell className="p-1"> {item.quantity}</TableCell>
                   <TableCell className="p-1">
                     <Switch
                       onCheckedChange={() =>
                         selectedOrder &&
-                        onIndividualPicked(item.item_id, selectedOrder)
+                        onIndividualPicked(item.id, selectedOrder)
                       }
                       checked={item.picked || false}
                     />

@@ -5,6 +5,7 @@ import { Session } from "@supabase/supabase-js";
 import {
   Home,
   LineChart,
+  List,
   PanelLeft,
   Search,
   ShoppingCart,
@@ -47,14 +48,6 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
-              to="/orders"
-              className="flex items-center gap-4 px-2.5 text-foreground"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              Orders
-            </Link>
-
-            <Link
               to="/customers"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
@@ -63,11 +56,19 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
-              to="/invoices"
+              to="/orders"
+              className="flex items-center gap-4 px-2.5 text-foreground"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              Orders
+            </Link>
+
+            <Link
+              to="/picking-list"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
-              <LineChart className="h-5 w-5" />
-              Invoices
+              <List className="h-5 w-5" />
+              Picking List
             </Link>
           </nav>
         </SheetContent>
