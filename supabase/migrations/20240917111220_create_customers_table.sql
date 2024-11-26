@@ -15,6 +15,25 @@ create table customers (
     created_at timestamptz default now()
 );
 
+-- Enable Row Level Security
+alter table customers enable row level security;
+
+-- Create policies that allow authenticated users to see and create customers
+create policy "Public customers are visible to authenticated Users."
+on customers for select
+to authenticated -- the Postgres Role (recommended)
+using ( true ); -- the actual Policy
+
+create policy "Authenticated Users can create a customer."
+on customers for insert
+to authenticated  
+using ( true );
+
+create policy "Authenticated Users can update customers."
+on customers for update
+to authenticated                   
+using ( true );
+
 -- trigger to manage deactivated_at timestamp
 create or replace function update_customer_deactivated_at()
 returns trigger as $$

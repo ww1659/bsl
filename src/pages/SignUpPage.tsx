@@ -75,8 +75,6 @@ function LoginPage() {
     }
   }
 
-  console.log(signUpError);
-
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
       <div className="flex items-center justify-center py-12">

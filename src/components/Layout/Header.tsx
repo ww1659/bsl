@@ -4,9 +4,8 @@ import { Session } from "@supabase/supabase-js";
 
 import {
   AlignStartVertical,
-  Home,
-  LineChart,
   List,
+  Origami,
   PanelLeft,
   Search,
   ShoppingCart,
@@ -26,15 +25,24 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
+import { supabase } from "@/services/supabase";
 
 export const Header: React.FC = () => {
   // const session: Session | null = useAppSelector((state) => state.auth.session);
+
+  async function handleSignOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error.message);
+    }
+  }
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -52,45 +60,52 @@ export const Header: React.FC = () => {
             </SheetHeader>
             <SheetDescription aria-description="Navigation bar" />
             <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                to="/"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Home className="h-5 w-5" />
-                Home
-              </Link>
+              <SheetClose asChild>
+                <Link
+                  to="/"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Origami className="h-5 w-5" />
+                  Home
+                </Link>
+              </SheetClose>
 
-              <Link
-                to="/customers"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <Users2 className="h-5 w-5" />
-                Customers
-              </Link>
-
-              <Link
-                to="/orders"
-                className="flex items-center gap-4 px-2.5 text-foreground"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                Orders
-              </Link>
-
-              <Link
-                to="/picking-list"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <List className="h-5 w-5" />
-                Picking List
-              </Link>
-
-              <Link
-                to="/inventory"
-                className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              >
-                <AlignStartVertical className="h-5 w-5" />
-                Inventory
-              </Link>
+              <SheetClose asChild>
+                <Link
+                  to="/customers"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Users2 className="h-5 w-5" />
+                  Customers
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  to="/orders"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <ShoppingCart className="h-5 w-5" />
+                  Orders
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  to="/picking-list"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <List className="h-5 w-5" />
+                  Picking List
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  to="/inventory"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <AlignStartVertical className="h-5 w-5" />
+                  Inventory
+                </Link>
+              </SheetClose>
             </nav>
           </div>
         </SheetContent>
@@ -123,10 +138,7 @@ export const Header: React.FC = () => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleSignOut}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

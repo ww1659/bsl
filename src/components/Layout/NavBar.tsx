@@ -18,20 +18,10 @@ export const NavBar: React.FC = () => {
       <nav className="flex flex-col items-start px-2 sm:py-5">
         <Link
           to="/"
-          className="flex flex-row w-full px-3 py-1 my-1 font-medium"
-        >
-          <div className="flex flex-row w-full gap-2 justify-start">
-            <Origami />
-            <p className="text-lg overflow-hidden whitespace-nowrap">BSL</p>
-          </div>
-        </Link>
-
-        <Link
-          to="/"
           className="flex flex-row w-full p-3 my-1 text-muted-foreground hover:text-primary hover:font-medium hover:bg-accent"
         >
           <div className="flex flex-row w-full gap-2">
-            <Home className="h-5 w-5" />
+            <Origami className="h-5 w-5" />
             <p className="text-sm overflow-hidden whitespace-nowrap">Home</p>
           </div>
         </Link>

@@ -8,6 +8,30 @@ create table standard_order_items (
   updated_at timestamptz default now()
 );
 
+-- Enable Row Level Security
+alter table standard_order_items enable row level security;
+
+-- Create policies that allow authenticated users to see and create standard orders
+create policy "Public standard order items are visible to authenticated Users."
+on standard_order_items for select
+to authenticated
+using ( true ); 
+
+create policy "Authenticated Users can create standard order items."
+on standard_order_items for insert
+to authenticated  
+using ( true );
+
+create policy "Authenticated Users can update standard order items."
+on standard_order_items for update
+to authenticated                   
+using ( true );
+
+create policy "Authenticated Users can delete standard order items."
+on standard_order_items for delete
+to authenticated                   
+using ( true  );
+
 -- Trigger to update the updated_at column on row changes
 CREATE OR REPLACE FUNCTION update_timestamp()
 RETURNS TRIGGER AS $$

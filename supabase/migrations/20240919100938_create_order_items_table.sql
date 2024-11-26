@@ -9,6 +9,25 @@ create table order_items (
   updated_at timestamptz default now()
 );
 
+-- Enable Row Level Security
+alter table order_items enable row level security;
+
+-- Create policies that allow authenticated users to see and create Order Items
+create policy "Public Order Items are visible to authenticated Users."
+on order_items for select
+to authenticated -- the Postgres Role (recommended)
+using ( true ); -- the actual Policy
+
+create policy "Authenticated Users can create an order item."
+on order_items for insert
+to authenticated  
+using ( true );
+
+create policy "Authenticated Users can update order items."
+on order_items for update
+to authenticated                   
+using ( true );
+
 -- Index for faster lookups
 create index on order_items (order_id);
 create index on order_items (item_id);

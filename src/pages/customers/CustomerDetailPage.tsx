@@ -124,7 +124,7 @@ function CustomerDetailPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row items-start justify-between">
         <div>
           <div className="flex flex-row items-center gap-4">
             <h1 className="py-2">
