@@ -27,7 +27,7 @@ function AddItemsDropdown({
   const { data: allItems, isLoading, isError, error } = useFetchItems();
 
   const sortedItems = allItems?.sort((a, b) =>
-    (a.item_name || "").localeCompare(b.item_name || "")
+    (a.name || "").localeCompare(b.name || "")
   );
 
   const handleItemAdd = (itemId: string) => {
@@ -76,7 +76,7 @@ function AddItemsDropdown({
                       <Plus className="h-4 w-4" />
                     </span>
                   )}
-                  {toTitleCase(item.item_name || "")}
+                  {toTitleCase(item.name || "")}
                 </SelectItem>
               );
             })}

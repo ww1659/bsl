@@ -34,9 +34,7 @@ function CustomerGroupPage() {
   if (isError) return <p>Error: {error.message}</p>;
 
   const formattedGroupName = toTitleCase(
-    removeDashes(
-      Array.isArray(data) ? "Private Customers" : data?.group_name || ""
-    )
+    removeDashes(data === null ? "Private Customers" : data?.groupName || "")
   );
 
   return (

@@ -68,7 +68,6 @@ export function OrdersTable<TData, TValue>({
   return (
     <div className="space-y-4">
       <div className="flex items-center">
-        <div className="flex items-center py-4"></div>
         <Input
           placeholder="Search by Customer"
           value={

@@ -87,7 +87,7 @@ function CustomerDetailPage() {
     toggleActiveCustomer.mutate(
       {
         customerId: customerId || "",
-        isActive: customerData?.is_active || false,
+        isActive: customerData?.isActive || false,
       },
       {
         onSuccess: () => {
@@ -128,14 +128,14 @@ function CustomerDetailPage() {
         <div>
           <div className="flex flex-row items-center gap-4">
             <h1 className="py-2">
-              {toTitleCase(customerData?.customer_name || "")}
+              {toTitleCase(customerData?.customerName || "")}
             </h1>
           </div>
 
           <p className="text-muted-foreground text-base">
-            {customerData?.house_number &&
-              `${toTitleCase(customerData.house_number || "")} `}
-            {toTitleCase(customerData?.street_name || "")}
+            {customerData?.houseNumber &&
+              `${toTitleCase(customerData.houseNumber || "")} `}
+            {toTitleCase(customerData?.streetName || "")}
           </p>
           <p className="text-muted-foreground text-base">
             {toTitleCase(customerData?.town || "")}
@@ -162,7 +162,7 @@ function CustomerDetailPage() {
             <Switch
               id="active-customer"
               className="data-[state=checked]:bg-success"
-              checked={customerData?.is_active ?? false}
+              checked={customerData?.isActive ?? false}
               onCheckedChange={handleDialogOpen}
             />
           </div>
@@ -194,9 +194,9 @@ function CustomerDetailPage() {
           </SheetHeader>
           <UpdateCustomerForm
             customerId={customerId}
-            customerName={customerData?.customer_name || ""}
-            customerHouseNumber={customerData?.house_number || ""}
-            customerStreet={customerData?.street_name || ""}
+            customerName={customerData?.customerName || ""}
+            customerHouseNumber={customerData?.houseNumber || ""}
+            customerStreet={customerData?.streetName || ""}
             customerPostcode={customerData?.postcode || ""}
             customerEmail={customerData?.email || ""}
             customerDiscount={customerData?.discount || null}
@@ -208,10 +208,10 @@ function CustomerDetailPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Set the customer {toTitleCase(customerData?.customer_name || "")}{" "}
-              to {customerData?.is_active ? "inactive" : "active"}?
+              Set the customer {toTitleCase(customerData?.customerName || "")}{" "}
+              to {customerData?.isActive ? "inactive" : "active"}?
             </DialogTitle>
-            {customerData?.is_active ? (
+            {customerData?.isActive ? (
               <DialogDescription>
                 The customer will no longer be able to place orders, however,
                 their old orders will still be visible.

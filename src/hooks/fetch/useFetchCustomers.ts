@@ -1,10 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../connection';
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "../../connection";
 
 const fetchCustomers = async () => {
-  const { data, error } = await supabase
-    .from('customers')
-    .select('*');
+  const { data, error } = await supabase.from("customers").select("*");
 
   if (error) {
     throw new Error(error.message);
@@ -13,6 +11,5 @@ const fetchCustomers = async () => {
 };
 
 export const useFetchCustomers = () => {
-  return useQuery({queryKey: ['customers'], queryFn: fetchCustomers});
+  return useQuery({ queryKey: ["customers"], queryFn: fetchCustomers });
 };
-

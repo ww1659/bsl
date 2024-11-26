@@ -1,32 +1,37 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../connection';
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "../../connection";
 
 const fetchGroupById = async (groupId: string) => {
-  console.log(groupId, typeof groupId);
-  
-
-  if (groupId !== 'private') {
-    console.log('IN HERE');
-    
+  if (groupId !== "private") {
     const { data, error } = await supabase
-      .from('groups')
-      .select('*')
-      .eq('id', groupId);
+      .from("groups")
+      .select("*")
+      .eq("id", groupId)
+      .single();
 
     if (error) {
       throw new Error(error.message);
     }
-    return data[0];
-  } else {
-    return [];
-  }
+
+    const groupData = {
+      id: data.id,
+      groupName: data.group_name,
+      houseNumber: data.house_number,
+      streetName: data.street_name,
+      town: data.town,
+      postcode: data.postcode,
+      email: data.email,
+      standardDiscount: data.standard_discount,
+      createdAt: data.created_at,
+    };
+    return groupData;
+  } else return null;
 };
 
 export const useFetchGroupById = (groupId: string) => {
   return useQuery({
-    queryKey: ['groups-id', groupId], 
-    queryFn: () => fetchGroupById(groupId), 
-    enabled: !!groupId
-});
-}
-
+    queryKey: ["groups-id", groupId],
+    queryFn: () => fetchGroupById(groupId),
+    enabled: !!groupId,
+  });
+};

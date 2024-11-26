@@ -1,33 +1,42 @@
-
-import { supabase } from '../../connection';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '../use-toast';
+import { supabase } from "../../connection";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../use-toast";
 
 type CreateCustomerMutation = {
-    customerData: {
-        customer_name: string;
-        email: string | undefined;
-        discount: number | undefined;
-        house_number: string | undefined;
-        street_name: string | undefined;
-        town: string | undefined;
-        postcode: string | undefined;
-        country: string;
-        group_id: string;
-        reference: string;
-    }
+  customerData: {
+    customerName: string;
+    email: string | undefined;
+    discount: number | undefined;
+    houseNumber: string | undefined;
+    streetName: string | undefined;
+    town: string | undefined;
+    postcode: string | undefined;
+    country: string;
+    groupId: string;
+    reference: string;
+  };
 };
 
-const createCustomer = async ({customerData}: CreateCustomerMutation) => {
-
+const createCustomer = async ({ customerData }: CreateCustomerMutation) => {
   const { data, error } = await supabase
-    .from('customers')
-    .insert(customerData)
-    .select('*')
+    .from("customers")
+    .insert({
+      customer_name: customerData.customerName,
+      email: customerData.email,
+      discount: customerData.discount,
+      house_number: customerData.houseNumber,
+      street_name: customerData.streetName,
+      town: customerData.town,
+      postcode: customerData.postcode,
+      country: customerData.country,
+      group_id: customerData.groupId,
+      reference: customerData.reference,
+    })
+    .select("*")
     .single();
 
-  if (error) {    
+  if (error) {
     throw new Error(error.message);
   }
 
@@ -40,15 +49,14 @@ export const useCreateCustomer = () => {
   return useMutation({
     mutationFn: createCustomer,
     onSuccess: (data) => {
-        toast({
-          title: "Success!",
-          description: `Customer ${data.customer_name} created!`,
-        });
-        navigate("/customers");
-      },
-      onError: (error) => {
-        console.error("Error creating order:", error.message);
-      },
-    }
-  )
+      toast({
+        title: "Success!",
+        description: `Customer ${data.customer_name} created!`,
+      });
+      navigate("/customers");
+    },
+    onError: (error) => {
+      console.error("Error creating order:", error.message);
+    },
+  });
 };

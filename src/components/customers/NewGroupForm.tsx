@@ -58,13 +58,12 @@ function NewGroupForm() {
   });
 
   function onSubmit(values: z.infer<typeof newGroupSchema>) {
-    console.log(values);
     const groupData = {
-      group_name: values.groupName.toLowerCase(),
+      groupName: values.groupName.toLowerCase(),
       email: values.email.toLowerCase(),
-      standard_discount: values.discount,
-      house_number: values.houseNumber?.toLowerCase(),
-      street_name: values.street?.toLowerCase(),
+      standardDiscount: values.discount,
+      houseNumber: values.houseNumber?.toLowerCase(),
+      streetName: values.street?.toLowerCase(),
       town: values.town?.toLowerCase(),
       postcode: values.postcode?.toLowerCase(),
       country: "uk",

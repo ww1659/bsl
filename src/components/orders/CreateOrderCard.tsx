@@ -67,8 +67,8 @@ function CreateOrderCard({
 
   const handleOrderChange = (selectedOrderName: string) => {
     const selectedOrderItems =
-      data?.find((order) => order.order_name === selectedOrderName)
-        ?.order_items || [];
+      data?.find((order) => order.orderName === selectedOrderName)
+        ?.orderItems || [];
     setCurrentOrderItems(
       selectedOrderItems.filter((item) => item.id !== undefined) as OrderItem[]
     );
@@ -90,11 +90,11 @@ function CreateOrderCard({
     );
   };
 
-  const standardOrderNames = data?.map((order) => order.order_name) || [];
+  const standardOrderNames = data?.map((order) => order.orderName) || [];
 
   const sortedItems = currentOrderItems.sort((a, b) => {
-    const nameA = a.item_name?.toLowerCase();
-    const nameB = b.item_name?.toLowerCase();
+    const nameA = a.name?.toLowerCase();
+    const nameB = b.name?.toLowerCase();
     if (nameA && nameB && nameA < nameB) return -1;
     if (nameA && nameB && nameA > nameB) return 1;
     return 0;
@@ -175,7 +175,7 @@ function CreateOrderCard({
                     {sortedItems?.map((item) => (
                       <TableRow key={item.id}>
                         <TableCell className="font-medium py-1">
-                          {toTitleCase(item.item_name || "")}
+                          {toTitleCase(item.name || "")}
                         </TableCell>
                         <TableCell className="py-1">
                           {customerDiscount

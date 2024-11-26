@@ -1,7 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
-import { supabase } from '../../connection';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '../use-toast';
+import { useMutation } from "@tanstack/react-query";
+import { supabase } from "../../connection";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../use-toast";
 
 type CreateOrderMutation = {
   orderData: {
@@ -12,27 +12,22 @@ type CreateOrderMutation = {
     discount: number | null;
     notes: string;
     group_id: string | null;
-  
   };
-  orderItems: {  
+  orderItems: {
     item_id: number | null | undefined;
     quantity: number;
     price: number | null | undefined;
-    }[];
+  }[];
 };
 
-const createOrder = async ({
-  orderData,
-  orderItems,
-}: CreateOrderMutation) => {
-
+const createOrder = async ({ orderData, orderItems }: CreateOrderMutation) => {
   const { data: order, error: orderError } = await supabase
-    .from('orders')
+    .from("orders")
     .insert(orderData)
-    .select('*')
+    .select("*")
     .single();
 
-  if (orderError) {    
+  if (orderError) {
     throw new Error(orderError.message);
   }
 
@@ -41,9 +36,8 @@ const createOrder = async ({
     order_id: order.id,
   }));
 
-
   const { error: orderItemsError } = await supabase
-    .from('order_items')
+    .from("order_items")
     .insert(orderItemsData);
 
   if (orderItemsError) {
@@ -59,15 +53,14 @@ export const useCreateOrder = () => {
   return useMutation({
     mutationFn: createOrder,
     onSuccess: (order) => {
-        toast({
-          title: "Success!",
-          description: `Order number ${order.number} created, £${order.total}`,
-        });
-        navigate("/");
-      },
-      onError: (error) => {
-        console.error("Error creating order:", error.message);
-      },
-    }
-  )
+      toast({
+        title: "Success!",
+        description: `Order number ${order.number} created, £${order.total}`,
+      });
+      navigate("/");
+    },
+    onError: (error) => {
+      console.error("Error creating order:", error.message);
+    },
+  });
 };

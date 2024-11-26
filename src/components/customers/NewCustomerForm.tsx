@@ -83,20 +83,18 @@ function NewCustomerForm() {
   });
 
   function onSubmit(values: z.infer<typeof newCustomerSchema>) {
-    console.log(values);
     const customerData = {
-      customer_name: values.customerName.toLowerCase(),
+      customerName: values.customerName.toLowerCase(),
       email: values.email?.toLowerCase(),
       discount: values.discount,
-      house_number: values.houseNumber?.toLowerCase(),
-      street_name: values.street?.toLowerCase(),
+      houseNumber: values.houseNumber?.toLowerCase(),
+      streetName: values.street?.toLowerCase(),
       town: values.town?.toLowerCase(),
       postcode: values.postcode?.toLowerCase(),
       country: "uk",
-      group_id: values.group,
+      groupId: values.group,
       reference: values.reference,
     };
-    console.log(customerData);
     createCustomer({ customerData });
   }
 

@@ -1,10 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../connection';
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "../../connection";
 
 const fetchGroups = async () => {
-  const { data, error } = await supabase
-    .from('groups')
-    .select('*');
+  const { data, error } = await supabase.from("groups").select("*");
 
   if (error) {
     throw new Error(error.message);
@@ -14,7 +12,7 @@ const fetchGroups = async () => {
 
 export const useFetchGroups = () => {
   return useQuery({
-    queryKey: ['groups'], 
-    queryFn: fetchGroups});
+    queryKey: ["groups"],
+    queryFn: fetchGroups,
+  });
 };
-

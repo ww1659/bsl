@@ -4,6 +4,7 @@ import { useState } from "react";
 type StandardOrderCard = {
   customerId: string | null;
 };
+
 import { OrderItem } from "@/types";
 
 //ui
@@ -74,16 +75,16 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
     setSelectValue(value?.toString());
     setSelectedOrder(value ?? null);
     const selectedOrderData = data?.find((order) => order.id === value);
-    const sortedItems = selectedOrderData?.order_items
+    const sortedItems = selectedOrderData?.orderItems
       .filter((item): item is OrderItem => item.id !== undefined)
       .sort((a, b) => {
-        const nameA = a.item_name?.toLowerCase();
-        const nameB = b.item_name?.toLowerCase();
+        const nameA = a.name?.toLowerCase();
+        const nameB = b.name?.toLowerCase();
         if (nameA && nameB && nameA < nameB) return -1;
         if (nameA && nameB && nameA > nameB) return 1;
         return 0;
       });
-    const orderName = selectedOrderData?.order_name;
+    const orderName = selectedOrderData?.orderName;
     setOrderName(orderName || null);
     setSelectedOrderItems(sortedItems || []);
     setIsNewOrder(false);
@@ -105,7 +106,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
       prevItems.filter((prevItem) => prevItem.id !== itemId)
     );
     toast({
-      title: `Removed ${toTitleCase(itemToRemove?.item_name || "")}`,
+      title: `Removed ${toTitleCase(itemToRemove?.name || "")}`,
       description: `From Order: ${toTitleCase(orderName || "")}`,
       duration: 2000,
     });
@@ -132,7 +133,6 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
           setOrderName(null);
         },
         onError: (error) => {
-          console.log("ORDER UPDATED", error);
           toast({
             title: "Error",
             description: "Failed to update order",
@@ -222,7 +222,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                   <SelectContent>
                     {data.map((order) => (
                       <SelectItem key={order.id} value={order.id.toString()}>
-                        {toTitleCase(order.order_name || "")}
+                        {toTitleCase(order.orderName || "")}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -265,7 +265,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                     {selectedOrderItems?.map((item) => (
                       <TableRow key={item.id} className="hover:bg-0">
                         <TableCell className="font-medium py-0">
-                          {toTitleCase(item.item_name || "")}
+                          {toTitleCase(item.name || "")}
                         </TableCell>
                         <TableCell className="py-0 text-center">
                           <div>

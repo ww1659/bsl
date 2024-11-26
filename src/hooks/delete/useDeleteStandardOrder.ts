@@ -1,37 +1,39 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../../connection';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "../../connection";
 
 type DeleteStandardOrder = {
-    standardOrderId: number;
+  standardOrderId: number;
 };
 
-const deleteStandardOrder = async ({ standardOrderId }: DeleteStandardOrder) => {
-    const { error: deleteItemsError } = await supabase
-        .from('standard_order_items')
-        .delete()
-        .eq('standard_order_id', standardOrderId);
+const deleteStandardOrder = async ({
+  standardOrderId,
+}: DeleteStandardOrder) => {
+  const { error: deleteItemsError } = await supabase
+    .from("standard_order_items")
+    .delete()
+    .eq("standard_order_id", standardOrderId);
 
-    if (deleteItemsError) throw new Error(deleteItemsError.message);
+  if (deleteItemsError) throw new Error(deleteItemsError.message);
 
-    const { error: deleteOrderError } = await supabase
-        .from('standard_order')
-        .delete()
-        .eq('id', standardOrderId);
+  const { error: deleteOrderError } = await supabase
+    .from("standard_order")
+    .delete()
+    .eq("id", standardOrderId);
 
-    if (deleteOrderError) throw new Error(deleteOrderError.message);
+  if (deleteOrderError) throw new Error(deleteOrderError.message);
 
-    return { success: true };
+  return { success: true };
 };
 
 export const useDeleteStandardOrder = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: deleteStandardOrder,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['customer-standard-orders'] });
-        },
-        onError: (error) => {
-            console.error('Failed to delete Standard Order:', error);
-        }
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteStandardOrder,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["customer-standard-orders"] });
+    },
+    onError: (error) => {
+      console.error("Failed to delete Standard Order:", error);
+    },
+  });
 };

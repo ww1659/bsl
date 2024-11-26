@@ -9,63 +9,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- CREATE OR REPLACE FUNCTION get_picking_list_by_date_range(start_date DATE, end_date DATE)
--- RETURNS TABLE (
---   item_id BIGINT,
---   item_name VARCHAR,
---   picked_count BIGINT,
---   unpicked_count BIGINT
--- ) AS $$
--- BEGIN
---   RETURN QUERY
---   SELECT
---     oi.item_id,
---     i.item_name,
---     SUM(CASE WHEN oi.picked THEN oi.quantity ELSE 0 END) AS picked_count,
---     SUM(CASE WHEN NOT oi.picked THEN oi.quantity ELSE 0 END) AS unpicked_count
---   FROM
---     order_items oi
---   JOIN items i ON oi.item_id = i.id
---   JOIN orders o ON oi.order_id = o.id
---   WHERE
---     o.delivery_date >= start_date
---     AND o.delivery_date <= end_date
---   GROUP BY
---     oi.item_id, i.item_name
---   ORDER BY
---     i.item_name ASC;  
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE OR REPLACE FUNCTION get_picking_list_by_date_range(start_date DATE, end_date DATE)
--- RETURNS TABLE (
---   item_id BIGINT,
---   item_name VARCHAR,
---   picked BOOLEAN,
---   customer_name VARCHAR,
---   order_id uuid
--- ) AS $$
--- BEGIN
---   RETURN QUERY
---   SELECT
---     oi.item_id,
---     i.item_name,
---     oi.picked,
---     c.customer_name,
---     o.id AS order_id
---   FROM
---     order_items oi
---   JOIN items i ON oi.item_id = i.id
---   JOIN orders o ON oi.order_id = o.id
---   JOIN customers c ON o.customer_id = c.id
---   WHERE
---     o.delivery_date >= start_date
---     AND o.delivery_date <= end_date
---   ORDER BY
---     i.item_name ASC, o.id ASC;  
--- END;
--- $$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION get_picking_list_by_date_range(start_date DATE, end_date DATE)
 RETURNS TABLE (
   item_id BIGINT,

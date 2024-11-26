@@ -54,31 +54,31 @@ function GroupDetailsCard() {
             </div>
           </CardHeader>
           <CardContent>
-            {data.group_name && (
+            {data.groupName && (
               <div className="flex flex-row align-center flex-wrap py-1">
                 <p className="pr-1 text-sm text-muted-foreground">
                   Group Name:
                 </p>
                 <p className="text-sm font-bold">
-                  {toTitleCase(data.group_name)}
+                  {toTitleCase(data.groupName)}
                 </p>
               </div>
             )}
 
-            {data.house_number && (
+            {data.houseNumber && (
               <div className="flex flex-row align-center flex-wrap py-1">
                 <p className="pr-1 text-sm text-muted-foreground">
                   House Number:
                 </p>
-                <p className="font-bold text-sm">{data.house_number}</p>
+                <p className="font-bold text-sm">{data.houseNumber}</p>
               </div>
             )}
 
-            {data.street_name && (
+            {data.streetName && (
               <div className="flex flex-row align-center flex-wrap py-1">
                 <p className="pr-1 text-sm text-muted-foreground">Street:</p>
                 <p className="font-bold text-sm">
-                  {toTitleCase(data?.street_name || "")}
+                  {toTitleCase(data?.streetName || "")}
                 </p>
               </div>
             )}
@@ -99,12 +99,12 @@ function GroupDetailsCard() {
               </div>
             )}
 
-            {data.standard_discount !== null && (
+            {data.standardDiscount !== null && (
               <div className="flex flex-row align-center flex-wrap py-1">
                 <p className="pr-1 text-sm text-muted-foreground">
                   Standard Discount:
                 </p>
-                <p className="font-bold text-sm">{data.standard_discount}%</p>
+                <p className="font-bold text-sm">{data.standardDiscount}%</p>
               </div>
             )}
           </CardContent>
@@ -120,12 +120,12 @@ function GroupDetailsCard() {
             </SheetHeader>
             <UpdateGroupForm
               groupId={data.id}
-              groupName={data.group_name}
-              groupHouseNumber={data.house_number}
-              groupStreet={data.street_name}
+              groupName={data.groupName}
+              groupHouseNumber={data.houseNumber}
+              groupStreet={data.streetName}
               groupPostcode={data.postcode}
               groupEmail={data.email}
-              groupStandardDiscount={data.standard_discount}
+              groupStandardDiscount={data.standardDiscount}
             />
           </SheetContent>
         </Sheet>

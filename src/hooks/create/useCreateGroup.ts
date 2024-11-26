@@ -1,30 +1,38 @@
-import { supabase } from '../../connection';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '../use-toast';
+import { supabase } from "../../connection";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../use-toast";
 
 type CreateGroupMutation = {
-    groupData: {
-        group_name: string;
-        email: string;
-        standard_discount: number;
-        house_number: string | undefined;
-        street_name: string | undefined;
-        town: string | undefined;
-        postcode: string | undefined;
-        country: string;
-    }
+  groupData: {
+    groupName: string;
+    email: string;
+    standardDiscount: number;
+    houseNumber: string | undefined;
+    streetName: string | undefined;
+    town: string | undefined;
+    postcode: string | undefined;
+    country: string;
+  };
 };
 
-const createGroup = async ({groupData}: CreateGroupMutation) => {
-
+const createGroup = async ({ groupData }: CreateGroupMutation) => {
   const { data, error } = await supabase
-    .from('groups')
-    .insert(groupData)
-    .select('*')
+    .from("groups")
+    .insert({
+      group_name: groupData.groupName,
+      email: groupData.email,
+      standard_discount: groupData.standardDiscount,
+      house_number: groupData.houseNumber,
+      street_name: groupData.streetName,
+      town: groupData.town,
+      postcode: groupData.postcode,
+      country: groupData.country,
+    })
+    .select("*")
     .single();
 
-  if (error) {    
+  if (error) {
     throw new Error(error.message);
   }
 
@@ -37,15 +45,14 @@ export const useCreateGroup = () => {
   return useMutation({
     mutationFn: createGroup,
     onSuccess: (data) => {
-        toast({
-          title: "Success!",
-          description: `Group ${data.group_name} created!`,
-        });
-        navigate("/customers");
-      },
-      onError: (error) => {
-        console.error("Error creating order:", error.message);
-      },
-    }
-  )
+      toast({
+        title: "Success!",
+        description: `Group ${data.group_name} created!`,
+      });
+      navigate("/customers");
+    },
+    onError: (error) => {
+      console.error("Error creating order:", error.message);
+    },
+  });
 };

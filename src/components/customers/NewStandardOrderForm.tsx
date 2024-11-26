@@ -59,7 +59,7 @@ function NewStandardOrderForm({
   const createStandardOrder = useCreateStandardOrder();
 
   const sortedItems = data?.sort((a, b) =>
-    (a.item_name || "").localeCompare(b.item_name || "")
+    (a.name || "").localeCompare(b.name || "")
   );
 
   const form = useForm<z.infer<typeof newStandardOrderSchema>>({
@@ -186,7 +186,7 @@ function NewStandardOrderForm({
                                 Number(value),
                                 sortedItems?.find(
                                   (item) => item.id === Number(value)
-                                )?.item_name || ""
+                                )?.name || ""
                               )
                             }
                           >
@@ -210,7 +210,7 @@ function NewStandardOrderForm({
                                     key={item.id}
                                     value={item.id.toString()}
                                   >
-                                    {toTitleCase(item.item_name || "")}
+                                    {toTitleCase(item.name || "")}
                                   </SelectItem>
                                 ))}
                             </SelectContent>
