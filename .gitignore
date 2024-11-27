@@ -27,3 +27,4 @@ dist-ssr
 .env
 supabase/seed.sql
 supabase/seedbackup.sql
+supabase/.temp/
