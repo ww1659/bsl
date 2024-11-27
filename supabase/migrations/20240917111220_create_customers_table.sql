@@ -27,7 +27,7 @@ using ( true ); -- the actual Policy
 create policy "Authenticated Users can create a customer."
 on customers for insert
 to authenticated  
-using ( true );
+with check ( true );
 
 create policy "Authenticated Users can update customers."
 on customers for update

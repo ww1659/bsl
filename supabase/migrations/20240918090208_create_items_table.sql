@@ -19,7 +19,7 @@ using ( true ); -- the actual Policy
 create policy "Authenticated Users can create an item."
 on items for insert
 to authenticated  
-using ( true );
+with check ( true );
 
 create policy "Authenticated Users can update items."
 on items for update

@@ -21,7 +21,7 @@ using ( true ); -- the actual Policy
 create policy "Authenticated Users can create an order item."
 on order_items for insert
 to authenticated  
-using ( true );
+with check ( true );
 
 create policy "Authenticated Users can update order items."
 on order_items for update

@@ -25,7 +25,7 @@ using ( true ); -- the actual Policy
 create policy "Authenticated Users can create a group."
 on groups for insert
 to authenticated  
-using ( true );
+with check ( true );
 
 create policy "Authenticated Users can update groups."
 on groups for update

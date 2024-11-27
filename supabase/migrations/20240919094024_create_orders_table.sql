@@ -25,7 +25,7 @@ using ( true ); -- the actual Policy
 create policy "Authenticated Users can create an order."
 on orders for insert
 to authenticated  
-using ( true );
+with check ( true );
 
 create policy "Authenticated Users can update orders."
 on orders for update

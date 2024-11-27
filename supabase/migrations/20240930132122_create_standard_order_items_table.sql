@@ -20,7 +20,7 @@ using ( true );
 create policy "Authenticated Users can create standard order items."
 on standard_order_items for insert
 to authenticated  
-using ( true );
+with check ( true );
 
 create policy "Authenticated Users can update standard order items."
 on standard_order_items for update
