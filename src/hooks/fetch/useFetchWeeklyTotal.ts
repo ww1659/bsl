@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "../../connection";
+import { supabase } from "@/services/supabase";
 import { getEndOfWeek, getStartOfWeek } from "@/lib/utils";
 
 const fetchWeeklyOrderTotal = async (): Promise<number | null> => {

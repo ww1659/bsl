@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "../../connection";
+import { supabase } from "@/services/supabase";
 import { OrderItem } from "@/types";
 
 type UpdateStandardOrderArgs = {

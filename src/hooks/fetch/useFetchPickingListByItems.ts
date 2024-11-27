@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "../../connection";
+import { supabase } from "@/services/supabase";
 
 const fetchPickingListItems = async (startDate: string, endDate: string) => {
   const { data, error } = await supabase.rpc("get_picking_list_by_date_range", {

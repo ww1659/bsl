@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { supabase } from "../../connection";
+import { supabase } from "@/services/supabase";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../use-toast";
 

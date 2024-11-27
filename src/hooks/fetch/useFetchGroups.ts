@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "../../connection";
+import { supabase } from "@/services/supabase";
 
 const fetchGroups = async () => {
   const { data, error } = await supabase.from("groups").select("*");

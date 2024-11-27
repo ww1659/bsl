@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "../../connection";
+import { supabase } from "@/services/supabase";
 
 const fetchCustomerById = async (customerId: string) => {
   const { data, error } = await supabase
