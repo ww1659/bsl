@@ -31,7 +31,7 @@ function CustomerCard({
         onClick={handleClick}
       >
         <Card>
-          <CardHeader className="p-4">
+          <CardHeader className="p-4 hover:bg-accent">
             <CardTitle className="text-lg">
               {toTitleCase(customerName || "")}
             </CardTitle>

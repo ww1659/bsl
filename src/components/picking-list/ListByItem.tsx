@@ -131,7 +131,6 @@ function ListByItem({ date }: ListByItemProps) {
                               )}
                             </Button>
                           </DropdownMenuTrigger>
-
                           <DropdownMenuContent className="w-56">
                             <DropdownMenuLabel>
                               Unpicked {toTitleCase(item.itemName || "")}

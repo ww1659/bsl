@@ -25,7 +25,7 @@ function GroupCard({ groupName, groupId }: GroupCardProps) {
 
   return (
     <Link to={`/customers/${formattedGroupName}`} onClick={handleClick}>
-      <Card>
+      <Card className="hover:bg-accent">
         <CardHeader>
           <CardTitle>{toTitleCase(groupName)}</CardTitle>
           <CardDescription>
