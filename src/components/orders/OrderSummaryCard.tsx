@@ -75,13 +75,13 @@ function OrderSummaryCard({
   };
 
   return (
-    <div className="grid lg:grid-cols-2 gap-6">
+    <div className="grid lg:grid-cols-2 gap-1">
       <Card className="flex flex-col justify-between">
         <div>
           <CardHeader>
             <div className="flex flex-row justify-between">
               <div>
-                <CardTitle>Details</CardTitle>
+                <CardTitle>Confirm Order</CardTitle>
                 <CardDescription>View and Update</CardDescription>
               </div>
             </div>
