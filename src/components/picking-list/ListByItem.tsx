@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronDown, ChevronUp, X } from "lucide-react";
 import { Button } from "../ui/button";
+import { format } from "date-fns";
 
 function ListByItem({ date }: ListByItemProps) {
   const [activeRow, setActiveRow] = useState<number | null>(null);
@@ -83,93 +84,98 @@ function ListByItem({ date }: ListByItemProps) {
               <TableBody>
                 {Array.isArray(data) && data.length !== 0 ? (
                   data.map((item) => (
-                    <>
-                      <TableRow
-                        key={item.item_id}
-                        className="bg-0 hover:bg-0 text-sm"
-                      >
-                        <TableCell className="py-2">
-                          <div className="font-medium">
-                            {toTitleCase(item.item_name || "")}
-                          </div>
-                        </TableCell>
-                        <TableCell className="py-2 font-bold text-center">
-                          {item.total_number}
-                        </TableCell>
-                        <TableCell className="py-2 font-bold text-center">
-                          {item.orders_unpicked.length}
-                        </TableCell>
-                        <TableCell className="py-2">
-                          {item.orders_unpicked.length > 0 ? (
-                            <X className="h-5 w-5 text-destructive" />
-                          ) : (
-                            <Check className="h-5 w-5 text-success" />
-                          )}
-                        </TableCell>
-                        <TableCell className=" py-2 text-right">
-                          <DropdownMenu
-                            open={item.item_id === activeRow}
-                            onOpenChange={(open) =>
-                              setActiveRow(open ? item.item_id : null)
-                            }
-                          >
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                disabled={item.orders_unpicked.length === 0}
-                                variant="ghost"
-                                onClick={() =>
-                                  setActiveRow(
-                                    activeRow === item.item_id
-                                      ? null
-                                      : item.item_id
-                                  )
-                                }
-                                className="focus:outline-none py-0"
-                              >
-                                {activeRow === item.item_id ? (
-                                  <ChevronUp className="h-5 w-5" />
-                                ) : (
-                                  <ChevronDown className="h-5 w-5" />
-                                )}
-                              </Button>
-                            </DropdownMenuTrigger>
+                    <TableRow
+                      key={item.itemId}
+                      className="bg-0 hover:bg-0 text-sm"
+                    >
+                      <TableCell className="py-2">
+                        <div className="font-medium">
+                          {toTitleCase(item.itemName || "")}
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-2 font-bold text-center">
+                        {item.quantity}
+                      </TableCell>
+                      <TableCell className="py-2 font-bold text-center">
+                        {item.ordersPicked.length}
+                      </TableCell>
+                      <TableCell className="py-2">
+                        {item.ordersUnpicked.length > 0 ? (
+                          <X className="h-5 w-5 text-destructive" />
+                        ) : (
+                          <Check className="h-5 w-5 text-success" />
+                        )}
+                      </TableCell>
+                      <TableCell className=" py-2 text-right">
+                        <DropdownMenu
+                          open={item.itemId === activeRow}
+                          onOpenChange={(open) =>
+                            setActiveRow(open ? item.itemId : null)
+                          }
+                        >
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              disabled={item.ordersUnpicked.length === 0}
+                              variant="ghost"
+                              onClick={() =>
+                                setActiveRow(
+                                  activeRow === item.itemId ? null : item.itemId
+                                )
+                              }
+                              className="focus:outline-none py-0"
+                            >
+                              {activeRow === item.itemId ? (
+                                <ChevronUp className="h-5 w-5" />
+                              ) : (
+                                <ChevronDown className="h-5 w-5" />
+                              )}
+                            </Button>
+                          </DropdownMenuTrigger>
 
-                            <DropdownMenuContent className="w-56">
-                              <DropdownMenuLabel>
-                                Unpicked {toTitleCase(item.item_name || "")}
-                              </DropdownMenuLabel>
-                              <DropdownMenuSeparator />
-                              {item.orders_unpicked.map((order) => (
-                                <DropdownMenuItem key={order.order_id}>
+                          <DropdownMenuContent className="w-56">
+                            <DropdownMenuLabel>
+                              Unpicked {toTitleCase(item.itemName || "")}
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            {item.ordersUnpicked &&
+                              item.ordersUnpicked.map((order) => (
+                                <DropdownMenuItem key={order.orderId}>
                                   <div className="flex flex-col w-full">
                                     <div className="flex flex-row justify-between">
                                       <p>
-                                        {toTitleCase(order.customer_name || "")}
+                                        {toTitleCase(order.customerName || "")}
                                       </p>
                                       <p className="font-bold">
                                         <span className="font-normal">x</span>
-                                        {order.total_unpicked}
+                                        {order.totalUnpicked}
                                       </p>
                                     </div>
                                     <div className="text-xs text-muted-foreground">
-                                      Order Number: {order.order_number}
+                                      Order Number: {order.orderNumber}
                                     </div>
                                   </div>
                                 </DropdownMenuItem>
                               ))}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    </>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
                   ))
                 ) : (
                   <TableRow className="bg-accent" key="1">
                     <TableCell colSpan={5} className="hidden sm:table-cell">
-                      No Items to be picked for the selected date range:{" "}
-                      <span className="font-bold">
-                        {startDate} to {endDate}
-                      </span>
+                      <div className="grid grid rows-2 justify-start gap-2">
+                        No Items to be picked for the selected date range:{" "}
+                        <span className="font-bold">
+                          {startDate
+                            ? format(new Date(startDate), "EEE dd MMM")
+                            : ""}{" "}
+                          -{" "}
+                          {endDate
+                            ? format(new Date(endDate), "EEE dd MMM")
+                            : ""}
+                        </span>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )}

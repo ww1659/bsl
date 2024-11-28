@@ -6,6 +6,7 @@ type CustomerDetailsForm = {
   customerPostcode: string | null;
   customerEmail: string | null;
   customerDiscount: number | null;
+  setIsSheetOpen: (value: boolean) => void;
 };
 
 //zod forms
@@ -28,6 +29,8 @@ import { Input } from "@/components/ui/input";
 //utils
 import { toTitleCase } from "@/lib/utils";
 import { useUpdateCustomer } from "@/hooks/update/useUpdateCustomer";
+import { useToast } from "@/hooks/use-toast";
+import { Spinner } from "../ui/loading";
 
 const customerDetailsSchema = z.object({
   name: z.string().min(2, {
@@ -60,9 +63,15 @@ const customerDetailsSchema = z.object({
       z.literal(""),
     ])
     .optional(),
-  email: z.string().email({
-    message: "Invalid email address.",
-  }),
+  email: z
+    .union([
+      z.string().email({
+        message: "Invalid email address.",
+      }),
+      z.null(),
+      z.literal(""),
+    ])
+    .optional(),
   discount: z.coerce
     .number()
     .gte(0, "Discount must be positive!")
@@ -77,8 +86,10 @@ function UpdateCustomerForm({
   customerPostcode,
   customerEmail,
   customerDiscount,
+  setIsSheetOpen,
 }: CustomerDetailsForm) {
-  const { mutate: updateCustomer } = useUpdateCustomer();
+  const { toast } = useToast();
+  const updateCustomer = useUpdateCustomer();
 
   const form = useForm<z.infer<typeof customerDetailsSchema>>({
     resolver: zodResolver(customerDetailsSchema),
@@ -99,10 +110,19 @@ function UpdateCustomerForm({
       customerHouseNumber: (values.houseNumber || "").toLowerCase(),
       customerStreet: (values.street || "").toLowerCase(),
       customerPostcode: (values.postcode || "").toLowerCase(),
-      customerEmail: values.email.toLowerCase(),
+      customerEmail: values.email?.toLowerCase() || "",
       customerDiscount: values.discount,
     };
-    updateCustomer(customerData);
+    updateCustomer.mutate(customerData, {
+      onSuccess: () => {
+        setIsSheetOpen(false);
+        toast({
+          title: "Success!",
+          description: "Customer Details Updated",
+          duration: 3000,
+        });
+      },
+    });
   }
 
   return (
@@ -213,7 +233,13 @@ function UpdateCustomerForm({
           />
         </div>
         <div className="flex flex-row justify-end pt-4">
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit" className="w-full">
+            {updateCustomer.isPending ? (
+              <Spinner size="sm" className="text-secondary" />
+            ) : (
+              "Save Changes"
+            )}
+          </Button>
         </div>
       </form>
     </Form>

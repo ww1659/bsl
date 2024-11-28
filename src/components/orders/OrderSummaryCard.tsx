@@ -104,7 +104,7 @@ function OrderSummaryCard({
               </div>
               {currentOrderItems.map((item) => (
                 <div key={item.id} className="grid grid-cols-3 gap-2">
-                  <p className="text-sm">{toTitleCase(item.item_name || "")}</p>
+                  <p className="text-sm">{toTitleCase(item.name || "")}</p>
                   <p className="text-sm"> x{item.quantity}</p>
                   <p className="text-sm">
                     £{(Number(item.price) * item.quantity).toFixed(2)}

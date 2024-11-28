@@ -2,7 +2,6 @@ import React from "react";
 
 import {
   AlignStartVertical,
-  Home,
   List,
   Origami,
   Settings,
@@ -14,7 +13,7 @@ import { Link } from "react-router-dom";
 
 export const NavBar: React.FC = () => {
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background sm:flex">
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background md:flex">
       <nav className="flex flex-col items-start px-2 sm:py-5">
         <Link
           to="/"

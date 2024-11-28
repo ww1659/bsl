@@ -200,6 +200,7 @@ function CustomerDetailPage() {
             customerPostcode={customerData?.postcode || ""}
             customerEmail={customerData?.email || ""}
             customerDiscount={customerData?.discount || null}
+            setIsSheetOpen={setIsSheetOpen}
           />
         </SheetContent>
       </Sheet>

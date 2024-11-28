@@ -44,7 +44,6 @@ export const useUpdateCustomer = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customer-by-id"] });
       queryClient.invalidateQueries({ queryKey: ["groups-id"] });
-      console.log("Customerr Update Successfully");
     },
     onError: (error) => {
       console.error("Failed to update customer:", error);
