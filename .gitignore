@@ -25,6 +25,7 @@ dist-ssr
 
 .env/*
 .env
+.env.staging
 supabase/seed.sql
 supabase/seedbackup.sql
 supabase/.temp/
