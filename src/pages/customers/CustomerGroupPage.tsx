@@ -22,19 +22,14 @@ import {
 
 //utils
 import { removeDashes, toTitleCase } from "@/lib/utils";
-import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
-
 function CustomerGroupPage() {
   const { groupName } = useParams();
   const groupId = useAppSelector((state) => state.group.groupId);
 
-  const { data, isLoading, isError, error } = useFetchGroupById(groupId || "");
-
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
-
   const formattedGroupName = toTitleCase(
-    removeDashes(data === null ? "Private Customers" : data?.groupName || "")
+    removeDashes(
+      groupName === "privates" ? "Private Customers" : groupName || ""
+    )
   );
 
   return (
@@ -50,8 +45,8 @@ function CustomerGroupPage() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="py-2">{formattedGroupName}</h1>
 
+      <h1 className="py-2">{formattedGroupName}</h1>
       <div className="space-y-4 my-2">
         <div
           className={`${

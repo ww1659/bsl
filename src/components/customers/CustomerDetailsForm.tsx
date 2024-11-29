@@ -36,7 +36,7 @@ const customerDetailsSchema = z.object({
       .optional(),
     z.null(),
     z.literal("0"),
-  ]), // allowing null and 0
+  ]),
   street: z.union([
     z
       .string()
@@ -61,7 +61,8 @@ const customerDetailsSchema = z.object({
       .email({
         message: "Invalid email address.",
       })
-      .optional(),
+      .optional()
+      .or(z.literal("")),
     z.null(),
   ]),
 });
@@ -101,7 +102,7 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
                 <FormLabel>Customer Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={toTitleCase(data.customer_name || "")}
+                    placeholder={toTitleCase(data.customerName || "")}
                     {...field}
                   />
                 </FormControl>
@@ -116,7 +117,11 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
               <FormItem>
                 <FormLabel>House Number</FormLabel>
                 <FormControl>
-                  <Input placeholder={data.house_number || ""} {...field} />
+                  <Input
+                    placeholder={data.houseNumber || ""}
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -129,7 +134,11 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
               <FormItem>
                 <FormLabel>Street Name</FormLabel>
                 <FormControl>
-                  <Input placeholder={data.street_name || ""} {...field} />
+                  <Input
+                    placeholder={data.streetName || ""}
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -142,12 +151,16 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
               <FormItem>
                 <FormLabel>Postcode</FormLabel>
                 <FormControl>
-                  <Input placeholder={data.postcode || ""} {...field} />
+                  <Input
+                    placeholder={data.postcode || ""}
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          />{" "}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -155,7 +168,11 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
               <FormItem>
                 <FormLabel>Customer Email</FormLabel>
                 <FormControl>
-                  <Input placeholder={data.email || ""} {...field} />
+                  <Input
+                    placeholder={data.email || ""}
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

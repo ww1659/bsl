@@ -1,20 +1,35 @@
-import React from "react";
-
 import {
   AlignStartVertical,
-  Home,
   List,
   Origami,
-  Settings,
   ShoppingCart,
   Users2,
 } from "lucide-react";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { Link } from "react-router-dom";
+import { supabase } from "@/services/supabase";
+import { DarkModeToggle } from "../DarkModeToggle";
 
 export const NavBar: React.FC = () => {
+  async function handleSignOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error.message);
+    }
+  }
+
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background sm:flex">
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background md:flex">
       <nav className="flex flex-col items-start px-2 sm:py-5">
         <Link
           to="/"
@@ -85,8 +100,8 @@ export const NavBar: React.FC = () => {
         </Link>
       </nav>
 
-      <nav className="mt-auto flex flex-col items-start gap-4 px-0 sm:py-5">
-        <Link
+      <nav className="mt-auto flex flex-col items-start px-3 gap-4 sm:py-5">
+        {/* <Link
           to="/"
           className="flex flex-row w-full p-3 my-1 text-muted-foreground hover:text-primary hover:font-medium hover:bg-accent"
         >
@@ -96,7 +111,33 @@ export const NavBar: React.FC = () => {
               Settings
             </p>
           </div>
-        </Link>
+        </Link> */}
+        <div className="flex flex-row w-full items-center gap-2">
+          <DarkModeToggle />
+          <p className="text-sm overflow-hidden whitespace-nowrap text-muted-foreground">
+            Dark Mode
+          </p>
+        </div>
+
+        <DropdownMenu>
+          <div className="flex flex-row w-full items-center gap-2">
+            <DropdownMenuTrigger asChild>
+              <Avatar className="h-8 w-8">
+                <AvatarImage src="" alt="" />
+                <AvatarFallback>CW</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <p className="text-sm overflow-hidden whitespace-nowrap text-muted-foreground">
+              Account
+            </p>
+          </div>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Account Settings</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignOut}>Logout</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </nav>
     </aside>
   );

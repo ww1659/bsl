@@ -135,7 +135,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
         onError: (error) => {
           toast({
             title: "Error",
-            description: "Failed to update order",
+            description: `Failed to update order: ${error.message}`,
           });
         },
       }

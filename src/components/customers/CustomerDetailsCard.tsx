@@ -21,7 +21,6 @@ import {
 import { Button } from "../ui/button";
 
 //components
-import UpdateCustomerDetailsDialog from "./UpdateCustomerDetailsDialog";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
@@ -87,13 +86,13 @@ function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
                 <div className="flex flex-row align-center flex-wrap">
                   <p className="pr-1 text-sm">House Number:</p>
                   <p className="font-bold text-sm">
-                    {customerData.house_number}
+                    {customerData.houseNumber}
                   </p>
                 </div>
                 <div className="flex flex-row align-center flex-wrap">
                   <p className="pr-1 text-sm">Street:</p>
                   <p className="font-bold text-sm">
-                    {toTitleCase(customerData?.street_name || "")}
+                    {toTitleCase(customerData?.streetName || "")}
                   </p>
                 </div>
 
@@ -117,7 +116,7 @@ function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
                   <p className="pr-1 text-sm">Name:</p>
                   <p className="font-bold text-sm">
                     {groupData
-                      ? toTitleCase(groupData.group_name)
+                      ? toTitleCase(groupData.groupName)
                       : "Private Customer"}
                   </p>
                 </div>
@@ -147,7 +146,7 @@ function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
             </CardContent>
           </div>
         </Card>
-        <UpdateCustomerDetailsDialog customerId={customerId} />
+        {/* <UpdateCustomerDetailsDialog customerId={customerId} /> */}
       </>
     );
 }

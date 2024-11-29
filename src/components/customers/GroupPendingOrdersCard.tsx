@@ -31,7 +31,7 @@ function GroupPendingOrdersCard() {
     .slice(0, 3);
 
   return (
-    <Card className="w-full col-span-1 sm:col-span-2 xl:col-span-1">
+    <Card className="grid gap-1 col-span-1 sm:col-span-2 xl:col-span-1">
       <CardHeader>
         <CardTitle>Pending Orders</CardTitle>
       </CardHeader>

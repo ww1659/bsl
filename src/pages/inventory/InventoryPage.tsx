@@ -7,7 +7,7 @@ import NewItemDialog from "@/components/inventory/NewItemDialog";
 import { Plus } from "lucide-react";
 
 function InventoryPage() {
-  const { data, isLoading, isError, error } = useFetchItems();
+  const { data, isLoading, isError } = useFetchItems();
   const [itemDialogOpen, setItemDialogOpen] = useState(false);
 
   return (
@@ -24,7 +24,7 @@ function InventoryPage() {
 
       <div className="grid gap-x-4 gap-y-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <div className="container col-span-4">
-          {data && (
+          {!isError && !isLoading && data && (
             <InventoryTable columns={inventoryTableColumns} data={data} />
           )}
         </div>

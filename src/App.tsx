@@ -10,7 +10,6 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
-import InvoicesPage from "./pages/invoices/InvoicesPage";
 
 //Components
 import Layout from "./components/layout/Layout";
