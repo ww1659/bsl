@@ -1,3 +1,3 @@
 # React + TypeScript + Vite
 
-This is the development branch
+This is the main branch
