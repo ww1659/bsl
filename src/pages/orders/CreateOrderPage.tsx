@@ -167,6 +167,7 @@ function CreateOrderPage() {
               currentOrderItems={currentOrderItems}
               setCurrentOrderItems={setCurrentOrderItems}
               customerDiscount={customerDiscount}
+              groupId={groupId}
             />
           </div>
           <div className="flex flex-row justify-end items-center gap-2">

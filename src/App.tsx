@@ -9,7 +9,7 @@ import { ThemeProvider } from "./components/ThemeProvider";
 //Pages
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
+// import SignUpPage from "./pages/SignUpPage";
 
 //Components
 import Layout from "./components/layout/Layout";
@@ -57,7 +57,7 @@ const App: React.FC = () => {
             {/* Routes accessible only when the user is NOT logged in */}
             <Route element={<PublicRoute />}>
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
+              {/* <Route path="/signup" element={<SignUpPage />} /> */}
             </Route>
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>

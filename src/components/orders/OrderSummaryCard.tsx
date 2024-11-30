@@ -26,6 +26,8 @@ import { Separator } from "../ui/separator";
 //utils
 import { toTitleCase } from "@/lib/utils";
 import { format } from "date-fns";
+import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
+import LoadingWheel from "../LoadingWheel";
 
 function OrderSummaryCard({
   currentOrderItems,
@@ -36,7 +38,9 @@ function OrderSummaryCard({
   groupId,
 }: OrderSummaryCard) {
   const { mutate: createOrder } = useCreateOrder();
+  const { data, isLoading } = useFetchGroupById(groupId || "");
 
+  const groupDiscount = data?.standardDiscount || 0;
   const formattedDate = format(date || "", "EEEE do MMMM");
 
   const orderTotal =
@@ -45,7 +49,7 @@ function OrderSummaryCard({
       const quantity = item.quantity;
       return total + itemPrice * quantity;
     }, 0) *
-    ((100 - (customerDiscount || 0)) / 100);
+    ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100);
 
   const handleOrderConfirmation = (
     currentOrderItems: OrderItem[],
@@ -55,7 +59,7 @@ function OrderSummaryCard({
     groupId: string | null
   ) => {
     const orderData = {
-      total: orderTotal,
+      total: orderTotal * 1.2,
       delivery_date: date?.toISOString(),
       status: "pending" as "pending" | "paid" | "sent" | "overdue",
       customer_id: customerId,
@@ -73,6 +77,8 @@ function OrderSummaryCard({
 
     createOrder({ orderData, orderItems });
   };
+
+  if (isLoading) return <LoadingWheel text="Order Summary Loading" />;
 
   return (
     <div className="grid lg:grid-cols-2 gap-1">
@@ -107,7 +113,12 @@ function OrderSummaryCard({
                   <p className="text-sm">{toTitleCase(item.name || "")}</p>
                   <p className="text-sm"> x{item.quantity}</p>
                   <p className="text-sm">
-                    £{(Number(item.price) * item.quantity).toFixed(2)}
+                    {(
+                      Number(item.price) *
+                      item.quantity *
+                      ((100 - Math.max(customerDiscount || 0, groupDiscount)) /
+                        100)
+                    ).toFixed(2)}
                   </p>
                 </div>
               ))}

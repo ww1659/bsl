@@ -120,6 +120,7 @@ function GroupDetailsCard() {
             groupPostcode={data?.postcode ?? null}
             groupEmail={data?.email ?? null}
             groupStandardDiscount={data?.standardDiscount ?? null}
+            setIsSheetOpen={setIsOpen}
           />
         </SheetContent>
       </Sheet>

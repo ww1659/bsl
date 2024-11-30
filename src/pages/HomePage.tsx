@@ -57,7 +57,7 @@ function HomePage() {
             </Card>
           </Link>
 
-          <Link to="orders">
+          <Link to="orders/create">
             <Card className="hover:bg-accent h-full">
               <CardHeader>
                 <CardTitle>Create a New Order</CardTitle>

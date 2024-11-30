@@ -1,5 +1,5 @@
 //router
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //redux
 import { useAppDispatch } from "@/redux/hooks";
@@ -25,6 +25,7 @@ import { setSession } from "@/redux/features/auth/authslice";
 
 //connect to Supabase client
 import { supabase } from "@/services/supabase";
+import { Spinner } from "@/components/ui/loading";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }).min(2).max(50),
@@ -35,6 +36,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [loginError, setLoginError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -45,10 +47,12 @@ function LoginPage() {
   });
 
   async function handleSignIn(values: z.infer<typeof loginSchema>) {
+    setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
     });
+    setLoading(false);
     if (error) {
       setLoginError(error.message);
     } else if (data.session) {
@@ -121,7 +125,11 @@ function LoginPage() {
                       )}
                     />
                     <Button className="w-full" type="submit">
-                      Log in
+                      {loading ? (
+                        <Spinner className="text-secondary" size="sm" />
+                      ) : (
+                        "Log in"
+                      )}
                     </Button>
                     {loginError && (
                       <p className="text-red-500 text-sm text-center font-bold">
@@ -132,7 +140,7 @@ function LoginPage() {
                 </Form>
               </div>
             </div>
-            <div className="mt-4 text-center text-sm">
+            {/* <div className="mt-4 text-center text-sm">
               Don't have an account?{" "}
               <Link
                 to="/signup"
@@ -140,7 +148,7 @@ function LoginPage() {
               >
                 Sign Up
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

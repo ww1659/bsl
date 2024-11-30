@@ -6,6 +6,7 @@ type GroupDetailsForm = {
   groupPostcode: string | null;
   groupEmail: string | null;
   groupStandardDiscount: number | null;
+  setIsSheetOpen: (value: boolean) => void;
 };
 
 //zod forms
@@ -28,6 +29,7 @@ import { Input } from "@/components/ui/input";
 //utils
 import { toTitleCase } from "@/lib/utils";
 import { useUpdateGroup } from "@/hooks/update/useUpdateGroup";
+import { useToast } from "@/hooks/use-toast";
 
 const groupDetailsSchema = z.object({
   name: z.string().min(2, {
@@ -77,8 +79,10 @@ function UpdateGroupForm({
   groupPostcode,
   groupEmail,
   groupStandardDiscount,
+  setIsSheetOpen,
 }: GroupDetailsForm) {
-  const { mutate: updateGroup } = useUpdateGroup();
+  const updateGroup = useUpdateGroup();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof groupDetailsSchema>>({
     resolver: zodResolver(groupDetailsSchema),
@@ -102,7 +106,16 @@ function UpdateGroupForm({
       groupEmail: values.email.toLowerCase(),
       groupStandardDiscount: values.standardDiscount,
     };
-    updateGroup(groupData);
+    updateGroup.mutate(groupData, {
+      onSuccess: () => {
+        setIsSheetOpen(false);
+        toast({
+          title: "Success!",
+          description: "Group Details Updated",
+          duration: 3000,
+        });
+      },
+    });
   }
 
   return (

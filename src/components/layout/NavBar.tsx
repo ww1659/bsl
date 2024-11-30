@@ -19,6 +19,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { supabase } from "@/services/supabase";
 import { DarkModeToggle } from "../DarkModeToggle";
+import { Session } from "@supabase/supabase-js";
+import { useAppSelector } from "@/redux/hooks";
 
 export const NavBar: React.FC = () => {
   async function handleSignOut() {
@@ -27,6 +29,9 @@ export const NavBar: React.FC = () => {
       console.error("Error signing out:", error.message);
     }
   }
+
+  const session: Session | null = useAppSelector((state) => state.auth.session);
+  const userEmail = session?.user.email;
 
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background md:flex">
@@ -132,9 +137,14 @@ export const NavBar: React.FC = () => {
             </p>
           </div>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              <div className="flex flex-col">
+                <p>My Account</p>
+                <p className="text-xs font-normal">{userEmail}</p>
+              </div>
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Account Settings</DropdownMenuItem>
+
             <DropdownMenuItem onClick={handleSignOut}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
