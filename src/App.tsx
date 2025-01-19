@@ -1,28 +1,28 @@
 //Routing
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CustomersRoutes from "./routes/CustomerRoutes";
-import OrderRoutes from "./routes/OrderRoutes";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CustomersRoutes from './routes/CustomerRoutes';
+import OrderRoutes from './routes/OrderRoutes';
 
 //Providers
-import { ThemeProvider } from "./components/ThemeProvider";
+import { ThemeProvider } from './components/ThemeProvider';
 
 //Pages
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-// import SignUpPage from "./pages/SignUpPage";
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 
 //Components
-import Layout from "./components/layout/Layout";
-import WelcomePage from "./pages/WelcomePage";
-import { useAppDispatch } from "./redux/hooks";
-import { useEffect } from "react";
-import { supabase } from "./services/supabase";
-import { clearSession, setSession } from "./redux/features/auth/authslice";
-import ProtectedRoute from "./components/ProtectedRoute";
-import NotFoundPage from "./pages/NotFoundPage";
-import PublicRoute from "./components/PublicRoute";
-import PickingListPage from "./pages/pickingList/PickingListPage";
-import InventoryPage from "./pages/inventory/InventoryPage";
+import Layout from './components/layout/Layout';
+import WelcomePage from './pages/WelcomePage';
+import { useAppDispatch } from './redux/hooks';
+import { useEffect } from 'react';
+import { supabase } from './services/supabase';
+import { clearSession, setSession } from './redux/features/auth/authslice';
+import ProtectedRoute from './components/ProtectedRoute';
+import NotFoundPage from './pages/NotFoundPage';
+import PublicRoute from './components/PublicRoute';
+import PickingListPage from './pages/pickingList/PickingListPage';
+import InventoryPage from './pages/inventory/InventoryPage';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +39,7 @@ const App: React.FC = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT") {
+      if (event === 'SIGNED_OUT') {
         dispatch(clearSession());
       } else if (session) {
         dispatch(setSession(session));
@@ -57,7 +57,9 @@ const App: React.FC = () => {
             {/* Routes accessible only when the user is NOT logged in */}
             <Route element={<PublicRoute />}>
               <Route path="/login" element={<LoginPage />} />
-              {/* <Route path="/signup" element={<SignUpPage />} /> */}
+              {process.env.NODE_ENV === 'development' && (
+                <Route path="/signup" element={<SignUpPage />} />
+              )}
             </Route>
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>

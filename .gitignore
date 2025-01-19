@@ -31,4 +31,7 @@ supabase/seedbackup.sql
 supabase/.temp/
 
 # Error Logs
-error/logs
+errors
+
+# Formatter
+.prettierrc

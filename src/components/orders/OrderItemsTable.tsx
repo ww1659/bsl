@@ -11,17 +11,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useFetchItemsByOrderId } from "@/hooks/fetch/useFetchItemsByOrderId";
-import { toTitleCase } from "@/lib/utils";
-import { Separator } from "../ui/separator";
+} from '@/components/ui/card';
+import { useFetchItemsByOrderId } from '@/hooks/fetch/useFetchItemsByOrderId';
+import { toTitleCase } from '@/lib/utils';
+import { Separator } from '../ui/separator';
 
 function OrderItemsTable({
   orderId,
@@ -29,7 +29,7 @@ function OrderItemsTable({
   customerDiscount,
 }: OrderItemsTableProps) {
   const { data, isLoading, isError, error } = useFetchItemsByOrderId(
-    orderId || ""
+    orderId || ''
   );
 
   if (isLoading) {
@@ -63,7 +63,7 @@ function OrderItemsTable({
             data.map((item) => (
               <TableRow key={item.id}>
                 <TableCell className="font-medium py-1">
-                  {toTitleCase(item.items?.item_name || "")}
+                  {toTitleCase(item.items?.item_name || '')}
                 </TableCell>
                 <TableCell className="py-1">{item.quantity}</TableCell>
                 <TableCell className="text-right py-1">
@@ -73,12 +73,12 @@ function OrderItemsTable({
             ))}
         </TableBody>
       </Table>
-      <Card className="flex flex-col justify-between border-none bg-muted/40">
+      <Card className="flex flex-col justify-between border-none bg-0">
         <div>
           <CardHeader>
             <CardTitle className="text-right">Total</CardTitle>
           </CardHeader>
-          <CardContent className="text-right">
+          <CardContent className="text-right border-0">
             <div className="flex flex-row gap-1 justify-end">
               <p className="text-base">Item Costs</p>
               <p className="text-base font-bold">£{orderTotal.toFixed(2)}</p>
