@@ -15,10 +15,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useUpdateOrderStatus } from '@/hooks/update/useUpdateOrderStatus';
+import { Badge } from '@/components/ui/badge';
 
-type OrderDetailPageProps = {};
-
-function OrderDetailPage({}: OrderDetailPageProps) {
+function OrderDetailPage() {
   const { orderId } = useParams<{ orderId: string }>();
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -69,10 +68,19 @@ function OrderDetailPage({}: OrderDetailPageProps) {
   return (
     <div>
       <div className="flex flex-row justify-between">
-        <h1>Order Number {orderData.number}</h1>
-        <Button onClick={() => handleOpenDialog()}>Delete Order</Button>
+        <div className="flex flex-col gap-2">
+          <h1>Order Number {orderData.number}</h1>
+          {orderData.status && <Badge className="w-fit">Archived</Badge>}
+        </div>
+        <Button
+          disabled={orderData.status !== 'pending'}
+          onClick={() => handleOpenDialog()}
+        >
+          Delete Order
+        </Button>
       </div>
       <Separator className="my-2" />
+
       <p>
         <span className="font-bold">Delivery Date: </span>
         {orderData.delivery_date

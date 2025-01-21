@@ -1,13 +1,12 @@
-import { calculateOrderPickedStatus, toTitleCase } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
+import { toTitleCase } from '@/lib/utils';
+import { ColumnDef } from '@tanstack/react-table';
+import { format } from 'date-fns';
 
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
-import { Badge } from "../ui/badge";
-import OrdersTableDropdown from "./OrdersTableDropdown";
+import OrdersTableDropdown from './OrdersTableDropdown';
 
 export type OrderItem = {
   id: number | null;
@@ -21,7 +20,7 @@ export type Order = {
   total: number | null;
   number: number | null;
   deliveryDate: string | null;
-  status: "pending" | "paid" | "sent" | "overdue" | null;
+  status: 'pending' | 'ready' | 'sent' | 'delivered' | 'archived' | null;
   notes: string | null;
   groupId: string | null;
   id: string;
@@ -32,7 +31,7 @@ export type Order = {
 
 export const ordersTableColumns: ColumnDef<Order>[] = [
   {
-    accessorKey: "number",
+    accessorKey: 'number',
     header: ({ column }) => {
       return (
         <div className="flex flex-row items-center justify-start gap-1">
@@ -40,7 +39,7 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
           <Button
             size="xs"
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             <ArrowUpDown className="h-4 w-4" />
           </Button>
@@ -48,11 +47,11 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("number")}</div>;
+      return <div className="font-medium">{row.getValue('number')}</div>;
     },
   },
   {
-    accessorKey: "customerName",
+    accessorKey: 'customerName',
     header: ({ column }) => {
       return (
         <div className="flex flex-row items-center justify-start gap-1">
@@ -60,7 +59,7 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
           <Button
             size="xs"
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             <ArrowUpDown className="h-4 w-4" />
           </Button>
@@ -70,43 +69,25 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       return (
         <div className="font-medium">
-          <p>{toTitleCase(row.getValue("customerName") || "")}</p>
+          <p>{toTitleCase(row.getValue('customerName') || '')}</p>
         </div>
       );
     },
   },
+
   {
-    accessorKey: "pickedStatus",
-    header: () => <div>Picked Status</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="font-medium">
-          {calculateOrderPickedStatus(row.original.orderItems || []) ===
-          "picked" ? (
-            <Badge variant="success">Picked</Badge>
-          ) : calculateOrderPickedStatus(row.original.orderItems || []) ===
-            "partial" ? (
-            <Badge variant="warning">Partial</Badge>
-          ) : (
-            <Badge variant="destructive">TBP</Badge>
-          )}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "groupName",
+    accessorKey: 'groupName',
     header: () => <div>Group Name</div>,
     cell: ({ row }) => {
       return (
         <div className="font-medium">
-          {toTitleCase(row.getValue("groupName") || "")}
+          {toTitleCase(row.getValue('groupName') || '')}
         </div>
       );
     },
   },
   {
-    accessorKey: "deliveryDate",
+    accessorKey: 'deliveryDate',
     header: ({ column }) => {
       return (
         <div className="flex flex-row items-center justify-start gap-1">
@@ -114,7 +95,7 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
           <Button
             size="xs"
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             <ArrowUpDown className="h-4 w-4" />
           </Button>
@@ -124,13 +105,13 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       return (
         <div className="font-medium">
-          {format(new Date(row.getValue("deliveryDate")), "MMM d, yyyy")}
+          {format(new Date(row.getValue('deliveryDate')), 'MMM d, yyyy')}
         </div>
       );
     },
   },
   {
-    accessorKey: "total",
+    accessorKey: 'total',
     header: ({ column }) => {
       return (
         <div className="flex flex-row items-center justify-start gap-1">
@@ -138,7 +119,7 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
           <Button
             size="xs"
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             <ArrowUpDown className="h-4 w-4" />
           </Button>
@@ -146,12 +127,13 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("total")}</div>;
+      return <div className="font-medium">{row.getValue('total')}</div>;
     },
   },
 
   {
-    id: "actions",
+    id: 'actions',
+    enableHiding: false,
     cell: ({ row }) => {
       return <OrdersTableDropdown orderId={row.original.id} />;
     },

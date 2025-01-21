@@ -1,19 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
+
+type OrderStatus =
+  | 'pending'
+  | 'ready'
+  | 'sent'
+  | 'delivered'
+  | 'archived'
+  | undefined;
 
 type FetchOrdersParams = {
   startDate?: string;
   groupId?: string;
   customerName?: string;
+  status?: OrderStatus[];
 };
 
 const fetchOrders = async ({
   startDate,
   groupId,
   customerName,
+  status,
 }: FetchOrdersParams) => {
   let query = supabase
-    .from("orders")
+    .from('orders')
     .select(
       `
       total,
@@ -38,25 +48,29 @@ const fetchOrders = async ({
       customers!inner(customer_name)
     `
     )
-    .order("delivery_date", { ascending: true });
+    .order('delivery_date', { ascending: true });
+
+  if (status && status.length > 0) {
+    query = query.in('status', status);
+  }
 
   if (startDate) {
-    query = query.gte("delivery_date", new Date(startDate).toISOString());
+    query = query.gte('delivery_date', new Date(startDate).toISOString());
   } else {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    query = query.gte("delivery_date", today.toISOString());
+    query = query.gte('delivery_date', today.toISOString());
   }
 
   if (groupId) {
     query =
-      groupId === "private"
-        ? query.is("group_id", null)
-        : query.eq("group_id", groupId);
+      groupId === 'private'
+        ? query.is('group_id', null)
+        : query.eq('group_id', groupId);
   }
 
   if (customerName) {
-    query = query.ilike("customers.customer_name", `%${customerName}%`);
+    query = query.ilike('customers.customer_name', `%${customerName}%`);
   }
 
   const { data, error } = await query;
@@ -75,7 +89,7 @@ const fetchOrders = async ({
     id: order.id,
     orderItems: order.order_items.map((item) => ({
       id: item.items?.id ?? null,
-      itemName: item.items?.item_name ?? "",
+      itemName: item.items?.item_name ?? '',
       price: item.items?.price ?? 0,
       quantity: item.quantity,
       picked: item.picked,
@@ -89,7 +103,7 @@ const fetchOrders = async ({
 
 export const useFetchOrders = (params: FetchOrdersParams) => {
   return useQuery({
-    queryKey: ["orders", params],
+    queryKey: ['orders', params],
     queryFn: () => fetchOrders(params),
   });
 };

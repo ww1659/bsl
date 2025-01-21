@@ -73,7 +73,7 @@ function OrderItemsTable({
             ))}
         </TableBody>
       </Table>
-      <Card className="flex flex-col justify-between border-none bg-0">
+      <Card className="flex flex-col justify-between border-none bg-0 shadow-none">
         <div>
           <CardHeader>
             <CardTitle className="text-right">Total</CardTitle>

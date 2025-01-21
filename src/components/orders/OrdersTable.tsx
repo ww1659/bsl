@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   ColumnDef,
@@ -10,7 +10,7 @@ import {
   VisibilityState,
   getSortedRowModel,
   getFilteredRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -19,16 +19,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTablePagination } from "../DataTablePagination";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+} from '@/components/ui/dropdown-menu';
+import { DataTablePagination } from '../DataTablePagination';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,10 +71,10 @@ export function OrdersTable<TData, TValue>({
         <Input
           placeholder="Search by Customer"
           value={
-            (table.getColumn("customerName")?.getFilterValue() as string) ?? ""
+            (table.getColumn('customerName')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn("customerName")?.setFilterValue(event.target.value)
+            table.getColumn('customerName')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -131,7 +131,7 @@ export function OrdersTable<TData, TValue>({
                 <TableRow
                   className="bg-card"
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
