@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,11 +9,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
-import { toTitleCase } from "@/lib/utils";
-import { useUpdateItem } from "@/hooks/update/useUpdateItem";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { toTitleCase } from '@/lib/utils';
+import { useUpdateItem } from '@/hooks/update/useUpdateItem';
 
 type UpdateItemFormProps = {
   itemId: number;
@@ -25,15 +25,15 @@ type UpdateItemFormProps = {
 const updateItemSchema = z.object({
   itemName: z
     .string()
-    .min(1, "Item must have a name")
-    .max(50, "Item name must be less than 50 characters"),
+    .min(1, 'Item must have a name')
+    .max(50, 'Item name must be less than 50 characters'),
   itemPrice: z.coerce
     .number()
-    .gte(0, "Price must be greater than £0")
-    .lte(500, "Price cannot exceed £500")
+    .gte(0, 'Price must be greater than £0')
+    .lte(500, 'Price cannot exceed £500')
     .refine((val) => /^\d+(\.\d{1,2})?$/.test(val.toString()), {
       message:
-        "Price must be a valid currency value with up to 2 decimal places",
+        'Price must be a valid currency value with up to 2 decimal places',
     }),
 });
 
@@ -49,7 +49,7 @@ function UpdateItemForm({
   const form = useForm<z.infer<typeof updateItemSchema>>({
     resolver: zodResolver(updateItemSchema),
     defaultValues: {
-      itemName: toTitleCase(itemName || ""),
+      itemName: toTitleCase(itemName || ''),
       itemPrice: itemPrice || 0,
     },
   });
@@ -65,16 +65,16 @@ function UpdateItemForm({
         onSuccess: (data) => {
           setIsSheetOpen(false);
           toast({
-            title: "Item Updated",
+            title: 'Item Updated',
             description: `Item "${toTitleCase(
-              data.item_name || ""
+              data.item_name || ''
             )}" updated successfully`,
             duration: 5000,
           });
         },
         onError: (error) => {
           toast({
-            title: "Failed to Update Item",
+            title: 'Failed to Update Item',
             description: error.message,
             duration: 5000,
           });
@@ -114,7 +114,7 @@ function UpdateItemForm({
                 </FormLabel>
                 <div className="grid gap-2 col-span-3">
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input type="number" step="0.01" {...field} />
                   </FormControl>
                   <FormMessage />
                 </div>

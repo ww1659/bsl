@@ -8,8 +8,7 @@ import { ThemeProvider } from './components/ThemeProvider';
 
 //Pages
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
+import SignUpPage from './pages/login/SignUpPage';
 
 //Components
 import Layout from './components/layout/Layout';
@@ -23,6 +22,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import PublicRoute from './components/PublicRoute';
 import PickingListPage from './pages/pickingList/PickingListPage';
 import InventoryPage from './pages/inventory/InventoryPage';
+import LoginRoutes from './routes/LoginRoutes';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -56,7 +56,7 @@ const App: React.FC = () => {
           <Routes>
             {/* Routes accessible only when the user is NOT logged in */}
             <Route element={<PublicRoute />}>
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login/*" element={<LoginRoutes />} />
               {process.env.NODE_ENV === 'development' && (
                 <Route path="/signup" element={<SignUpPage />} />
               )}

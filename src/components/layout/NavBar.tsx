@@ -3,8 +3,9 @@ import {
   List,
   Origami,
   ShoppingCart,
+  UserCircle2,
   Users2,
-} from "lucide-react";
+} from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -13,20 +14,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-import { Link } from "react-router-dom";
-import { supabase } from "@/services/supabase";
-import { DarkModeToggle } from "../DarkModeToggle";
-import { Session } from "@supabase/supabase-js";
-import { useAppSelector } from "@/redux/hooks";
+import { Link } from 'react-router-dom';
+import { supabase } from '@/services/supabase';
+import { DarkModeToggle } from '../DarkModeToggle';
+import { Session } from '@supabase/supabase-js';
+import { useAppSelector } from '@/redux/hooks';
 
 export const NavBar: React.FC = () => {
   async function handleSignOut() {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.error("Error signing out:", error.message);
+      console.error('Error signing out:', error.message);
     }
   }
 
@@ -129,7 +130,9 @@ export const NavBar: React.FC = () => {
             <DropdownMenuTrigger asChild>
               <Avatar className="h-8 w-8">
                 <AvatarImage src="" alt="" />
-                <AvatarFallback>CW</AvatarFallback>
+                <AvatarFallback>
+                  <UserCircle2 />
+                </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <p className="text-sm overflow-hidden whitespace-nowrap text-muted-foreground">

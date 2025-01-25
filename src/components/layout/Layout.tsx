@@ -1,19 +1,21 @@
-import { ReactNode } from "react";
-import { NavBar } from "./NavBar";
-import { Header } from "./Header";
-import { useLocation } from "react-router-dom";
-import { Toaster } from "../ui/toaster";
+import { ReactNode } from 'react';
+import { NavBar } from './NavBar';
+import { Header } from './Header';
+import { useLocation } from 'react-router-dom';
+import { Toaster } from '../ui/toaster';
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const hideNav = ["/login", "/signup"].includes(location.pathname);
+  const hideNav =
+    location.pathname.startsWith('/login') ||
+    location.pathname.startsWith('/signup');
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       {!hideNav && <NavBar />}
       <div
         className={`flex flex-col sm:gap-4 ${
-          !hideNav ? "md:pl-40 md:py-4" : ""
+          !hideNav ? 'md:pl-40 md:py-4' : ''
         }`}
       >
         {!hideNav && <Header />}

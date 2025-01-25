@@ -25,7 +25,6 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
       )
     `
     )
-    .eq('status', 'pending')
     .gte('delivery_date', startDate)
     .lte('delivery_date', endDate)
     .order('delivery_date', { ascending: true });

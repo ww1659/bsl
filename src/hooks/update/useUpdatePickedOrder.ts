@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
 
 type UpdatePickedMutation = {
   orderId: string;
@@ -11,9 +11,10 @@ const updatePickedOrder = async ({
   currentPickedStatus,
 }: UpdatePickedMutation) => {
   const { data, error } = await supabase
-    .from("order_items")
+    .from('order_items')
     .update({ picked: !currentPickedStatus })
-    .eq("order_id", orderId);
+    .eq('order_id', orderId)
+    .select();
 
   if (error) throw new Error(error.message);
   return data;
@@ -24,10 +25,11 @@ export const useUpdatePickedOrder = () => {
   return useMutation({
     mutationFn: updatePickedOrder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["picking-list-orders"] });
+      queryClient.invalidateQueries({ queryKey: ['picking-list-orders'] });
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
     },
     onError: (error) => {
-      console.error("Failed to toggle picked status:", error);
+      console.error('Failed to toggle picked status:', error);
     },
   });
 };

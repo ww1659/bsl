@@ -88,12 +88,12 @@ function ListByItem({ date }: ListByItemProps) {
             <Table>
               <TableHeader>
                 <TableRow className="bg-0 hover:bg-0 text-sm">
+                  <TableHead className="py-1 h-6 text-left">Status</TableHead>
                   <TableHead className="py-1 h-6">Item Name</TableHead>
                   <TableHead className="py-1 h-6 text-center">Total</TableHead>
                   <TableHead className="py-1 h-6 text-center">
-                    Unpicked Count
+                    Picked Count
                   </TableHead>
-                  <TableHead className="py-1 h-6">Status</TableHead>
                   <TableHead className="py-1 h-6 text-right"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -104,6 +104,13 @@ function ListByItem({ date }: ListByItemProps) {
                       key={item.itemId}
                       className="bg-0 hover:bg-0 text-sm"
                     >
+                      <TableCell className="py-1 text-left">
+                        {item.ordersUnpicked.length > 0 ? (
+                          <X className="h-5 w-5 text-destructive" />
+                        ) : (
+                          <Check className="h-5 w-5 text-success" />
+                        )}
+                      </TableCell>
                       <TableCell className="py-1">
                         <div className="font-medium">
                           {toTitleCase(item.itemName || '')}
@@ -114,13 +121,6 @@ function ListByItem({ date }: ListByItemProps) {
                       </TableCell>
                       <TableCell className="py-1 font-bold text-center">
                         {item.ordersPicked.length}
-                      </TableCell>
-                      <TableCell className="py-1">
-                        {item.ordersUnpicked.length > 0 ? (
-                          <X className="h-5 w-5 text-destructive" />
-                        ) : (
-                          <Check className="h-5 w-5 text-success" />
-                        )}
                       </TableCell>
                       <TableCell className=" py-1 text-right">
                         <Popover

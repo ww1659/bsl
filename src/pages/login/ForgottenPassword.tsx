@@ -1,12 +1,12 @@
 //router
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 //redux
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch } from '@/redux/hooks';
 
 //components
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,35 +14,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
 //zod form validation
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { setSession } from "@/redux/features/auth/authslice";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { setSession } from '@/redux/features/auth/authslice';
 
 //connect to Supabase client
-import { supabase } from "@/services/supabase";
-import { Spinner } from "@/components/ui/loading";
+import { supabase } from '@/services/supabase';
+import { Spinner } from '@/components/ui/loading';
+import { Link } from 'react-router-dom';
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }).min(2).max(50),
-  password: z.string().max(32),
+  email: z.string().email({ message: 'Invalid email address' }).min(2).max(50),
 });
 
-function LoginPage() {
+function ForgottenPassword() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [loginError, setLoginError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
     },
   });
 
@@ -50,14 +49,13 @@ function LoginPage() {
     setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
-      password: values.password,
     });
     setLoading(false);
     if (error) {
-      setLoginError(error.message);
+      setError(error.message);
     } else if (data.session) {
       dispatch(setSession(data.session));
-      navigate("/");
+      navigate('/');
     }
   }
 
@@ -76,9 +74,10 @@ function LoginPage() {
           <div className="mx-auto grid w-[350px] gap-6">
             <div className="grid gap-2 text-left">
               <div className="justify-start">
-                <h1 className="text-3xl font-bold">Login</h1>
-                <p className="text-balance text-muted-foreground">
-                  Enter your email and password to log in
+                <h1 className="text-3xl font-bold">Forgotten Password?</h1>
+                <p className="text-normal text-muted-foreground">
+                  Enter your email and we'll send you a link to reset your
+                  password.
                 </p>
               </div>
             </div>
@@ -107,48 +106,25 @@ function LoginPage() {
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <Input
-                              className="focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1"
-                              type="password"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-xs" />
-                        </FormItem>
-                      )}
-                    />
                     <Button className="w-full" type="submit">
                       {loading ? (
                         <Spinner className="text-secondary" size="sm" />
                       ) : (
-                        "Log in"
+                        'Reset Password'
                       )}
                     </Button>
-                    {loginError && (
-                      <p className="text-red-500 text-sm text-center font-bold">
-                        {loginError}
-                      </p>
-                    )}
+                    <div className="flex flex-center justify-center">
+                      <Link
+                        to="/login"
+                        className="text-sm font-light underline-offset-2 hover:underline"
+                      >
+                        Back to Login
+                      </Link>
+                    </div>
                   </form>
                 </Form>
               </div>
             </div>
-            {/* <div className="mt-4 text-center text-sm">
-              Don't have an account?{" "}
-              <Link
-                to="/signup"
-                className="m-auto inline-block text-sm underline"
-              >
-                Sign Up
-              </Link>
-            </div> */}
           </div>
         </div>
       </div>
@@ -156,4 +132,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default ForgottenPassword;

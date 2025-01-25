@@ -7,6 +7,7 @@ import { ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import OrdersTableDropdown from './OrdersTableDropdown';
+import { Badge } from '../ui/badge';
 
 export type OrderItem = {
   id: number | null;
@@ -32,19 +33,8 @@ export type Order = {
 export const ordersTableColumns: ColumnDef<Order>[] = [
   {
     accessorKey: 'number',
-    header: ({ column }) => {
-      return (
-        <div className="flex flex-row items-center justify-start gap-1">
-          <p>Order No</p>
-          <Button
-            size="xs"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
-        </div>
-      );
+    header: () => {
+      return <p>Order Number</p>;
     },
     cell: ({ row }) => {
       return <div className="font-medium">{row.getValue('number')}</div>;
@@ -52,19 +42,8 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: 'customerName',
-    header: ({ column }) => {
-      return (
-        <div className="flex flex-row items-center justify-start gap-1">
-          <p>Customer Name</p>
-          <Button
-            size="xs"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            <ArrowUpDown className="h-4 w-4" />
-          </Button>
-        </div>
-      );
+    header: () => {
+      return <p>Customer Name</p>;
     },
     cell: ({ row }) => {
       return (
@@ -77,11 +56,24 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
 
   {
     accessorKey: 'groupName',
-    header: () => <div>Group Name</div>,
+    header: ({ column }) => {
+      return (
+        <div className="flex flex-row items-center justify-start gap-1">
+          <p>Group</p>
+          <Button
+            size="xs"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
     cell: ({ row }) => {
       return (
         <div className="font-medium">
-          {toTitleCase(row.getValue('groupName') || '')}
+          {toTitleCase(row.getValue('groupName') || 'Private Customer')}
         </div>
       );
     },
@@ -111,6 +103,43 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
     },
   },
   {
+    accessorKey: 'status',
+    header: ({ column }) => {
+      return (
+        <div className="flex flex-row items-center justify-start gap-1">
+          <p>Status</p>
+          <Button
+            size="xs"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const status = row.getValue('status');
+      return (
+        <div className="font-medium">
+          <Badge
+            variant={
+              status === 'sent'
+                ? 'success'
+                : status === 'ready'
+                ? 'default'
+                : status === 'pending'
+                ? 'warning'
+                : 'default'
+            }
+          >
+            {toTitleCase(row.getValue('status') || '')}
+          </Badge>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: 'total',
     header: ({ column }) => {
       return (
@@ -127,7 +156,11 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue('total')}</div>;
+      return (
+        <div className="font-medium">
+          £{(row.getValue('total') as number).toFixed(2)}
+        </div>
+      );
     },
   },
 
@@ -135,7 +168,12 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      return <OrdersTableDropdown orderId={row.original.id} />;
+      return (
+        <OrdersTableDropdown
+          orderId={row.original.id}
+          orderStatus={row.original.status}
+        />
+      );
     },
   },
 ];

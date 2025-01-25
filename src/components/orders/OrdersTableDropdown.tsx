@@ -1,5 +1,6 @@
 type OrdersTableDropdownProps = {
   orderId: string;
+  orderStatus: 'pending' | 'ready' | 'sent' | 'delivered' | 'archived' | null;
 };
 
 import {
@@ -9,12 +10,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { Link } from "react-router-dom";
+} from '@/components/ui/dropdown-menu';
+import { Button } from '../ui/button';
+import {
+  ListOrderedIcon,
+  MoreHorizontal,
+  NotebookTabs,
+  SquareCheckBig,
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useUpdateOrderStatus } from '@/hooks/update/useUpdateOrderStatus';
 
-function OrdersTableDropdown({ orderId }: OrdersTableDropdownProps) {
+function OrdersTableDropdown({
+  orderId,
+  orderStatus,
+}: OrdersTableDropdownProps) {
+  const updateOrderStatus = useUpdateOrderStatus();
+  const handleSentClick = () => {
+    updateOrderStatus.mutate({ orderId, newStatus: 'sent' });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,9 +41,32 @@ function OrdersTableDropdown({ orderId }: OrdersTableDropdownProps) {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>View Notes</DropdownMenuItem>
         <DropdownMenuItem>
-          <Link to={`/orders/${orderId}`}>View Order</Link>
+          <Link to={`/orders/${orderId}`}>
+            <div className="flex flex-row items-center gap-2">
+              <ListOrderedIcon className="h-4 w-4" />
+              <p>View Order</p>
+            </div>
+          </Link>
+        </DropdownMenuItem>
+        {/* <DropdownMenuItem>
+          <div className="flex flex-row items-center gap-2">
+            <NotebookTabs className="h-4 w-4" />
+            <p>View Notes</p>
+          </div>
+        </DropdownMenuItem> */}
+        <DropdownMenuItem
+          disabled={
+            orderStatus === 'archived' ||
+            orderStatus === 'sent' ||
+            orderStatus === 'pending'
+          }
+          onClick={() => handleSentClick()}
+        >
+          <div className="flex flex-row items-center gap-2">
+            <SquareCheckBig className="h-4 w-4" />
+            {orderStatus === 'sent' ? <p>Sent!</p> : <p>Mark as Sent</p>}
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

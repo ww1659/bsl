@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,27 +9,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useCreateItem } from "@/hooks/create/useCreateItem";
-import { useToast } from "@/hooks/use-toast";
-import { toTitleCase } from "@/lib/utils";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useCreateItem } from '@/hooks/create/useCreateItem';
+import { useToast } from '@/hooks/use-toast';
+import { toTitleCase } from '@/lib/utils';
 
 type NewItemFormProps = { setDialogOpen: (open: boolean) => void };
 
 const newItemSchema = z.object({
   itemName: z
     .string()
-    .min(1, "Item must have a name")
-    .max(50, "Item name must be less than 50 characters"),
+    .min(1, 'Item must have a name')
+    .max(50, 'Item name must be less than 50 characters'),
   price: z.coerce
     .number()
-    .gte(0, "Price must be greater than £0")
-    .lte(500, "Price cannot exceed £500"),
+    .gte(0, 'Price must be greater than £0')
+    .lte(500, 'Price cannot exceed £500'),
   stock: z.coerce
     .number()
-    .gte(0, "Stock must be greater than 0")
-    .int("Value must be a whole number"),
+    .gte(0, 'Stock must be greater than 0')
+    .int('Value must be a whole number'),
 });
 
 function NewItemForm({ setDialogOpen }: NewItemFormProps) {
@@ -51,9 +51,9 @@ function NewItemForm({ setDialogOpen }: NewItemFormProps) {
         onSuccess: (data) => {
           setDialogOpen(false);
           toast({
-            title: "New Item Created",
+            title: 'New Item Created',
             description: `Item "${toTitleCase(
-              data.itemName || ""
+              data.itemName || ''
             )}" created successfully`,
             duration: 5000,
           });
@@ -93,7 +93,12 @@ function NewItemForm({ setDialogOpen }: NewItemFormProps) {
                 </FormLabel>
                 <div className="grid gap-2 col-span-3">
                   <FormControl>
-                    <Input type="number" placeholder="e.g. 2.99" {...field} />
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="e.g. 2.99"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </div>

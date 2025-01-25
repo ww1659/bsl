@@ -7,7 +7,7 @@ type OrderStatus =
   | 'sent'
   | 'delivered'
   | 'archived'
-  | undefined;
+  | null;
 
 type FetchOrdersParams = {
   startDate?: string;
