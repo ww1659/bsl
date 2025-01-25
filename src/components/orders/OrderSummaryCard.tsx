@@ -1,4 +1,4 @@
-import { OrderItem } from "@/types";
+import { OrderItem } from '@/types';
 type OrderSummaryCard = {
   currentOrderItems: OrderItem[];
   date: Date | undefined;
@@ -9,7 +9,7 @@ type OrderSummaryCard = {
 };
 
 //supabase hooks
-import { useCreateOrder } from "@/hooks/create/useCreateOrder";
+import { useCreateOrder } from '@/hooks/create/useCreateOrder';
 
 //ui
 import {
@@ -19,15 +19,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+} from '@/components/ui/card';
+import { Button } from '../ui/button';
+import { Separator } from '../ui/separator';
 
 //utils
-import { toTitleCase } from "@/lib/utils";
-import { format } from "date-fns";
-import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
-import LoadingWheel from "../LoadingWheel";
+import { toTitleCase } from '@/lib/utils';
+import { format } from 'date-fns';
+import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
+import LoadingWheel from '../LoadingWheel';
 
 function OrderSummaryCard({
   currentOrderItems,
@@ -38,10 +38,10 @@ function OrderSummaryCard({
   groupId,
 }: OrderSummaryCard) {
   const { mutate: createOrder } = useCreateOrder();
-  const { data, isLoading } = useFetchGroupById(groupId || "");
+  const { data, isLoading } = useFetchGroupById(groupId || '');
 
   const groupDiscount = data?.standardDiscount || 0;
-  const formattedDate = format(date || "", "EEEE do MMMM");
+  const formattedDate = format(date || '', 'EEEE do MMMM');
 
   const orderTotal =
     currentOrderItems.reduce((total, item) => {
@@ -59,12 +59,12 @@ function OrderSummaryCard({
     groupId: string | null
   ) => {
     const orderData = {
-      total: orderTotal * 1.2,
+      total: orderTotal,
       delivery_date: date?.toISOString(),
-      status: "pending" as "pending" | "paid" | "sent" | "overdue",
+      status: 'pending' as 'pending' | 'paid' | 'sent' | 'overdue',
       customer_id: customerId,
       discount: customerDiscount,
-      notes: "",
+      notes: '',
       group_id: groupId,
     };
     const orderItems = currentOrderItems.map((item) => {
@@ -94,9 +94,9 @@ function OrderSummaryCard({
           </CardHeader>
           <CardContent>
             <p className="text-sm mb-2">
-              Customer Name:{" "}
+              Customer Name:{' '}
               <span className="font-bold">
-                {toTitleCase(customerName || "")}
+                {toTitleCase(customerName || '')}
               </span>
             </p>
             <p className="text-sm mb-4">
@@ -110,7 +110,7 @@ function OrderSummaryCard({
               </div>
               {currentOrderItems.map((item) => (
                 <div key={item.id} className="grid grid-cols-3 gap-2">
-                  <p className="text-sm">{toTitleCase(item.name || "")}</p>
+                  <p className="text-sm">{toTitleCase(item.name || '')}</p>
                   <p className="text-sm"> x{item.quantity}</p>
                   <p className="text-sm">
                     {(
@@ -133,35 +133,35 @@ function OrderSummaryCard({
           </CardHeader>
           <CardContent className="text-right">
             <div className="flex flex-row gap-1 justify-end">
-              <p className="text-base">Item Costs</p>
-              <p className="text-base font-bold">£{orderTotal.toFixed(2)}</p>
+              <p className="text-base">Item Costs:</p>
+              <p className="text-base font-bold">
+                £{((orderTotal * 5) / 6).toFixed(2)}
+              </p>
             </div>
             <div className="flex flex-row gap-1 justify-end mb-2 text-muted-foreground text-xs">
               <p>Customer Discount</p>
               <p>{customerDiscount}%</p>
             </div>
             <div className="flex flex-row gap-1 justify-end">
-              <p className="text-base">VAT</p>
+              <p className="text-base">VAT:</p>
               <p className="text-base font-bold">
-                £{(orderTotal * 0.2).toFixed(2)}
+                £{(orderTotal / 6).toFixed(2)}
               </p>
             </div>
             <div className="flex flex-row gap-1 justify-end mb-2 text-muted-foreground text-xs">
               <p>VAT charged at 20%</p>
             </div>
             <div className="flex flex-row gap-1 justify-end mb-2">
-              <p className="text-base">Total inc VAT</p>
-              <p className="text-base font-bold">
-                £{(orderTotal * 1.2).toFixed(2)}
-              </p>
+              <p className="text-base">Total inc VAT:</p>
+              <p className="text-base font-bold">£{orderTotal.toFixed(2)}</p>
             </div>
             <Separator />
           </CardContent>
         </div>
         <CardFooter className="justify-end pb-0">
           <div className="flex flex-col items-end">
-            <p className="text-muted-foreground">Order Total</p>
-            <h3>£{(orderTotal * 1.2).toFixed(2)}</h3>
+            <h3 className="text-muted-foreground">Order Total</h3>
+            <h3>£{orderTotal.toFixed(2)}</h3>
           </div>
         </CardFooter>
         <Button

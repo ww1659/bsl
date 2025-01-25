@@ -16,7 +16,7 @@ type ItemsSheetProps = {
   orderPicked: string | null;
 };
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 //components
 import {
@@ -26,7 +26,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 import {
   Table,
   TableBody,
@@ -34,12 +34,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
 //utils
-import { toTitleCase } from "@/lib/utils";
-import { Switch } from "../ui/switch";
-import { Label } from "../ui/label";
+import { toTitleCase } from '@/lib/utils';
+import { Switch } from '../ui/switch';
+import { Label } from '../ui/label';
 
 function ItemsSheet({
   selectedOrder,
@@ -59,9 +59,9 @@ function ItemsSheet({
     };
 
     checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
+    window.addEventListener('resize', checkScreenSize);
 
-    return () => window.removeEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
   useEffect(() => {
@@ -73,8 +73,8 @@ function ItemsSheet({
   }, [isSmallScreen, selectedOrder]);
 
   const sortedItems = orderItems.sort((a, b) => {
-    const nameA = a?.itemName?.toLowerCase() || "";
-    const nameB = b?.itemName?.toLowerCase() || "";
+    const nameA = a?.itemName?.toLowerCase() || '';
+    const nameB = b?.itemName?.toLowerCase() || '';
     if (nameA < nameB) return -1;
     if (nameA > nameB) return 1;
     return 0;
@@ -99,8 +99,8 @@ function ItemsSheet({
           </SheetHeader>
           <SheetDescription>
             Items to be picked for this order shown below. Click
-            <span className="font-bold">Picked</span> when you have prepared the
-            order
+            <span className="font-bold"> Pick All Items</span> or pick
+            individual items when they are ready for delivery.
           </SheetDescription>
           <Table className="my-4">
             <TableHeader>
@@ -114,7 +114,7 @@ function ItemsSheet({
               {sortedItems.map((item) => (
                 <TableRow className="text-xs bg-0 hover:bg-0" key={item.id}>
                   <TableCell className="p-1">
-                    {toTitleCase(item.itemName || "")}
+                    {toTitleCase(item.itemName || '')}
                   </TableCell>
                   <TableCell className="p-1"> {item.quantity}</TableCell>
                   <TableCell className="p-1">
@@ -134,15 +134,15 @@ function ItemsSheet({
             <div className="flex flex-col gap-2 w-full items-center mt-5">
               <div className="flex items-center gap-2">
                 <Label htmlFor="all-picked">
-                  {orderPicked === "picked"
-                    ? "Unpick All Items"
-                    : "Pick All Items"}
+                  {orderPicked === 'picked'
+                    ? 'Unpick All Items'
+                    : 'Pick All Items'}
                 </Label>
                 <Switch
                   onCheckedChange={() =>
                     selectedOrder && onAllPicked(selectedOrder)
                   }
-                  checked={orderPicked === "picked"}
+                  checked={orderPicked === 'picked'}
                 />
               </div>
             </div>

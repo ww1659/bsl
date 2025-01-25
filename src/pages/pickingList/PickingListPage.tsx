@@ -1,29 +1,29 @@
-import { DateRange } from "react-day-picker";
-import { useState } from "react";
+import { DateRange } from 'react-day-picker';
+import { useState } from 'react';
 
 //ui
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar as CalendarIcon } from "lucide-react";
+} from '@/components/ui/popover';
+import { Calendar as CalendarIcon } from 'lucide-react';
 
 //components
-import ListByItem from "@/components/picking-list/ListByItem";
-import ListByOrder from "@/components/picking-list/ListByOrder";
+import ListByItem from '@/components/picking-list/ListByItem';
+import ListByOrder from '@/components/picking-list/ListByOrder';
 
 //utils
-import { cn, getWeekRange } from "@/lib/utils";
-import { format } from "date-fns";
+import { cn, getMonthRange } from '@/lib/utils';
+import { format } from 'date-fns';
 
 function PickingListPage() {
   const [date, setDate] = useState<DateRange | undefined>({
-    from: getWeekRange().dateFrom,
-    to: getWeekRange().dateTo,
+    from: getMonthRange().dateFrom,
+    to: getMonthRange().dateTo,
   });
 
   return (
@@ -35,26 +35,26 @@ function PickingListPage() {
             <TabsTrigger value="order">Group by Order</TabsTrigger>
             <TabsTrigger value="item">Group by Items</TabsTrigger>
           </TabsList>
-          <div className={cn("grid gap-2 justify-end")}>
+          <div className={cn('grid gap-2 justify-end')}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   id="date"
-                  variant={"outline"}
+                  variant={'outline'}
                   className={cn(
-                    "justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
+                    'justify-start text-left font-normal',
+                    !date && 'text-muted-foreground'
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date?.from ? (
                     date.to ? (
                       <>
-                        {format(date.from, "LLL dd")} -{" "}
-                        {format(date.to, "LLL dd")}
+                        {format(date.from, 'LLL dd')} -{' '}
+                        {format(date.to, 'LLL dd')}
                       </>
                     ) : (
-                      format(date.from, "LLL dd, y")
+                      format(date.from, 'LLL dd, y')
                     )
                   ) : (
                     <span>Pick a date</span>
@@ -69,7 +69,7 @@ function PickingListPage() {
                   selected={date}
                   onSelect={setDate}
                   numberOfMonths={1}
-                  disabled={(date) => date < getWeekRange().dateFrom}
+                  disabled={(date) => date < getMonthRange().dateFrom}
                 />
               </PopoverContent>
             </Popover>

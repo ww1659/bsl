@@ -68,9 +68,13 @@ function OrderDetailPage() {
   return (
     <div>
       <div className="flex flex-row justify-between">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-row gap-4 items-center">
           <h1>Order Number {orderData.number}</h1>
-          {orderData.status && <Badge className="w-fit">Archived</Badge>}
+          {orderData.status === 'archived' && (
+            <Badge className="w-fit" variant="destructive">
+              Archived
+            </Badge>
+          )}
         </div>
         <Button
           disabled={orderData.status !== 'pending'}

@@ -1,8 +1,8 @@
 type ListByOrderProps = {
   date: DateRange | undefined;
 };
-import { DateRange } from "react-day-picker";
-import { useState } from "react";
+import { DateRange } from 'react-day-picker';
+import { useState } from 'react';
 
 //ui
 import {
@@ -11,7 +11,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -19,22 +19,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "../ui/badge";
-import { Switch } from "../ui/switch";
+} from '@/components/ui/table';
+import { Badge } from '../ui/badge';
+import { Switch } from '../ui/switch';
 
 //utils
-import { format, parseISO } from "date-fns";
-import { calculateOrderPickedStatus, toTitleCase } from "@/lib/utils";
+import { format, parseISO } from 'date-fns';
+import { calculateOrderPickedStatus, toTitleCase } from '@/lib/utils';
 
 //supabase hooks
-import { useFetchPickingListByOrder } from "@/hooks/fetch/useFetchPickingListByOrder";
-import { useUpdatePickedItem } from "@/hooks/update/useUpdatePickedItem";
-import { useUpdatePickedOrder } from "@/hooks/update/useUpdatePickedOrder";
+import { useFetchPickingListByOrder } from '@/hooks/fetch/useFetchPickingListByOrder';
+import { useUpdatePickedItem } from '@/hooks/update/useUpdatePickedItem';
+import { useUpdatePickedOrder } from '@/hooks/update/useUpdatePickedOrder';
 
 //components
-import ItemsSheet from "./ItemsSheet";
-import { Label } from "../ui/label";
+import ItemsSheet from './ItemsSheet';
+import { Label } from '../ui/label';
 
 function ListByOrder({ date }: ListByOrderProps) {
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
@@ -49,8 +49,8 @@ function ListByOrder({ date }: ListByOrderProps) {
   const endDate = date?.to?.toISOString();
 
   const { data, isLoading, isError, error } = useFetchPickingListByOrder(
-    startDate || "",
-    endDate || ""
+    startDate || '',
+    endDate || ''
   );
 
   let orderNumber = null;
@@ -65,8 +65,8 @@ function ListByOrder({ date }: ListByOrderProps) {
     : [];
 
   const sortedItems = items.sort((a, b) => {
-    const nameA = a?.itemName?.toLowerCase() || "";
-    const nameB = b?.itemName?.toLowerCase() || "";
+    const nameA = a?.itemName?.toLowerCase() || '';
+    const nameB = b?.itemName?.toLowerCase() || '';
     if (nameA < nameB) return -1;
     if (nameA > nameB) return 1;
     return 0;
@@ -87,7 +87,7 @@ function ListByOrder({ date }: ListByOrderProps) {
   };
 
   const handleAllPicked = (orderId: string) => {
-    const currentPickedStatus = orderPicked === "picked" ? true : false;
+    const currentPickedStatus = orderPicked === 'picked' ? true : false;
     updatePickedOrder({ orderId, currentPickedStatus });
   };
 
@@ -124,17 +124,17 @@ function ListByOrder({ date }: ListByOrderProps) {
                 {data.map((order) => (
                   <TableRow
                     className={
-                      order.id === selectedOrder ? "bg-secondary" : "bg-0"
+                      order.id === selectedOrder ? 'bg-secondary' : 'bg-0'
                     }
                     key={order.id}
                     onClick={() => handleRowClick(order.id)}
                   >
                     <TableCell className="p-2">
                       <div className="font-medium">
-                        {toTitleCase(order.groupName || "") || "Private"}
+                        {toTitleCase(order.groupName || '') || 'Private'}
                       </div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
-                        {toTitleCase(order.customerName || "")}
+                        {toTitleCase(order.customerName || '')}
                       </div>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell p-2">
@@ -142,15 +142,15 @@ function ListByOrder({ date }: ListByOrderProps) {
                     </TableCell>
                     <TableCell className="p-2">
                       {order.deliveryDate
-                        ? format(parseISO(order.deliveryDate), "dd-MM-yyyy")
-                        : "N/A"}
+                        ? format(parseISO(order.deliveryDate), 'dd-MM-yyyy')
+                        : 'N/A'}
                     </TableCell>
                     <TableCell className="p-2">
                       {calculateOrderPickedStatus(order.orderItems) ===
-                      "picked" ? (
+                      'picked' ? (
                         <Badge variant="success">Picked</Badge>
                       ) : calculateOrderPickedStatus(order.orderItems) ===
-                        "partial" ? (
+                        'partial' ? (
                         <Badge variant="warning">Partial</Badge>
                       ) : (
                         <Badge variant="destructive">TBP</Badge>
@@ -180,12 +180,12 @@ function ListByOrder({ date }: ListByOrderProps) {
                   onCheckedChange={() =>
                     selectedOrder && handleAllPicked(selectedOrder)
                   }
-                  checked={orderPicked === "picked"}
+                  checked={orderPicked === 'picked'}
                 />
                 <Label htmlFor="all-picked">
-                  {orderPicked === "picked"
-                    ? "Unpick All Items"
-                    : "Pick All Items"}
+                  {orderPicked === 'picked'
+                    ? 'Unpick All Items'
+                    : 'Pick All Items'}
                 </Label>
               </div>
             )}
@@ -204,7 +204,7 @@ function ListByOrder({ date }: ListByOrderProps) {
                   sortedItems.map((item) => (
                     <TableRow className="text-sm bg-0 hover:bg-0" key={item.id}>
                       <TableCell className="p-1">
-                        {toTitleCase(item.itemName || "")}
+                        {toTitleCase(item.itemName || '')}
                       </TableCell>
                       <TableCell className="p-1"> {item.quantity}</TableCell>
                       <TableCell className="p-1 text-center">
