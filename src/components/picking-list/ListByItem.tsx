@@ -9,7 +9,7 @@ import { useFetchPickingListByItem } from '@/hooks/fetch/useFetchPickingListByIt
 import { useState } from 'react';
 
 //utils
-import { cn, toTitleCase } from '@/lib/utils';
+import { toTitleCase } from '@/lib/utils';
 
 //ui
 import {
@@ -27,14 +27,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Command,
   CommandEmpty,
@@ -56,7 +48,6 @@ import { format } from 'date-fns';
 
 function ListByItem({ date }: ListByItemProps) {
   const [activeRow, setActiveRow] = useState<number | null>(null);
-  const [value, setValue] = useState('');
 
   const startDate = date?.from?.toISOString();
   const endDate = date?.to?.toISOString();

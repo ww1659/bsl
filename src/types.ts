@@ -19,3 +19,11 @@ export type OrderItem = {
   name: string | null;
   price: number | null;
 };
+
+export type OrderStatus =
+  | 'pending'
+  | 'ready'
+  | 'sent'
+  | 'delivered'
+  | 'archived'
+  | undefined;

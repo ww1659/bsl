@@ -1,13 +1,14 @@
-import { useMutation } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../use-toast";
+import { useMutation } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../use-toast';
+import { OrderStatus } from '@/types';
 
 type CreateOrderMutation = {
   orderData: {
     total: number;
     delivery_date: string | undefined;
-    status: "pending" | "paid" | "sent" | "overdue";
+    status: OrderStatus;
     customer_id: string | null;
     discount: number | null;
     notes: string;
@@ -22,9 +23,9 @@ type CreateOrderMutation = {
 
 const createOrder = async ({ orderData, orderItems }: CreateOrderMutation) => {
   const { data: order, error: orderError } = await supabase
-    .from("orders")
+    .from('orders')
     .insert(orderData)
-    .select("*")
+    .select('*')
     .single();
 
   if (orderError) {
@@ -37,7 +38,7 @@ const createOrder = async ({ orderData, orderItems }: CreateOrderMutation) => {
   }));
 
   const { error: orderItemsError } = await supabase
-    .from("order_items")
+    .from('order_items')
     .insert(orderItemsData);
 
   if (orderItemsError) {
@@ -54,13 +55,13 @@ export const useCreateOrder = () => {
     mutationFn: createOrder,
     onSuccess: (order) => {
       toast({
-        title: "Success!",
+        title: 'Success!',
         description: `Order number ${order.number} created, £${order.total}`,
       });
-      navigate("/");
+      navigate('/');
     },
     onError: (error) => {
-      console.error("Error creating order:", error.message);
+      console.error('Error creating order:', error.message);
     },
   });
 };

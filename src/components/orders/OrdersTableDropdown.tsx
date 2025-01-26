@@ -12,12 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
-import {
-  ListOrderedIcon,
-  MoreHorizontal,
-  NotebookTabs,
-  SquareCheckBig,
-} from 'lucide-react';
+import { ListOrderedIcon, MoreHorizontal, SquareCheckBig } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useUpdateOrderStatus } from '@/hooks/update/useUpdateOrderStatus';
 

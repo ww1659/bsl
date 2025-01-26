@@ -1,4 +1,4 @@
-import { OrderItem } from '@/types';
+import { OrderItem, OrderStatus } from '@/types';
 type OrderSummaryCard = {
   currentOrderItems: OrderItem[];
   date: Date | undefined;
@@ -61,7 +61,7 @@ function OrderSummaryCard({
     const orderData = {
       total: orderTotal,
       delivery_date: date?.toISOString(),
-      status: 'pending' as 'pending' | 'paid' | 'sent' | 'overdue',
+      status: 'pending' as OrderStatus,
       customer_id: customerId,
       discount: customerDiscount,
       notes: '',
