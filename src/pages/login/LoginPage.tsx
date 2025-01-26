@@ -26,7 +26,7 @@ import { setSession } from '@/redux/features/auth/authslice';
 //connect to Supabase client
 import { supabase } from '@/services/supabase';
 import { Spinner } from '@/components/ui/loading';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).min(2).max(50),
@@ -116,12 +116,12 @@ function LoginPage() {
                           <FormLabel>
                             <div className="flex flex-row justify-between items-center">
                               <p>Password</p>{' '}
-                              <Link
+                              {/* <Link
                                 to="/login/forgotten-password"
                                 className="text-sm font-light underline-offset-2 hover:underline"
                               >
                                 Forgot your password?
-                              </Link>
+                              </Link> */}
                             </div>
                           </FormLabel>
                           <FormControl>

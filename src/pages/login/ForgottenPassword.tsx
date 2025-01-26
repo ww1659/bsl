@@ -1,9 +1,3 @@
-//router
-import { useNavigate } from 'react-router-dom';
-
-//redux
-import { useAppDispatch } from '@/redux/hooks';
-
 //components
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -21,43 +15,53 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { setSession } from '@/redux/features/auth/authslice';
 
 //connect to Supabase client
 import { supabase } from '@/services/supabase';
 import { Spinner } from '@/components/ui/loading';
 import { Link } from 'react-router-dom';
 
-const loginSchema = z.object({
+const forgottenPasswordSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).min(2).max(50),
 });
 
 function ForgottenPassword() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof forgottenPasswordSchema>>({
+    resolver: zodResolver(forgottenPasswordSchema),
     defaultValues: {
       email: '',
     },
   });
 
-  async function handleSignIn(values: z.infer<typeof loginSchema>) {
+  async function handleForgottenPassword(
+    values: z.infer<typeof forgottenPasswordSchema>
+  ) {
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: values.email,
+    const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+      redirectTo: '/login/update-password',
     });
-    setLoading(false);
     if (error) {
-      setError(error.message);
-    } else if (data.session) {
-      dispatch(setSession(data.session));
-      navigate('/');
+      alert(error.message);
+    } else {
+      setLoading(false);
+      alert('Password recovery email sent');
     }
   }
+
+  // useEffect(() => {
+  //  supabase.auth.onAuthStateChange(async (event, session) => {
+  //    if (event == "PASSWORD_RECOVERY") {
+  //      const newPassword = prompt("What would you like your new password to be?");
+  //      const { data, error } = await supabase.auth
+  //        .updateUser({ password: newPassword })
+
+  //      if (data) alert("Password updated successfully!")
+  //      if (error) alert("There was an error updating your password.")
+  //    }
+  //  })
+  // }, [])
 
   return (
     <div className="flex justify-center items-center">
@@ -85,7 +89,7 @@ function ForgottenPassword() {
               <div className="grid gap-2">
                 <Form {...form}>
                   <form
-                    onSubmit={form.handleSubmit(handleSignIn)}
+                    onSubmit={form.handleSubmit(handleForgottenPassword)}
                     className="space-y-8"
                   >
                     <FormField

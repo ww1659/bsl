@@ -8,7 +8,7 @@ import { ThemeProvider } from './components/ThemeProvider';
 
 //Pages
 import HomePage from './pages/HomePage';
-import SignUpPage from './pages/login/SignUpPage';
+import SignUpPage from './pages/SignUpPage';
 
 //Components
 import Layout from './components/layout/Layout';

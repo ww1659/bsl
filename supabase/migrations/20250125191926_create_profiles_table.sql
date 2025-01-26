@@ -4,7 +4,8 @@ create table if not exists profiles (
     first_name text,
     last_name text,
     email text,
-    created_at timestamp with time zone default now()
+    avatar_url varchar(2048),
+    created_at timestamptz default now()
 );
 
 -- Enable Row Level Security
