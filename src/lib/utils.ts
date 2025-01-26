@@ -1,6 +1,6 @@
-import { clsx, type ClassValue } from "clsx";
-import { addDays, format } from "date-fns";
-import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from 'clsx';
+import { addDays, format } from 'date-fns';
+import { twMerge } from 'tailwind-merge';
 
 export type OrderItem = {
   id: number | null;
@@ -16,30 +16,30 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatName(name: string) {
   return name
-    .split("-")
+    .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
+    .join(' ');
 }
 
 export function toTitleCase(input: string) {
-  if (!input) return "";
+  if (!input) return '';
 
   return input
     .toLowerCase()
-    .split(" ")
+    .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export function toSentenceCase(input: string) {
-  if (!input) return "";
+  if (!input) return '';
   return input
     .toLowerCase()
     .replace(/(^\s*\w|[.!?]\s*\w)/g, (match) => match.toUpperCase());
 }
 
 export function removeDashes(input: string) {
-  return input.replace(/-/g, " ");
+  return input.replace(/-/g, ' ');
 }
 
 export function getStartOfWeek(date: Date, display?: boolean) {
@@ -48,10 +48,10 @@ export function getStartOfWeek(date: Date, display?: boolean) {
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   return display
     ? format(
-        new Date(d.setDate(diff)).toISOString().split("T")[0],
-        "eee dd-MMM"
+        new Date(d.setDate(diff)).toISOString().split('T')[0],
+        'eee dd-MMM'
       )
-    : new Date(d.setDate(diff)).toISOString().split("T")[0];
+    : new Date(d.setDate(diff)).toISOString().split('T')[0];
 }
 
 export function getEndOfWeek(date: Date, display?: boolean) {
@@ -60,8 +60,8 @@ export function getEndOfWeek(date: Date, display?: boolean) {
     new Date(startOfWeek).setDate(new Date(startOfWeek).getDate() + 6)
   );
   return display
-    ? format(endOfWeek.toISOString(), "eee dd-MMM")
-    : endOfWeek.toISOString().split("T")[0];
+    ? format(endOfWeek.toISOString(), 'eee dd-MMM')
+    : endOfWeek.toISOString().split('T')[0];
 }
 
 export function getWeekRange(date = new Date()) {
@@ -73,10 +73,16 @@ export function getWeekRange(date = new Date()) {
   return { dateFrom, dateTo };
 }
 
+export function getMonthRange(date = new Date()) {
+  const dateFrom = new Date(date.getFullYear(), date.getMonth(), 1);
+  const dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  return { dateFrom, dateTo };
+}
+
 export function calculateOrderPickedStatus(items: OrderItem[]) {
   const allPicked = items.every((item) => item.picked === true);
   const nonePicked = items.every((item) => item.picked === false);
-  if (allPicked) return "picked";
-  if (!nonePicked) return "partial";
-  return "not picked";
+  if (allPicked) return 'picked';
+  if (!nonePicked) return 'partial';
+  return 'not picked';
 }

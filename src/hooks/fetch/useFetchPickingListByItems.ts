@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
 
 type PickingListItem = {
   itemId: number;
@@ -20,7 +20,7 @@ type PickingListItem = {
 };
 
 const fetchPickingListItems = async (startDate: string, endDate: string) => {
-  const { data, error } = await supabase.rpc("get_picking_list_by_date_range", {
+  const { data, error } = await supabase.rpc('get_picking_list_by_date_range', {
     start_date: startDate,
     end_date: endDate,
   });
@@ -55,7 +55,7 @@ export const useFetchPickingListByItem = (
   endDate: string
 ) => {
   return useQuery({
-    queryKey: ["picking-list-items", startDate, endDate],
+    queryKey: ['picking-list-items', startDate, endDate],
     queryFn: () => fetchPickingListItems(startDate, endDate),
   });
 };

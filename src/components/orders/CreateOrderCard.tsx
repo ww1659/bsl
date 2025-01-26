@@ -1,4 +1,4 @@
-import { OrderItem } from "@/types";
+import { OrderItem } from '@/types';
 
 type CreateOrderCard = {
   customerId: string | null;
@@ -10,10 +10,10 @@ type CreateOrderCard = {
 };
 
 //utils
-import { toTitleCase } from "@/lib/utils";
+import { toTitleCase } from '@/lib/utils';
 
 //supabase hooks
-import { useFetchStandardOrders } from "@/hooks/fetch/useFetchStandardOrder";
+import { useFetchStandardOrders } from '@/hooks/fetch/useFetchStandardOrder';
 
 //ui
 import {
@@ -22,7 +22,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -31,7 +31,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -40,8 +40,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { MoreHorizontal, Trash2Icon } from "lucide-react";
+} from '@/components/ui/table';
+import { MoreHorizontal, Trash2Icon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,13 +49,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
-import { Button } from "../ui/button";
-import AddItemsDropdown from "./AddItemsDropdown";
-import { Input } from "../ui/input";
-import LoadingWheel from "../LoadingWheel";
-import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
+import { Button } from '../ui/button';
+import AddItemsDropdown from './AddItemsDropdown';
+import { Input } from '../ui/input';
+import LoadingWheel from '../LoadingWheel';
+import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
 
 function CreateOrderCard({
   customerId,
@@ -66,11 +66,11 @@ function CreateOrderCard({
   groupId,
 }: CreateOrderCard) {
   const { data, isLoading, isError, error } = useFetchStandardOrders(
-    customerId || ""
+    customerId || ''
   );
 
   const { data: groupData, isLoading: isGroupLoading } = useFetchGroupById(
-    groupId || ""
+    groupId || ''
   );
 
   const handleOrderChange = (selectedOrderName: string) => {
@@ -131,7 +131,7 @@ function CreateOrderCard({
               <div className="w-1/2">
                 <CardTitle>Item List</CardTitle>
                 <CardDescription className="font-bold">
-                  {toTitleCase(customerName || "")}
+                  {toTitleCase(customerName || '')}
                 </CardDescription>
               </div>
               <div className="w-1/2">
@@ -143,11 +143,11 @@ function CreateOrderCard({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>
-                          {toTitleCase(customerName || "")} Standard Orders
+                          {toTitleCase(customerName || '')} Standard Orders
                         </SelectLabel>
                         {standardOrderNames.map((name, index) => (
-                          <SelectItem key={index} value={name || "default"}>
-                            {toTitleCase(name || "default")}
+                          <SelectItem key={index} value={name || 'default'}>
+                            {toTitleCase(name || 'default')}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -167,7 +167,7 @@ function CreateOrderCard({
                 <TableHeader>
                   <TableRow className="text-xs md:text-md">
                     <TableHead>Item Name</TableHead>
-                    <TableHead>
+                    <TableHead className="hidden lg:table-cell">
                       <div className="flex flex-col">
                         <span>Customer Price (£)</span>
                         <span className="text-xs font-light">
@@ -180,7 +180,7 @@ function CreateOrderCard({
                       </div>
                     </TableHead>
                     <TableHead>Quantity</TableHead>
-                    <TableHead className="text-right">Amount (£)</TableHead>
+                    <TableHead className="text-right">Total (£)</TableHead>
                     <TableHead></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -188,9 +188,9 @@ function CreateOrderCard({
                   {sortedItems?.map((item) => (
                     <TableRow key={item.id}>
                       <TableCell className="font-medium py-1">
-                        {toTitleCase(item.name || "")}
+                        {toTitleCase(item.name || '')}
                       </TableCell>
-                      <TableCell className="py-1">
+                      <TableCell className="py-1 hidden lg:table-cell">
                         {item.price
                           ? (
                               Number(item.price) *
@@ -247,7 +247,7 @@ function CreateOrderCard({
                                 )) /
                                 100)
                             ).toFixed(2)
-                          : ""}
+                          : ''}
                       </TableCell>
                       <TableCell className="py-1">
                         <DropdownMenu>

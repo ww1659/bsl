@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   ColumnDef,
@@ -10,7 +10,7 @@ import {
   VisibilityState,
   getSortedRowModel,
   getFilteredRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -19,16 +19,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTablePagination } from "../DataTablePagination";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+} from '@/components/ui/dropdown-menu';
+import { DataTablePagination } from '../DataTablePagination';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { ChevronDown } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,17 +72,20 @@ export function OrdersTable<TData, TValue>({
         <Input
           placeholder="Search by Customer"
           value={
-            (table.getColumn("customerName")?.getFilterValue() as string) ?? ""
+            (table.getColumn('customerName')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn("customerName")?.setFilterValue(event.target.value)
+            table.getColumn('customerName')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns
+              <div className="flex flex-row items-center gap-1">
+                <ChevronDown className="h4 w-4" />
+                <p>Columns</p>
+              </div>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -89,6 +93,21 @@ export function OrdersTable<TData, TValue>({
               .getAllColumns()
               .filter((column) => column.getCanHide())
               .map((column) => {
+                const displayName = column.id.replace(
+                  /(customerName|groupName|deliveryDate)/g,
+                  (match) => {
+                    switch (match) {
+                      case 'customerName':
+                        return 'Customer Name';
+                      case 'groupName':
+                        return 'Group Name';
+                      case 'deliveryDate':
+                        return 'Delivery Date';
+                      default:
+                        return match;
+                    }
+                  }
+                );
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
@@ -98,7 +117,7 @@ export function OrdersTable<TData, TValue>({
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {displayName}
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -131,7 +150,7 @@ export function OrdersTable<TData, TValue>({
                 <TableRow
                   className="bg-card"
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

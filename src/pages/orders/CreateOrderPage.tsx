@@ -1,22 +1,22 @@
-import { useState } from "react";
-import { OrderItem } from "@/types";
+import { useState } from 'react';
+import { Customer, OrderItem } from '@/types';
 
 //components
-import CreateOrderCard from "@/components/orders/CreateOrderCard";
+import CreateOrderCard from '@/components/orders/CreateOrderCard';
 
 //ui
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 //supabase hooks
-import { useFetchCustomers } from "@/hooks/fetch/useFetchCustomers";
+import { useFetchCustomers } from '@/hooks/fetch/useFetchCustomers';
 
 //utils
-import { toTitleCase } from "@/lib/utils";
-import DeliveryDatePicker from "@/components/orders/DeliveryDatePicker";
-import { MoveLeftIcon } from "lucide-react";
-import OrderSummaryCard from "@/components/orders/OrderSummaryCard";
-import LoadingWheel from "@/components/LoadingWheel";
+import { toTitleCase } from '@/lib/utils';
+import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
+import { MoveLeftIcon } from 'lucide-react';
+import OrderSummaryCard from '@/components/orders/OrderSummaryCard';
+import LoadingWheel from '@/components/LoadingWheel';
 
 function CreateOrderPage() {
   const { data, isLoading, isError, error } = useFetchCustomers();
@@ -28,7 +28,7 @@ function CreateOrderPage() {
   const [customerDiscount, setCustomerDiscount] = useState<number | null>(0);
   const [date, setDate] = useState<Date | undefined>();
   const [currentOrderItems, setCurrentOrderItems] = useState<OrderItem[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
@@ -56,18 +56,18 @@ function CreateOrderPage() {
   };
 
   const sortedCustomers = data?.sort((a, b) =>
-    (a.customer_name || "").localeCompare(b.customer_name || "")
+    (a.customer_name || '').localeCompare(b.customer_name || '')
   );
 
   const filteredCustomers = sortedCustomers?.filter((customer) =>
-    (customer.customer_name || "").toLowerCase().includes(searchTerm)
+    (customer.customer_name || '').toLowerCase().includes(searchTerm)
   );
 
   return (
     <div>
       <h1>Generate a new Order</h1>
       {currentStep === 3 || currentStep === 4 ? (
-        <h4 className="pb-5">{toTitleCase(customerName || "")}</h4>
+        <h4 className="pb-5">{toTitleCase(customerName || '')}</h4>
       ) : (
         <h4 className="invisible">Null</h4>
       )}
@@ -122,22 +122,22 @@ function CreateOrderPage() {
             ) : isError ? (
               <p>Error fetching customers: {error.message}</p>
             ) : (
-              filteredCustomers?.map((customer: any) => (
+              filteredCustomers?.map((customer: Customer) => (
                 <Button
                   key={customer.id}
                   onClick={() =>
                     handleCustomerSelection(
                       customer.id,
-                      customer.customer_name || "",
+                      customer.customer_name || '',
                       customer.discount,
-                      customer.group_id || ""
+                      customer.group_id || ''
                     )
                   }
                   variant="select"
                   className="p-10"
                 >
                   <p className="text-lg">
-                    {toTitleCase(customer.customer_name || "")}
+                    {toTitleCase(customer.customer_name || '')}
                   </p>
                 </Button>
               ))
