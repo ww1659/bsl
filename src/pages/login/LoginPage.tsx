@@ -67,10 +67,7 @@ function LoginPage() {
       <div className="w-full grid min-h-screen lg:grid-cols-2 lg:gap-24">
         <div className="hidden lg:grid lg:items-center lg:justify-end lg:py-12">
           <div className="mx-auto grid w-[120px] lg:w-[350px]">
-            <img
-              src="/src/public/static/images/bsl-logo.png"
-              className="w-full"
-            ></img>
+            <img src="/static/images/bsl-logo.png" className="w-full"></img>
           </div>
         </div>
         <div className="grid items-center justify-center lg:justify-start">
