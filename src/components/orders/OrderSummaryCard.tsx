@@ -24,10 +24,11 @@ import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 
 //utils
-import { toTitleCase } from '@/lib/utils';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 import { format } from 'date-fns';
 import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
 import LoadingWheel from '../LoadingWheel';
+import { useMemo } from 'react';
 
 function OrderSummaryCard({
   currentOrderItems,
@@ -78,6 +79,11 @@ function OrderSummaryCard({
     createOrder({ orderData, orderItems });
   };
 
+  const sortedItems = useMemo(
+    () => sortCustomOrder(currentOrderItems),
+    [currentOrderItems]
+  );
+
   if (isLoading) return <LoadingWheel text="Order Summary Loading" />;
 
   return (
@@ -108,7 +114,7 @@ function OrderSummaryCard({
                 <p className="text-sm font-bold">Quantity</p>
                 <p className="text-sm font-bold">Price</p>
               </div>
-              {currentOrderItems.map((item) => (
+              {sortedItems.map((item) => (
                 <div key={item.id} className="grid grid-cols-3 gap-2">
                   <p className="text-sm">{toTitleCase(item.name || '')}</p>
                   <p className="text-sm"> x{item.quantity}</p>

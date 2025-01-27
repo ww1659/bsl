@@ -28,6 +28,8 @@ dist-ssr
 .env.staging
 supabase/seed.sql
 supabase/seedbackup.sql
+supabase/seed-prod.sql
+supabase/seed-local.sql
 supabase/.temp/
 
 # Error Logs
@@ -35,3 +37,7 @@ errors
 
 # Formatter
 .prettierrc
+
+# Backup databases
+backup.sql
+backup-data.sql

@@ -9,8 +9,8 @@ export type Item = {
   id: number;
   name: string | null;
   price: number | null;
-  stock: number | null;
-  loanedOut: number | null;
+  stock?: number | null;
+  loanedOut?: number | null;
 };
 
 export const inventoryTableColumns: ColumnDef<Item>[] = [

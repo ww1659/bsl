@@ -16,7 +16,7 @@ type ItemsSheetProps = {
   orderPicked: string | null;
 };
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 //components
 import {
@@ -37,7 +37,7 @@ import {
 } from '@/components/ui/table';
 
 //utils
-import { toTitleCase } from '@/lib/utils';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
 
@@ -79,6 +79,8 @@ function ItemsSheet({
     if (nameA > nameB) return 1;
     return 0;
   });
+
+  // const sortedItems = useMemo(() => sortCustomOrder(orderItems), [orderItems]);
 
   const handleSheetOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
