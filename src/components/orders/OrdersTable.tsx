@@ -26,6 +26,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
 import { DataTablePagination } from '../DataTablePagination';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -34,6 +35,8 @@ import { ChevronDown } from 'lucide-react';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchParams: URLSearchParams;
+  setSearchParams: React.Dispatch<React.SetStateAction<URLSearchParams>>;
 }
 
 export function OrdersTable<TData, TValue>({
@@ -68,61 +71,68 @@ export function OrdersTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center">
-        <Input
-          placeholder="Search by Customer"
-          value={
-            (table.getColumn('customerName')?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table.getColumn('customerName')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              <div className="flex flex-row items-center gap-1">
-                <ChevronDown className="h4 w-4" />
-                <p>Columns</p>
-              </div>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                const displayName = column.id.replace(
-                  /(customerName|groupName|deliveryDate)/g,
-                  (match) => {
-                    switch (match) {
-                      case 'customerName':
-                        return 'Customer Name';
-                      case 'groupName':
-                        return 'Group Name';
-                      case 'deliveryDate':
-                        return 'Delivery Date';
-                      default:
-                        return match;
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row w-1/2 gap-4">
+          <Input
+            placeholder="Search by Customer"
+            value={
+              (table.getColumn('customerName')?.getFilterValue() as string) ??
+              ''
+            }
+            onChange={(event) =>
+              table
+                .getColumn('customerName')
+                ?.setFilterValue(event.target.value)
+            }
+            className="w-full"
+          />
+        </div>
+        <div className="flex flex-row gap-4 items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <div className="flex flex-row items-center gap-1">
+                  <ChevronDown className="h4 w-4" />
+                  <p>Columns</p>
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  const displayName = column.id.replace(
+                    /(customerName|groupName|deliveryDate)/g,
+                    (match) => {
+                      switch (match) {
+                        case 'customerName':
+                          return 'Customer Name';
+                        case 'groupName':
+                          return 'Group Name';
+                        case 'deliveryDate':
+                          return 'Delivery Date';
+                        default:
+                          return match;
+                      }
                     }
-                  }
-                );
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {displayName}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+                  );
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {displayName}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

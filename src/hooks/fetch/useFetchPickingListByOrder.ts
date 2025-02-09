@@ -27,6 +27,7 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
     )
     .gte('delivery_date', startDate)
     .lte('delivery_date', endDate)
+    .in('status', ['pending', 'ready'])
     .order('delivery_date', { ascending: true });
 
   if (error) {
@@ -45,10 +46,10 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
     groupName: order.groups?.group_name,
     orderItems: order.order_items.map((item) => ({
       id: item.items?.id ?? null,
-      itemName: item.items?.item_name ?? '',
+      name: item.items?.item_name ?? '',
       price: item.items?.price ?? 0,
-      quantity: item.quantity,
-      picked: item.picked,
+      quantity: item.quantity ?? 0,
+      picked: item.picked ?? true,
     })),
   }));
 

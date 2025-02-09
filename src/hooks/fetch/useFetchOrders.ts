@@ -10,14 +10,38 @@ type OrderStatus =
   | null;
 
 type FetchOrdersParams = {
-  startDate?: string;
+  month?: string;
   groupId?: string;
   customerName?: string;
   status?: OrderStatus[];
 };
 
+const monthDates = (month: string): { startDate: string; endDate: string } => {
+  const monthMap: { [key: string]: number } = {
+    january: 0,
+    february: 1,
+    march: 2,
+    april: 3,
+    may: 4,
+    june: 5,
+    july: 6,
+    august: 7,
+    september: 8,
+    october: 9,
+    november: 10,
+    december: 11,
+  };
+
+  const year = new Date().getFullYear();
+  const monthIndex = monthMap[month.toLowerCase()];
+  const startDate = new Date(year, monthIndex, 1).toISOString();
+  const endDate = new Date(year, monthIndex + 1, 0).toISOString();
+
+  return { startDate, endDate };
+};
+
 const fetchOrders = async ({
-  startDate,
+  month,
   groupId,
   customerName,
   status,
@@ -54,12 +78,16 @@ const fetchOrders = async ({
     query = query.in('status', status);
   }
 
-  if (startDate) {
-    query = query.gte('delivery_date', new Date(startDate).toISOString());
+  if (month) {
+    query = query.gte('delivery_date', monthDates(month).startDate);
+    query = query.lte('delivery_date', monthDates(month).endDate);
   } else {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    query = query.gte('delivery_date', today.toISOString());
+    // const currentDate = new Date();
+    // const currentMonth = currentDate
+    //   .toLocaleString('en-US', { month: 'long' })
+    //   .toLowerCase();
+    // query = query.gte('delivery_date', monthDates(currentMonth).startDate);
+    // query = query.lte('delivery_date', monthDates(currentMonth).endDate);
   }
 
   if (groupId) {

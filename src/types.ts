@@ -14,10 +14,14 @@ export type Customer = {
 };
 
 export type OrderItem = {
-  id: number;
-  quantity: number;
+  id: number | null;
   name: string | null;
   price: number | null;
+  quantity?: number | null;
+  loanedOut?: number | null;
+  stock?: number | null;
+  createdAt?: string | null;
+  picked?: boolean;
 };
 
 export type OrderStatus =

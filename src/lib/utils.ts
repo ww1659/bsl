@@ -1,14 +1,7 @@
+import { OrderItem } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { addDays, format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
-
-export type OrderItem = {
-  id: number | null;
-  itemName: string | null;
-  price: number | null;
-  quantity: number | null;
-  picked: boolean | null;
-};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -87,18 +80,7 @@ export function calculateOrderPickedStatus(items: OrderItem[]) {
   return 'not picked';
 }
 
-//temporary type
-type OrderItems = {
-  id: number;
-  quantity?: number;
-  name: string | null;
-  price: number | null;
-  loanedOut?: number | null;
-  stock?: number | null;
-  createdAt?: string | null;
-};
-
-export function sortCustomOrder(items: OrderItems[]): OrderItems[] {
+export function sortCustomOrder(items: OrderItem[]): OrderItem[] {
   const orderPriority: { [key: string]: number } = {
     'superking bed set': 1,
     'luxury - superking bed set': 2,

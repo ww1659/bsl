@@ -65,8 +65,8 @@ function ListByOrder({ date }: ListByOrderProps) {
     : [];
 
   const sortedItems = items.sort((a, b) => {
-    const nameA = a?.itemName?.toLowerCase() || '';
-    const nameB = b?.itemName?.toLowerCase() || '';
+    const nameA = a?.name?.toLowerCase() || '';
+    const nameB = b?.name?.toLowerCase() || '';
     if (nameA < nameB) return -1;
     if (nameA > nameB) return 1;
     return 0;
@@ -131,11 +131,11 @@ function ListByOrder({ date }: ListByOrderProps) {
                   >
                     <TableCell className="p-2">
                       <div className="font-medium">
-                        {toTitleCase(order.groupName || '') || 'Private'}
-                      </div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
                         {toTitleCase(order.customerName || '')}
                       </div>
+                      {/* <div className="hidden text-sm text-muted-foreground md:inline">
+                        {toTitleCase(order.groupName || '') || 'Private'}
+                      </div> */}
                     </TableCell>
                     <TableCell className="hidden sm:table-cell p-2">
                       {order.number}
@@ -204,7 +204,7 @@ function ListByOrder({ date }: ListByOrderProps) {
                   sortedItems.map((item) => (
                     <TableRow className="text-sm bg-0 hover:bg-0" key={item.id}>
                       <TableCell className="p-1">
-                        {toTitleCase(item.itemName || '')}
+                        {toTitleCase(item.name || '')}
                       </TableCell>
                       <TableCell className="p-1"> {item.quantity}</TableCell>
                       <TableCell className="p-1 text-center">

@@ -10,7 +10,7 @@ type CreateOrderCard = {
 };
 
 //utils
-import { toTitleCase } from '@/lib/utils';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 
 //supabase hooks
 import { useFetchStandardOrders } from '@/hooks/fetch/useFetchStandardOrder';
@@ -101,13 +101,15 @@ function CreateOrderCard({
   const standardOrderNames = data?.map((order) => order.orderName) || [];
   const groupDiscount = groupData?.standardDiscount || 0;
 
-  const sortedItems = currentOrderItems.sort((a, b) => {
-    const nameA = a.name?.toLowerCase();
-    const nameB = b.name?.toLowerCase();
-    if (nameA && nameB && nameA < nameB) return -1;
-    if (nameA && nameB && nameA > nameB) return 1;
-    return 0;
-  });
+  // const sortedItems = currentOrderItems.sort((a, b) => {
+  //   const nameA = a.name?.toLowerCase();
+  //   const nameB = b.name?.toLowerCase();
+  //   if (nameA && nameB && nameA < nameB) return -1;
+  //   if (nameA && nameB && nameA > nameB) return 1;
+  //   return 0;
+  // });
+
+  const sortedItems = sortCustomOrder(currentOrderItems);
 
   const orderTotal =
     currentOrderItems.reduce((total, item) => {
@@ -209,9 +211,12 @@ function CreateOrderCard({
                           size="sm"
                           className="h-10"
                           onClick={() =>
-                            updateQuantity(item.id || 0, item.quantity - 1)
+                            updateQuantity(
+                              item.id || 0,
+                              (item.quantity ?? 1) - 1
+                            )
                           }
-                          disabled={item.quantity <= 1}
+                          disabled={(item.quantity ?? 1) <= 1}
                         >
                           -
                         </Button>
@@ -229,7 +234,7 @@ function CreateOrderCard({
                           size="sm"
                           className="h-10"
                           onClick={() =>
-                            updateQuantity(item.id || 0, item.quantity + 1)
+                            updateQuantity(item.id || 0, item.quantity! + 1)
                           }
                         >
                           +
@@ -238,7 +243,7 @@ function CreateOrderCard({
                       <TableCell className="py-1 text-right">
                         {item.price
                           ? (
-                              item.quantity *
+                              item.quantity! *
                               item.price *
                               ((100 -
                                 Math.max(

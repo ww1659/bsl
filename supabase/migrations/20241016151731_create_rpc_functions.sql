@@ -43,7 +43,7 @@ BEGIN
   WHERE
     o.delivery_date >= start_date
     AND o.delivery_date <= end_date
-    AND o.status = 'pending'
+    AND o.status IN ('pending', 'ready')
   GROUP BY
     oi.item_id, i.item_name
   ORDER BY

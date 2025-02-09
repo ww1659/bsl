@@ -83,7 +83,7 @@ function ListByItem({ date }: ListByItemProps) {
                   <TableHead className="py-1 h-6">Item Name</TableHead>
                   <TableHead className="py-1 h-6 text-center">Total</TableHead>
                   <TableHead className="py-1 h-6 text-center">
-                    Picked Count
+                    Unpicked Remaining
                   </TableHead>
                   <TableHead className="py-1 h-6 text-right"></TableHead>
                 </TableRow>
@@ -91,10 +91,7 @@ function ListByItem({ date }: ListByItemProps) {
               <TableBody>
                 {Array.isArray(data) && data.length !== 0 ? (
                   data.map((item) => (
-                    <TableRow
-                      key={item.itemId}
-                      className="bg-0 hover:bg-0 text-sm"
-                    >
+                    <TableRow key={item.id} className="bg-0 hover:bg-0 text-sm">
                       <TableCell className="py-1 text-left">
                         {item.ordersUnpicked.length > 0 ? (
                           <X className="h-5 w-5 text-destructive" />
@@ -104,14 +101,17 @@ function ListByItem({ date }: ListByItemProps) {
                       </TableCell>
                       <TableCell className="py-1">
                         <div className="font-medium">
-                          {toTitleCase(item.itemName || '')}
+                          {toTitleCase(item.name || '')}
                         </div>
                       </TableCell>
                       <TableCell className="py-1 font-bold text-center">
                         {item.quantity}
                       </TableCell>
                       <TableCell className="py-1 font-bold text-center">
-                        {item.ordersPicked.length}
+                        {item.ordersUnpicked.reduce(
+                          (sum, order) => sum + order.totalUnpicked,
+                          0
+                        )}
                       </TableCell>
                       <TableCell className=" py-1 text-right">
                         <Popover
