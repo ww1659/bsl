@@ -6,6 +6,7 @@ type OrderSummaryCard = {
   customerDiscount: number | null;
   customerId: string | null;
   groupId: string | null;
+  orderNotes: string | '';
 };
 
 //supabase hooks
@@ -37,6 +38,7 @@ function OrderSummaryCard({
   customerDiscount,
   customerId,
   groupId,
+  orderNotes,
 }: OrderSummaryCard) {
   const { mutate: createOrder } = useCreateOrder();
   const { data, isLoading } = useFetchGroupById(groupId || '');
@@ -65,7 +67,7 @@ function OrderSummaryCard({
       status: 'pending' as OrderStatus,
       customer_id: customerId,
       discount: customerDiscount,
-      notes: '',
+      notes: orderNotes,
       group_id: groupId,
     };
     const orderItems = currentOrderItems.map((item) => {
@@ -94,7 +96,6 @@ function OrderSummaryCard({
             <div className="flex flex-row justify-between">
               <div>
                 <CardTitle>Confirm Order</CardTitle>
-                <CardDescription>View and Update</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -133,7 +134,7 @@ function OrderSummaryCard({
         </div>
       </Card>
       <Card className="flex flex-col justify-between border-none bg-muted/40">
-        <div>
+        <div className="flex flex-col">
           <CardHeader>
             <CardTitle className="text-right">Total</CardTitle>
           </CardHeader>
@@ -162,28 +163,37 @@ function OrderSummaryCard({
               <p className="text-base font-bold">£{orderTotal.toFixed(2)}</p>
             </div>
             <Separator />
+            <div className="mt-2">
+              <p className="font-bold">Additional Notes</p>
+              <p className="italic text-muted-foreground text-sm">
+                {orderNotes}
+              </p>
+            </div>
           </CardContent>
         </div>
-        <CardFooter className="justify-end pb-0">
-          <div className="flex flex-col items-end">
-            <h3 className="text-muted-foreground">Order Total</h3>
-            <h3>£{orderTotal.toFixed(2)}</h3>
-          </div>
-        </CardFooter>
-        <Button
-          className="mx-6"
-          onClick={() =>
-            handleOrderConfirmation(
-              currentOrderItems,
-              customerDiscount,
-              date,
-              customerId,
-              groupId
-            )
-          }
-        >
-          Confirm Order
-        </Button>
+
+        <div className="flex flex-col gap-2">
+          <CardFooter className="justify-end pb-0">
+            <div className="flex flex-col items-end">
+              <h3 className="text-muted-foreground">Order Total</h3>
+              <h3>£{orderTotal.toFixed(2)}</h3>
+            </div>
+          </CardFooter>
+          <Button
+            className="mx-6"
+            onClick={() =>
+              handleOrderConfirmation(
+                currentOrderItems,
+                customerDiscount,
+                date,
+                customerId,
+                groupId
+              )
+            }
+          >
+            Confirm Order
+          </Button>
+        </div>
       </Card>
     </div>
   );

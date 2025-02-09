@@ -28,6 +28,7 @@ function CreateOrderPage() {
   const [customerDiscount, setCustomerDiscount] = useState<number | null>(0);
   const [date, setDate] = useState<Date | undefined>();
   const [currentOrderItems, setCurrentOrderItems] = useState<OrderItem[]>([]);
+  const [orderNotes, setOrderNotes] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleNextStep = () => {
@@ -168,18 +169,20 @@ function CreateOrderPage() {
               setCurrentOrderItems={setCurrentOrderItems}
               customerDiscount={customerDiscount}
               groupId={groupId}
+              setOrderNotes={setOrderNotes}
             />
           </div>
-          <div className="flex flex-row justify-end items-center gap-2">
-            <p className="text-xs">
-              This will take you to the Order Summary page
-            </p>
+          <div className="flex flex-col justify-end items-center gap-4">
             <Button
+              className="w-full"
               disabled={currentOrderItems.length === 0 || !date}
               onClick={() => handleNextStep()}
             >
               Confirm Order
             </Button>
+            <p className="text-xs">
+              This will take you to the Order Summary page
+            </p>
           </div>
         </div>
       )}
@@ -205,6 +208,7 @@ function CreateOrderPage() {
               customerDiscount={customerDiscount}
               customerId={customerId}
               groupId={groupId ? groupId : null}
+              orderNotes={orderNotes}
             />
           </div>
         </div>

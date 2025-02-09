@@ -98,7 +98,7 @@ function OrderDetailPage() {
       {orderData.notes && (
         <p>
           <span className="font-bold">Notes: </span>
-          {toTitleCase(orderData.customers?.customer_name || '')}
+          {toTitleCase(orderData.notes || '')}
         </p>
       )}
 

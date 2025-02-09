@@ -7,6 +7,7 @@ type CreateOrderCard = {
   setCurrentOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
   customerDiscount: number | null;
   groupId: string | null;
+  setOrderNotes: React.Dispatch<React.SetStateAction<string>>;
 };
 
 //utils
@@ -56,6 +57,7 @@ import AddItemsDropdown from './AddItemsDropdown';
 import { Input } from '../ui/input';
 import LoadingWheel from '../LoadingWheel';
 import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
+import { NewOrderNotes } from './NewOrderNotes';
 
 function CreateOrderCard({
   customerId,
@@ -64,6 +66,7 @@ function CreateOrderCard({
   setCurrentOrderItems,
   customerDiscount,
   groupId,
+  setOrderNotes,
 }: CreateOrderCard) {
   const { data, isLoading, isError, error } = useFetchStandardOrders(
     customerId || ''
@@ -101,14 +104,6 @@ function CreateOrderCard({
   const standardOrderNames = data?.map((order) => order.orderName) || [];
   const groupDiscount = groupData?.standardDiscount || 0;
 
-  // const sortedItems = currentOrderItems.sort((a, b) => {
-  //   const nameA = a.name?.toLowerCase();
-  //   const nameB = b.name?.toLowerCase();
-  //   if (nameA && nameB && nameA < nameB) return -1;
-  //   if (nameA && nameB && nameA > nameB) return 1;
-  //   return 0;
-  // });
-
   const sortedItems = sortCustomOrder(currentOrderItems);
 
   const orderTotal =
@@ -125,7 +120,7 @@ function CreateOrderCard({
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
+    <div className="my-2">
       <Card className="flex flex-col justify-between">
         <div>
           <CardHeader>
@@ -144,7 +139,7 @@ function CreateOrderCard({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>
+                        <SelectLabel className="pl-2">
                           {toTitleCase(customerName || '')} Standard Orders
                         </SelectLabel>
                         {standardOrderNames.map((name, index) => (
@@ -163,7 +158,7 @@ function CreateOrderCard({
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-4">
             {sortedItems.length !== 0 ? (
               <Table>
                 <TableHeader>
@@ -183,7 +178,7 @@ function CreateOrderCard({
                     </TableHead>
                     <TableHead>Quantity</TableHead>
                     <TableHead className="text-right">Total (£)</TableHead>
-                    <TableHead></TableHead>
+                    <TableHead className="text-right"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="text-xs md:text-sm">
@@ -254,7 +249,7 @@ function CreateOrderCard({
                             ).toFixed(2)
                           : ''}
                       </TableCell>
-                      <TableCell className="py-1">
+                      <TableCell className="py-1 text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -278,9 +273,11 @@ function CreateOrderCard({
                   ))}
                 </TableBody>
                 <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">
+                  <TableRow className="bg-secondary">
+                    <TableCell colSpan={3} className="text-lg">
+                      Total
+                    </TableCell>
+                    <TableCell colSpan={1} className="text-right text-lg">
                       £{orderTotal.toFixed(2)}
                     </TableCell>
                     <TableCell></TableCell>
@@ -295,6 +292,7 @@ function CreateOrderCard({
                 </p>
               </div>
             )}
+            <NewOrderNotes setOrderNotes={setOrderNotes} />
           </CardContent>
         </div>
       </Card>
