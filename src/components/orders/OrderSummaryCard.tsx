@@ -48,7 +48,7 @@ function OrderSummaryCard({
     currentOrderItems.reduce((total, item) => {
       const itemPrice = item.price || 0;
       const quantity = item.quantity;
-      return total + itemPrice * quantity;
+      return total + itemPrice * quantity!;
     }, 0) *
     ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100);
 
@@ -121,7 +121,7 @@ function OrderSummaryCard({
                   <p className="text-sm">
                     {(
                       Number(item.price) *
-                      item.quantity *
+                      item.quantity! *
                       ((100 - Math.max(customerDiscount || 0, groupDiscount)) /
                         100)
                     ).toFixed(2)}

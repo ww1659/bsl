@@ -115,9 +115,9 @@ function ListByItem({ date }: ListByItemProps) {
                       </TableCell>
                       <TableCell className=" py-1 text-right">
                         <Popover
-                          open={item.itemId === activeRow}
+                          open={item.id === activeRow}
                           onOpenChange={(open) =>
-                            setActiveRow(open ? item.itemId : null)
+                            setActiveRow(open ? item.id : null)
                           }
                         >
                           <PopoverTrigger asChild>
@@ -126,12 +126,12 @@ function ListByItem({ date }: ListByItemProps) {
                               variant="ghost"
                               onClick={() =>
                                 setActiveRow(
-                                  activeRow === item.itemId ? null : item.itemId
+                                  activeRow === item.id ? null : item.id
                                 )
                               }
                               className="focus:outline-none py-0"
                             >
-                              {activeRow === item.itemId ? (
+                              {activeRow === item.id ? (
                                 <ChevronUp className="h-5 w-5" />
                               ) : (
                                 <ChevronDown className="h-5 w-5" />

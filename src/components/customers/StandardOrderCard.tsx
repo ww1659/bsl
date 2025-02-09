@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 //types
 type StandardOrderCard = {
   customerId: string | null;
 };
 
-import { OrderItem } from "@/types";
+import { OrderItem } from '@/types';
 
 //ui
 import {
@@ -14,15 +14,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "../ui/button";
+} from '@/components/ui/card';
+import { Button } from '../ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -30,7 +30,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   Dialog,
   DialogContent,
@@ -38,28 +38,28 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Spinner } from "../ui/loading";
+} from '@/components/ui/dialog';
+import { Spinner } from '../ui/loading';
 
 //utils
-import { toTitleCase } from "@/lib/utils";
-import { useFetchStandardOrders } from "@/hooks/fetch/useFetchStandardOrder";
-import { Plus, Trash2, Trash2Icon } from "lucide-react";
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
+import { useFetchStandardOrders } from '@/hooks/fetch/useFetchStandardOrder';
+import { Plus, Trash2, Trash2Icon } from 'lucide-react';
 
 //components
-import NewStandardOrderForm from "./NewStandardOrderForm";
-import AddItemsDropdown from "../orders/AddItemsDropdown";
+import NewStandardOrderForm from './NewStandardOrderForm';
+import AddItemsDropdown from '../orders/AddItemsDropdown';
 
 //hooks
-import { useToast } from "@/hooks/use-toast";
-import { useUpdateStandardOrder } from "@/hooks/update/useUpdateStandardOrder";
-import { useDeleteStandardOrder } from "@/hooks/delete/useDeleteStandardOrder";
+import { useToast } from '@/hooks/use-toast';
+import { useUpdateStandardOrder } from '@/hooks/update/useUpdateStandardOrder';
+import { useDeleteStandardOrder } from '@/hooks/delete/useDeleteStandardOrder';
 
 function StandardOrderCard({ customerId }: StandardOrderCard) {
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<number | null>(null);
-  const [orderName, setOrderName] = useState<string | null>("");
+  const [orderName, setOrderName] = useState<string | null>('');
   const [selectedOrderItems, setSelectedOrderItems] = useState<OrderItem[]>([]);
   const [selectValue, setSelectValue] = useState<string | undefined>(undefined);
   const [isNewOrder, setIsNewOrder] = useState<boolean>(false);
@@ -68,22 +68,21 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
   const deleteStandardOrder = useDeleteStandardOrder();
 
   const { data, isLoading, isError, error } = useFetchStandardOrders(
-    customerId || ""
+    customerId || ''
   );
 
   const handleSelectChange = (value: number | undefined) => {
     setSelectValue(value?.toString());
     setSelectedOrder(value ?? null);
     const selectedOrderData = data?.find((order) => order.id === value);
-    const sortedItems = selectedOrderData?.orderItems
-      .filter((item): item is OrderItem => item.id !== undefined)
-      .sort((a, b) => {
-        const nameA = a.name?.toLowerCase();
-        const nameB = b.name?.toLowerCase();
-        if (nameA && nameB && nameA < nameB) return -1;
-        if (nameA && nameB && nameA > nameB) return 1;
-        return 0;
-      });
+    const sortedItems = sortCustomOrder(
+      (selectedOrderData?.orderItems ?? []).map((item) => ({
+        id: item.id ?? null,
+        name: item.name ?? null,
+        price: item.price ?? null,
+        quantity: item.quantity,
+      }))
+    );
     const orderName = selectedOrderData?.orderName;
     setOrderName(orderName || null);
     setSelectedOrderItems(sortedItems || []);
@@ -94,7 +93,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
     setSelectedOrderItems((prevItems) =>
       prevItems.map((item) =>
         item.id === itemId
-          ? { ...item, quantity: Math.max(1, item.quantity + quantity) }
+          ? { ...item, quantity: Math.max(1, item.quantity! + quantity) }
           : item
       )
     );
@@ -106,8 +105,8 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
       prevItems.filter((prevItem) => prevItem.id !== itemId)
     );
     toast({
-      title: `Removed ${toTitleCase(itemToRemove?.name || "")}`,
-      description: `From Order: ${toTitleCase(orderName || "")}`,
+      title: `Removed ${toTitleCase(itemToRemove?.name || '')}`,
+      description: `From Order: ${toTitleCase(orderName || '')}`,
       duration: 2000,
     });
   };
@@ -121,20 +120,20 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
       {
         onSuccess: () => {
           toast({
-            title: "Order Updated",
+            title: 'Order Updated',
             description: `Order "${toTitleCase(
-              orderName || ""
+              orderName || ''
             )}" updated successfully`,
             duration: 5000,
           });
-          setSelectValue("");
+          setSelectValue('');
           setSelectedOrder(null);
           setSelectedOrderItems([]);
           setOrderName(null);
         },
         onError: (error) => {
           toast({
-            title: "Error",
+            title: 'Error',
             description: `Failed to update order: ${error.message}`,
           });
         },
@@ -150,13 +149,13 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
       {
         onSuccess: () => {
           toast({
-            title: "Order Deleted",
+            title: 'Order Deleted',
             description: `Order "${toTitleCase(
-              orderName || ""
+              orderName || ''
             )}" deleted successfully`,
             duration: 5000,
           });
-          setSelectValue("");
+          setSelectValue('');
           setSelectedOrder(null);
           setSelectedOrderItems([]);
           setOrderName(null);
@@ -164,7 +163,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
         },
         onError: (error) => {
           toast({
-            title: "Error",
+            title: 'Error',
             description: `Failed to update order: ${error.message}`,
           });
         },
@@ -173,7 +172,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
   };
 
   const handleNewStandardOrder = () => {
-    setSelectValue("");
+    setSelectValue('');
     setSelectedOrder(null);
     setSelectedOrderItems([]);
     setOrderName(null);
@@ -182,7 +181,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
 
   const handleSaveNewOrder = () => {
     setIsNewOrder(false);
-    setSelectValue("");
+    setSelectValue('');
     setSelectedOrder(null);
     setSelectedOrderItems([]);
     setOrderName(null);
@@ -214,15 +213,15 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                     <SelectValue
                       placeholder={
                         data.length === 0
-                          ? "No Standard Orders"
-                          : "Select Order"
+                          ? 'No Standard Orders'
+                          : 'Select Order'
                       }
                     />
                   </SelectTrigger>
                   <SelectContent>
                     {data.map((order) => (
                       <SelectItem key={order.id} value={order.id.toString()}>
-                        {toTitleCase(order.orderName || "")}
+                        {toTitleCase(order.orderName || '')}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -240,7 +239,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                 <div className="flex flex-row justify-between items-center px-2">
                   {orderName && (
                     <p className="w-1/2 font-bold">
-                      Order Name:{" "}
+                      Order Name:{' '}
                       <span className="font-normal">
                         {toTitleCase(orderName)}
                       </span>
@@ -265,7 +264,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                     {selectedOrderItems?.map((item) => (
                       <TableRow key={item.id} className="hover:bg-0">
                         <TableCell className="font-medium py-0">
-                          {toTitleCase(item.name || "")}
+                          {toTitleCase(item.name || '')}
                         </TableCell>
                         <TableCell className="py-0 text-center">
                           <div>
@@ -274,14 +273,18 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                               variant="outline"
                               size="xs"
                               className="mr-1"
-                              onClick={() => updateQuantity(item.id, -1)}
+                              onClick={() =>
+                                item.id && updateQuantity(item.id, -1)
+                              }
                             >
                               -
                             </Button>
                             <Button
                               variant="outline"
                               size="xs"
-                              onClick={() => updateQuantity(item.id, 1)}
+                              onClick={() =>
+                                item.id && updateQuantity(item.id, 1)
+                              }
                             >
                               +
                             </Button>
@@ -291,7 +294,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                           <Button
                             disabled={selectedOrderItems.length === 1}
                             variant="ghost"
-                            onClick={handleRemoveItem(item.id)}
+                            onClick={() => item.id && handleRemoveItem(item.id)}
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
@@ -315,7 +318,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                     {updateStandardOrder.isPending ? (
                       <Spinner size="sm" />
                     ) : (
-                      "Save Changes"
+                      'Save Changes'
                     )}
                   </Button>
                 </div>
@@ -324,7 +327,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
             {isNewOrder && (
               <CardContent className="border border-primary rounded-lg p-4 mx-4 mb-4">
                 <NewStandardOrderForm
-                  customerId={customerId || ""}
+                  customerId={customerId || ''}
                   handleSaveNewOrder={handleSaveNewOrder}
                 />
               </CardContent>
@@ -336,7 +339,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                Delete Standard Order '{toTitleCase(orderName || "")}'?
+                Delete Standard Order '{toTitleCase(orderName || '')}'?
               </DialogTitle>
               <DialogDescription>
                 This will delete this standard order. This action cannot be
@@ -352,7 +355,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                   {deleteStandardOrder.isPending ? (
                     <Spinner className="text-secondary" size="sm" />
                   ) : (
-                    "Delete Order"
+                    'Delete Order'
                   )}
                 </Button>
               </div>

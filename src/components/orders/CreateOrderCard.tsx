@@ -116,7 +116,7 @@ function CreateOrderCard({
       const itemPrice = item.price || 0;
       const quantity = item.quantity;
 
-      return total + itemPrice * quantity;
+      return total + itemPrice * quantity!;
     }, 0) *
     ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100);
 
@@ -223,7 +223,7 @@ function CreateOrderCard({
                         <Input
                           type="text"
                           className="w-1/5 py-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1"
-                          value={item.quantity}
+                          value={item.quantity!}
                           onChange={(e) =>
                             updateQuantity(item.id || 0, Number(e.target.value))
                           }
