@@ -130,10 +130,14 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
                 ? 'default'
                 : status === 'pending'
                 ? 'warning'
-                : 'default'
+                : status === 'archived'
+                ? 'destructive'
+                : 'secondary'
             }
           >
-            {toTitleCase(row.getValue('status') || '')}
+            {row.getValue('status') === 'archived'
+              ? 'Cancelled'
+              : toTitleCase(row.getValue('status') || '')}
           </Badge>
         </div>
       );

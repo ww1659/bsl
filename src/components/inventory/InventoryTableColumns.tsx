@@ -4,16 +4,9 @@ import { Button } from '@/components/ui/button';
 
 import { toTitleCase } from '@/lib/utils';
 import UpdateItemDropdown from './UpdateItemDropdown';
+import { OrderItem } from '@/types';
 
-export type Item = {
-  id: number;
-  name: string | null;
-  price: number | null;
-  stock: number | null;
-  loanedOut: number | null;
-};
-
-export const inventoryTableColumns: ColumnDef<Item>[] = [
+export const inventoryTableColumns: ColumnDef<OrderItem>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {

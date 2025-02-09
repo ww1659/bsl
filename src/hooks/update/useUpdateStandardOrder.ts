@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
-import { OrderItem } from "@/types";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
+import { OrderItem } from '@/types';
 
 type UpdateStandardOrderArgs = {
   orderId: number;
@@ -12,17 +12,17 @@ const updateStandardOrder = async ({
   orderItems,
 }: UpdateStandardOrderArgs) => {
   const { error: deleteError } = await supabase
-    .from("standard_order_items")
+    .from('standard_order_items')
     .delete()
-    .eq("standard_order_id", orderId);
+    .eq('standard_order_id', orderId);
 
   if (deleteError) throw new Error(deleteError.message);
 
-  const { data, error } = await supabase.from("standard_order_items").insert(
+  const { data, error } = await supabase.from('standard_order_items').insert(
     orderItems.map((item) => ({
       standard_order_id: orderId,
       item_id: item.id,
-      quantity: item.quantity,
+      quantity: item.quantity!,
     }))
   );
 
@@ -35,10 +35,10 @@ export const useUpdateStandardOrder = () => {
   return useMutation({
     mutationFn: updateStandardOrder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer-standard-orders"] });
+      queryClient.invalidateQueries({ queryKey: ['customer-standard-orders'] });
     },
     onError: (error) => {
-      console.error("Failed to update standard Order:", error);
+      console.error('Failed to update standard Order:', error);
     },
   });
 };

@@ -1,11 +1,3 @@
-type OrderItem = {
-  id: number | null;
-  itemName: string | null;
-  price: number | null;
-  quantity: number | null;
-  picked: boolean | null;
-};
-
 type ItemsSheetProps = {
   selectedOrder: string | null;
   setSelectedOrder: (orderId: string | null) => void;
@@ -16,7 +8,7 @@ type ItemsSheetProps = {
   orderPicked: string | null;
 };
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 //components
 import {
@@ -37,9 +29,10 @@ import {
 } from '@/components/ui/table';
 
 //utils
-import { toTitleCase } from '@/lib/utils';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
+import { OrderItem } from '@/types';
 
 function ItemsSheet({
   selectedOrder,
@@ -72,13 +65,15 @@ function ItemsSheet({
     }
   }, [isSmallScreen, selectedOrder]);
 
-  const sortedItems = orderItems.sort((a, b) => {
-    const nameA = a?.itemName?.toLowerCase() || '';
-    const nameB = b?.itemName?.toLowerCase() || '';
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-    return 0;
-  });
+  // const sortedItems = orderItems.sort((a, b) => {
+  //   const nameA = a?.name?.toLowerCase() || '';
+  //   const nameB = b?.name?.toLowerCase() || '';
+  //   if (nameA < nameB) return -1;
+  //   if (nameA > nameB) return 1;
+  //   return 0;
+  // });
+
+  const sortedItems = useMemo(() => sortCustomOrder(orderItems), [orderItems]);
 
   const handleSheetOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -114,7 +109,7 @@ function ItemsSheet({
               {sortedItems.map((item) => (
                 <TableRow className="text-xs bg-0 hover:bg-0" key={item.id}>
                   <TableCell className="p-1">
-                    {toTitleCase(item.itemName || '')}
+                    {toTitleCase(item.name || '')}
                   </TableCell>
                   <TableCell className="p-1"> {item.quantity}</TableCell>
                   <TableCell className="p-1">

@@ -4,31 +4,35 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { useFetchOrders } from "@/hooks/fetch/useFetchOrders";
-import { toTitleCase } from "@/lib/utils";
-import { useAppSelector } from "@/redux/hooks";
-import { format } from "date-fns";
+} from '@/components/ui/card';
+import { useFetchOrders } from '@/hooks/fetch/useFetchOrders';
+import { toTitleCase } from '@/lib/utils';
+import { useAppSelector } from '@/redux/hooks';
+import { format } from 'date-fns';
+import { useMemo } from 'react';
 
 function GroupPendingOrdersCard() {
   const groupId = useAppSelector((state) => state.group.groupId);
-  const startDate = new Date(new Date().setUTCHours(0, 0, 0, 0)).toISOString();
 
   const { data, isLoading, isError, error } = useFetchOrders({
-    startDate,
     groupId: groupId ?? undefined,
   });
 
+  const sortedData = useMemo(
+    () =>
+      data
+        ?.sort((a, b) => {
+          // Defensive sort to ensure delivery date ordering
+          const dateA = a.deliveryDate ? new Date(a.deliveryDate).getTime() : 0;
+          const dateB = b.deliveryDate ? new Date(b.deliveryDate).getTime() : 0;
+          return dateA - dateB;
+        })
+        .slice(0, 3),
+    [data]
+  );
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
-
-  const sortedData = data
-    ?.sort((a, b) => {
-      const dateA = a.deliveryDate ? new Date(a.deliveryDate).getTime() : 0;
-      const dateB = b.deliveryDate ? new Date(b.deliveryDate).getTime() : 0;
-      return dateA - dateB;
-    })
-    .slice(0, 3);
 
   return (
     <Card className="grid gap-1 col-span-1 sm:col-span-2 xl:col-span-1">
@@ -43,18 +47,18 @@ function GroupPendingOrdersCard() {
                 <p className="font-bold">#{order.number}</p>
                 <div className="flex flex-col">
                   <p className="text-xs text-muted-foreground">
-                    Delivery Date:{" "}
+                    Delivery Date:{' '}
                     <span className="font-bold text-primary">
                       {format(
                         new Date(order.deliveryDate ?? new Date()),
-                        "MMM d, yyyy"
+                        'MMM d, yyyy'
                       )}
                     </span>
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Customer:{" "}
+                    Customer:{' '}
                     <span className="font-bold text-primary">
-                      {toTitleCase(order.customerName || "")}
+                      {toTitleCase(order.customerName || '')}
                     </span>
                   </p>
                 </div>

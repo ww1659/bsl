@@ -1,14 +1,7 @@
+import { OrderItem } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { addDays, format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
-
-export type OrderItem = {
-  id: number | null;
-  itemName: string | null;
-  price: number | null;
-  quantity: number | null;
-  picked: boolean | null;
-};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -85,4 +78,47 @@ export function calculateOrderPickedStatus(items: OrderItem[]) {
   if (allPicked) return 'picked';
   if (!nonePicked) return 'partial';
   return 'not picked';
+}
+
+export function sortCustomOrder(items: OrderItem[]): OrderItem[] {
+  const orderPriority: { [key: string]: number } = {
+    'superking bed set': 1,
+    'luxury - superking bed set': 2,
+    'own - superking bed set': 3,
+    'king bed set': 4,
+    'luxury - king bed set': 5,
+    'own - king bed set': 6,
+    'double bed set': 7,
+    'luxury - double bed set': 8,
+    'own - double bed set': 9,
+    'single bed set': 10,
+    'luxury - single bed set': 11,
+    'own - single bed set': 12,
+    'super king mattress protectors': 13,
+    'king mattress protectors': 14,
+    'double mattress protectors': 15,
+    'own - double mattress protectors': 16,
+    'single mattress protectors': 17,
+    'pillow protectors': 18,
+    'bath sheet': 19,
+    'own - bath sheet': 20,
+    'bath mat': 21,
+    'own - bath mat': 22,
+    'hand towel': 23,
+    'own - hand towel': 24,
+    'tea towel': 25,
+    'own - tea towel': 26,
+    'oven gloves': 27,
+    'own - oven glove': 28,
+    throw: 29,
+    'own - cushion cover': 30,
+    'dressing gown': 31,
+    'own - dog towel': 32,
+  };
+
+  return items.sort((a, b) => {
+    const priorityA = orderPriority[a.name?.toLowerCase() ?? ''] || 100;
+    const priorityB = orderPriority[b.name?.toLowerCase() ?? ''] || 100;
+    return priorityA - priorityB;
+  });
 }

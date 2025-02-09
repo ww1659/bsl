@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
 
 type PickingListItem = {
-  itemId: number;
-  itemName: string;
+  id: number;
+  name: string;
   quantity: number;
   ordersPicked: {
     orderId: number;
@@ -30,8 +30,8 @@ const fetchPickingListItems = async (startDate: string, endDate: string) => {
   }
 
   const itemsData: PickingListItem[] = data.map((item: any) => ({
-    itemId: item.item_id,
-    itemName: item.item_name,
+    id: item.item_id,
+    name: item.item_name,
     quantity: item.total_number,
     ordersPicked: item.orders_picked.map((order: any) => ({
       orderId: order.order_id,

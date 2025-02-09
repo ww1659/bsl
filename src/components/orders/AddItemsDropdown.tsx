@@ -1,4 +1,4 @@
-import { OrderItem } from "@/types";
+import { OrderItem } from '@/types';
 
 type ItemsDropDown = {
   currentOrderItems: OrderItem[];
@@ -12,13 +12,13 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
-import { useFetchItems } from "@/hooks/fetch/useFetchAllItems";
+import { useFetchItems } from '@/hooks/fetch/useFetchAllItems';
 
-import { toTitleCase } from "@/lib/utils";
-import { SelectSeparator } from "@radix-ui/react-select";
-import { Plus } from "lucide-react";
+import { toTitleCase } from '@/lib/utils';
+import { SelectSeparator } from '@radix-ui/react-select';
+import { Plus } from 'lucide-react';
 
 function AddItemsDropdown({
   currentOrderItems,
@@ -27,7 +27,7 @@ function AddItemsDropdown({
   const { data: allItems, isLoading, isError, error } = useFetchItems();
 
   const sortedItems = allItems?.sort((a, b) =>
-    (a.name || "").localeCompare(b.name || "")
+    (a.name || '').localeCompare(b.name || '')
   );
 
   const handleItemAdd = (itemId: string) => {
@@ -76,7 +76,7 @@ function AddItemsDropdown({
                       <Plus className="h-4 w-4" />
                     </span>
                   )}
-                  {toTitleCase(item.name || "")}
+                  {toTitleCase(item.name || '')}
                 </SelectItem>
               );
             })}

@@ -7,10 +7,11 @@ type CreateOrderCard = {
   setCurrentOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
   customerDiscount: number | null;
   groupId: string | null;
+  setOrderNotes: React.Dispatch<React.SetStateAction<string>>;
 };
 
 //utils
-import { toTitleCase } from '@/lib/utils';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 
 //supabase hooks
 import { useFetchStandardOrders } from '@/hooks/fetch/useFetchStandardOrder';
@@ -56,6 +57,7 @@ import AddItemsDropdown from './AddItemsDropdown';
 import { Input } from '../ui/input';
 import LoadingWheel from '../LoadingWheel';
 import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
+import { NewOrderNotes } from './NewOrderNotes';
 
 function CreateOrderCard({
   customerId,
@@ -64,6 +66,7 @@ function CreateOrderCard({
   setCurrentOrderItems,
   customerDiscount,
   groupId,
+  setOrderNotes,
 }: CreateOrderCard) {
   const { data, isLoading, isError, error } = useFetchStandardOrders(
     customerId || ''
@@ -101,20 +104,14 @@ function CreateOrderCard({
   const standardOrderNames = data?.map((order) => order.orderName) || [];
   const groupDiscount = groupData?.standardDiscount || 0;
 
-  const sortedItems = currentOrderItems.sort((a, b) => {
-    const nameA = a.name?.toLowerCase();
-    const nameB = b.name?.toLowerCase();
-    if (nameA && nameB && nameA < nameB) return -1;
-    if (nameA && nameB && nameA > nameB) return 1;
-    return 0;
-  });
+  const sortedItems = sortCustomOrder(currentOrderItems);
 
   const orderTotal =
     currentOrderItems.reduce((total, item) => {
       const itemPrice = item.price || 0;
       const quantity = item.quantity;
 
-      return total + itemPrice * quantity;
+      return total + itemPrice * quantity!;
     }, 0) *
     ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100);
 
@@ -123,7 +120,7 @@ function CreateOrderCard({
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
+    <div className="my-2">
       <Card className="flex flex-col justify-between">
         <div>
           <CardHeader>
@@ -142,7 +139,7 @@ function CreateOrderCard({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>
+                        <SelectLabel className="pl-2">
                           {toTitleCase(customerName || '')} Standard Orders
                         </SelectLabel>
                         {standardOrderNames.map((name, index) => (
@@ -161,7 +158,7 @@ function CreateOrderCard({
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-4">
             {sortedItems.length !== 0 ? (
               <Table>
                 <TableHeader>
@@ -181,7 +178,7 @@ function CreateOrderCard({
                     </TableHead>
                     <TableHead>Quantity</TableHead>
                     <TableHead className="text-right">Total (£)</TableHead>
-                    <TableHead></TableHead>
+                    <TableHead className="text-right"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="text-xs md:text-sm">
@@ -209,16 +206,19 @@ function CreateOrderCard({
                           size="sm"
                           className="h-10"
                           onClick={() =>
-                            updateQuantity(item.id || 0, item.quantity - 1)
+                            updateQuantity(
+                              item.id || 0,
+                              (item.quantity ?? 1) - 1
+                            )
                           }
-                          disabled={item.quantity <= 1}
+                          disabled={(item.quantity ?? 1) <= 1}
                         >
                           -
                         </Button>
                         <Input
                           type="text"
                           className="w-1/5 py-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1"
-                          value={item.quantity}
+                          value={item.quantity!}
                           onChange={(e) =>
                             updateQuantity(item.id || 0, Number(e.target.value))
                           }
@@ -229,7 +229,7 @@ function CreateOrderCard({
                           size="sm"
                           className="h-10"
                           onClick={() =>
-                            updateQuantity(item.id || 0, item.quantity + 1)
+                            updateQuantity(item.id || 0, item.quantity! + 1)
                           }
                         >
                           +
@@ -238,7 +238,7 @@ function CreateOrderCard({
                       <TableCell className="py-1 text-right">
                         {item.price
                           ? (
-                              item.quantity *
+                              item.quantity! *
                               item.price *
                               ((100 -
                                 Math.max(
@@ -249,7 +249,7 @@ function CreateOrderCard({
                             ).toFixed(2)
                           : ''}
                       </TableCell>
-                      <TableCell className="py-1">
+                      <TableCell className="py-1 text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -273,9 +273,11 @@ function CreateOrderCard({
                   ))}
                 </TableBody>
                 <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">
+                  <TableRow className="bg-secondary">
+                    <TableCell colSpan={3} className="text-lg">
+                      Total
+                    </TableCell>
+                    <TableCell colSpan={1} className="text-right text-lg">
                       £{orderTotal.toFixed(2)}
                     </TableCell>
                     <TableCell></TableCell>
@@ -290,6 +292,7 @@ function CreateOrderCard({
                 </p>
               </div>
             )}
+            <NewOrderNotes setOrderNotes={setOrderNotes} />
           </CardContent>
         </div>
       </Card>

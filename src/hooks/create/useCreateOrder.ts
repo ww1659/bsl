@@ -16,7 +16,7 @@ type CreateOrderMutation = {
   };
   orderItems: {
     item_id: number | null | undefined;
-    quantity: number;
+    quantity: number | null | undefined;
     price: number | null | undefined;
   }[];
 };

@@ -4,7 +4,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,22 +12,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
-import { toTitleCase } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { useState } from "react";
-import UpdateItemForm from "./UpdateItemForm";
+import { toTitleCase } from '@/lib/utils';
+import { Button } from '../ui/button';
+import { MoreHorizontal } from 'lucide-react';
+import { useState } from 'react';
+import UpdateItemForm from './UpdateItemForm';
+import { OrderItem } from '@/types';
 
 type UpdateItemDialogProps = {
-  row: {
-    id: number;
-    name: string | null;
-    price: number | null;
-    stock: number | null;
-    loanedOut: number | null;
-  };
+  row: OrderItem;
 };
 
 function UpdateItemDropdown({ row }: UpdateItemDialogProps) {
@@ -60,12 +55,12 @@ function UpdateItemDropdown({ row }: UpdateItemDialogProps) {
           <SheetHeader>
             <SheetTitle>Update Item</SheetTitle>
             <SheetDescription>
-              Update the item name or price for{" "}
-              <span className="font-bold">{toTitleCase(row.name || "")}</span>.
+              Update the item name or price for{' '}
+              <span className="font-bold">{toTitleCase(row.name || '')}</span>.
               Click Update Item when you are done.
             </SheetDescription>
             <UpdateItemForm
-              itemId={row.id}
+              itemId={row.id!}
               itemName={row.name}
               itemPrice={row.price}
               setIsSheetOpen={setIsSheetOpen}
