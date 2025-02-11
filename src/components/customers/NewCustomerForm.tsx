@@ -1,8 +1,8 @@
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -11,26 +11,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { useFetchGroups } from "@/hooks/fetch/useFetchGroups";
-import { toTitleCase } from "@/lib/utils";
-import { useCreateCustomer } from "@/hooks/create/useCreateCustomer";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { useFetchGroups } from '@/hooks/fetch/useFetchGroups';
+import { toTitleCase } from '@/lib/utils';
+import { useCreateCustomer } from '@/hooks/create/useCreateCustomer';
 
 const ukPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i;
 
 const newCustomerSchema = z.object({
   customerName: z
     .string()
-    .min(1, "Customer must have a name")
-    .max(50, "Customer name must be smaller than 50 characters"),
+    .min(1, 'Customer must have a name')
+    .max(50, 'Customer name must be smaller than 50 characters'),
   houseNumber: z.string().optional(),
   street: z.string().optional(),
   town: z.string().optional(),
@@ -38,28 +38,28 @@ const newCustomerSchema = z.object({
     .string()
     .optional()
     .refine((val) => !val || ukPostcodeRegex.test(val), {
-      message: "Invalid UK postcode",
+      message: 'Invalid UK postcode',
     }),
   email: z
     .string()
-    .email("Invalid email address")
-    .max(50, "Email must be less than 50 characters")
+    .email('Invalid email address')
+    .max(50, 'Email must be less than 50 characters')
     .optional()
-    .or(z.literal("")),
+    .or(z.literal('')),
   discount: z.coerce
     .number()
-    .gte(0, "Discount must be positive!")
-    .lte(100, "Discount cannot exceed 100%")
+    .gte(0, 'Discount must be positive!')
+    .lte(100, 'Discount cannot exceed 100%')
     .optional()
     .transform((val) => (val === undefined ? undefined : val)),
   group: z
     .string()
-    .min(1, "Group must have a name")
-    .max(50, "Group name must be between 2 and 50 characters"),
+    .min(1, 'Group must have a name')
+    .max(50, 'Group name must be between 2 and 50 characters'),
   reference: z
     .string()
-    .min(1, "No reference")
-    .max(50, "Reference must be less than 50 characters"),
+    .min(1, 'No reference')
+    .max(50, 'Reference must be less than 50 characters'),
 });
 
 function NewCustomerForm() {
@@ -70,15 +70,15 @@ function NewCustomerForm() {
   const form = useForm<z.infer<typeof newCustomerSchema>>({
     resolver: zodResolver(newCustomerSchema),
     defaultValues: {
-      customerName: "",
-      houseNumber: "",
-      street: "",
-      town: "",
-      postcode: "",
-      email: "",
+      customerName: '',
+      houseNumber: '',
+      street: '',
+      town: '',
+      postcode: '',
+      email: '',
       discount: 20,
-      group: "",
-      reference: "",
+      group: '',
+      reference: '',
     },
   });
 
@@ -91,7 +91,7 @@ function NewCustomerForm() {
       streetName: values.street?.toLowerCase(),
       town: values.town?.toLowerCase(),
       postcode: values.postcode?.toLowerCase(),
-      country: "uk",
+      country: 'uk',
       groupId: values.group,
       reference: values.reference,
     };
@@ -149,7 +149,7 @@ function NewCustomerForm() {
                   <SelectContent>
                     {data?.map((group) => (
                       <SelectItem key={group.id} value={group.id}>
-                        {toTitleCase(group.group_name || "")}
+                        {toTitleCase(group.group_name || '')}
                       </SelectItem>
                     ))}
                     <SelectItem value="private">Private Customer</SelectItem>

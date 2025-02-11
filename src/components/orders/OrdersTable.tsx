@@ -10,6 +10,7 @@ import {
   VisibilityState,
   getSortedRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from '@tanstack/react-table';
 
 import {
@@ -62,6 +63,7 @@ export function OrdersTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
       columnFilters,
