@@ -99,7 +99,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
     );
   };
 
-  const handleRemoveItem = (itemId: number) => () => {
+  const handleRemoveItem = (itemId: number) => {
     const itemToRemove = selectedOrderItems.find((item) => item.id === itemId);
     setSelectedOrderItems((prevItems) =>
       prevItems.filter((prevItem) => prevItem.id !== itemId)
@@ -294,7 +294,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
                           <Button
                             disabled={selectedOrderItems.length === 1}
                             variant="ghost"
-                            onClick={() => item.id && handleRemoveItem(item.id)}
+                            onClick={() => handleRemoveItem(item.id!)}
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
