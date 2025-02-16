@@ -3,6 +3,7 @@ import { OrderItem } from '@/types';
 type ItemsDropDown = {
   currentOrderItems: OrderItem[];
   setCurrentOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
+  disabled?: boolean;
 };
 
 import {
@@ -23,6 +24,7 @@ import { Plus } from 'lucide-react';
 function AddItemsDropdown({
   currentOrderItems,
   setCurrentOrderItems,
+  disabled,
 }: ItemsDropDown) {
   const { data: allItems, isLoading, isError, error } = useFetchItems();
 
@@ -52,9 +54,7 @@ function AddItemsDropdown({
   if (sortedItems)
     return (
       <Select onValueChange={handleItemAdd}>
-        <SelectTrigger>
-          <span>Add New Items</span>
-        </SelectTrigger>
+        <SelectTrigger disabled={disabled}>Add New Items</SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Items</SelectLabel>
@@ -72,7 +72,7 @@ function AddItemsDropdown({
                   noCheck={true}
                 >
                   {!itemExists && (
-                    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                    <span className="absolute left-2">
                       <Plus className="h-4 w-4" />
                     </span>
                   )}
