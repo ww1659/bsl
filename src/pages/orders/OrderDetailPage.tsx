@@ -34,6 +34,7 @@ import { OrderItem } from '@/types';
 import AddItemsDropdown from '@/components/orders/AddItemsDropdown';
 import { useUpdateOrder } from '@/hooks/update/useUpdateOrder';
 import { format } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
 
 function OrderDetailPage() {
   const { orderId } = useParams<{ orderId: string }>();
@@ -44,6 +45,7 @@ function OrderDetailPage() {
   const [currentItems, setCurrentItems] = useState<OrderItem[]>([]);
   const [originalItems, setOriginalItems] = useState<OrderItem[]>([]);
 
+  const { toast } = useToast();
   const { data: orderItems } = useFetchItemsByOrderId(orderId || '');
   const {
     data: orderData,
@@ -80,6 +82,20 @@ function OrderDetailPage() {
       setCurrentItems(sortedItems);
     }
   }, [sortedItems]);
+
+  const calculateTotal = (items: OrderItem[], discount: number = 0) => {
+    return (
+      items.reduce((sum, item) => {
+        const itemTotal = item.price! * item.quantity!;
+        return sum + itemTotal;
+      }, 0) *
+      ((100 - discount) / 100)
+    );
+  };
+
+  const currentTotal = useMemo(() => {
+    return calculateTotal(currentItems, orderData?.discount || 0);
+  }, [currentItems, orderData?.discount]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -145,7 +161,19 @@ function OrderDetailPage() {
       },
       {
         onSuccess: () => {
+          toast({
+            title: 'Success',
+            description: `Order #${orderData.number} updated successfully`,
+            duration: 5000,
+          });
           setIsEditing(false);
+        },
+        onError: (error) => {
+          toast({
+            title: 'Error',
+            description: 'Failed to update order: ' + error.message,
+            duration: 5000,
+          });
         },
       }
     );
@@ -230,8 +258,11 @@ function OrderDetailPage() {
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row gap-2">
             <h3>Delivery Date:</h3>
-            <h3 className="text-muted-foreground">
-              {format(orderData.delivery_date!, 'd MMMM, yyyy')}
+            <h3 className={isEditing ? 'text-normal' : 'text-muted-foreground'}>
+              {format(
+                deliveryDate || new Date(orderData.delivery_date!),
+                'd MMMM, yyyy'
+              )}
             </h3>
           </div>
 
@@ -362,7 +393,7 @@ function OrderDetailPage() {
                       Total
                     </TableCell>
                     <TableCell colSpan={1} className="text-right text-lg">
-                      £{orderData.total!.toFixed(2)}
+                      £{currentTotal.toFixed(2) || orderData.total!.toFixed(2)}
                     </TableCell>
                     <TableCell></TableCell>
                   </TableRow>
