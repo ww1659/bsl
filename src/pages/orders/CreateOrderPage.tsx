@@ -160,7 +160,11 @@ function CreateOrderPage() {
             <h3>Step 3: Customise Order</h3>
           </div>
 
-          <DeliveryDatePicker date={date} setDate={setDate} />
+          <DeliveryDatePicker
+            date={date}
+            setDate={setDate}
+            label="Select a date for delivery"
+          />
           <div className="grid grid-cols-1 gap-6 my-2">
             <CreateOrderCard
               customerId={customerId}
