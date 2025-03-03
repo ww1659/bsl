@@ -72,7 +72,7 @@ const fetchOrders = async ({
       customers!inner(customer_name)
     `
     )
-    .order('delivery_date', { ascending: true });
+    .order('delivery_date', { ascending: false });
 
   if (status && status.length > 0) {
     query = query.in('status', status);

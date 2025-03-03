@@ -1,6 +1,7 @@
 type ItemsSheetProps = {
   selectedOrder: string | null;
   setSelectedOrder: (orderId: string | null) => void;
+  selectedOrderNotes: string | null;
   orderNumber: number | null | undefined;
   orderItems: OrderItem[];
   onIndividualPicked: (itemId: number | null, orderId: string) => void;
@@ -37,6 +38,7 @@ import { OrderItem } from '@/types';
 function ItemsSheet({
   selectedOrder,
   setSelectedOrder,
+  selectedOrderNotes,
   orderNumber,
   orderItems,
   onAllPicked,
@@ -126,7 +128,7 @@ function ItemsSheet({
             </TableBody>
           </Table>
           <SheetFooter>
-            <div className="flex flex-col gap-2 w-full items-center mt-5">
+            <div className="flex flex-col gap-6 w-full items-center mt-5">
               <div className="flex items-center gap-2">
                 <Label htmlFor="all-picked">
                   {orderPicked === 'picked'
@@ -140,6 +142,12 @@ function ItemsSheet({
                   checked={orderPicked === 'picked'}
                 />
               </div>
+              {selectedOrderNotes && (
+                <div className="">
+                  <h5 className="font-bold">Order Notes</h5>
+                  <p className="italic text-sm">{selectedOrderNotes}</p>
+                </div>
+              )}
             </div>
           </SheetFooter>
         </SheetContent>
