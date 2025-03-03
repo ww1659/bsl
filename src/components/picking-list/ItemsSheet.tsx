@@ -1,6 +1,7 @@
 type ItemsSheetProps = {
   selectedOrder: string | null;
   setSelectedOrder: (orderId: string | null) => void;
+  selectedOrderNotes: string | null;
   orderNumber: number | null | undefined;
   orderItems: OrderItem[];
   onIndividualPicked: (itemId: number | null, orderId: string) => void;

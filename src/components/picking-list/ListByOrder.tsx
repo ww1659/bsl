@@ -44,7 +44,7 @@ function ListByOrder({ date }: ListByOrderProps) {
   const { mutate: updatePickedItem } = useUpdatePickedItem();
   const { mutate: updatePickedOrder } = useUpdatePickedOrder();
 
-  const handleRowClick = (orderId: string, orderNotes: string) => {
+  const handleRowClick = (orderId: string, orderNotes: string | null) => {
     setSelectedOrder(orderId === selectedOrder ? null : orderId);
     setSelectedOrderNotes(orderId === selectedOrder ? null : orderNotes);
   };
