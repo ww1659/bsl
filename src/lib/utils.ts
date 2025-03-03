@@ -72,6 +72,12 @@ export function getMonthRange(date = new Date()) {
   return { dateFrom, dateTo };
 }
 
+export function getFourWeekRange(date = new Date()) {
+  const dateFrom = addDays(date, -14);
+  const dateTo = addDays(date, 14);
+  return { dateFrom, dateTo };
+}
+
 export function calculateOrderPickedStatus(items: OrderItem[]) {
   const allPicked = items.every((item) => item.picked === true);
   const nonePicked = items.every((item) => item.picked === false);
