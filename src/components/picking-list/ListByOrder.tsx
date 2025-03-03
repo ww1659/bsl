@@ -38,11 +38,15 @@ import { Label } from '../ui/label';
 
 function ListByOrder({ date }: ListByOrderProps) {
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+  const [selectedOrderNotes, setSelectedOrderNotes] = useState<string | null>(
+    null
+  );
   const { mutate: updatePickedItem } = useUpdatePickedItem();
   const { mutate: updatePickedOrder } = useUpdatePickedOrder();
 
-  const handleRowClick = (orderId: string) => {
+  const handleRowClick = (orderId: string, orderNotes: string) => {
     setSelectedOrder(orderId === selectedOrder ? null : orderId);
+    setSelectedOrderNotes(orderId === selectedOrder ? null : orderNotes);
   };
 
   const startDate = date?.from?.toISOString();
@@ -127,7 +131,7 @@ function ListByOrder({ date }: ListByOrderProps) {
                       order.id === selectedOrder ? 'bg-secondary' : 'bg-0'
                     }
                     key={order.id}
-                    onClick={() => handleRowClick(order.id)}
+                    onClick={() => handleRowClick(order.id, order.notes)}
                   >
                     <TableCell className="p-2">
                       <div className="font-medium">
@@ -231,6 +235,7 @@ function ListByOrder({ date }: ListByOrderProps) {
         <ItemsSheet
           selectedOrder={selectedOrder}
           setSelectedOrder={setSelectedOrder}
+          selectedOrderNotes={selectedOrderNotes}
           orderNumber={orderNumber}
           orderItems={items}
           onAllPicked={handleAllPicked}
