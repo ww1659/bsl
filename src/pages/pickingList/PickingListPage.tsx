@@ -17,13 +17,13 @@ import ListByItem from '@/components/picking-list/ListByItem';
 import ListByOrder from '@/components/picking-list/ListByOrder';
 
 //utils
-import { cn, getMonthRange } from '@/lib/utils';
+import { cn, getFourWeekRange } from '@/lib/utils';
 import { format } from 'date-fns';
 
 function PickingListPage() {
   const [date, setDate] = useState<DateRange | undefined>({
-    from: getMonthRange().dateFrom,
-    to: getMonthRange().dateTo,
+    from: getFourWeekRange().dateFrom,
+    to: getFourWeekRange().dateTo,
   });
 
   return (
@@ -69,7 +69,6 @@ function PickingListPage() {
                   selected={date}
                   onSelect={setDate}
                   numberOfMonths={1}
-                  disabled={(date) => date < getMonthRange().dateFrom}
                 />
               </PopoverContent>
             </Popover>
