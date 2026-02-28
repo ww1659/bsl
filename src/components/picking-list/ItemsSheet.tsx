@@ -33,7 +33,7 @@ import {
 import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
 
 function ItemsSheet({
   selectedOrder,

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Customer, OrderItem } from '@/types';
+import type { Customer, OrderItem } from '@/schemas';
 
 //components
 import CreateOrderCard from '@/components/orders/CreateOrderCard';

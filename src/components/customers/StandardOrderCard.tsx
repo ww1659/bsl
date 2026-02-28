@@ -5,7 +5,7 @@ type StandardOrderCard = {
   customerId: string | null;
 };
 
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
 
 //ui
 import {

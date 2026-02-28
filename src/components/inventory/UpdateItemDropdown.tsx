@@ -19,7 +19,7 @@ import { Button } from '../ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
 import UpdateItemForm from './UpdateItemForm';
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
 
 type UpdateItemDialogProps = {
   row: OrderItem;
@@ -60,9 +60,9 @@ function UpdateItemDropdown({ row }: UpdateItemDialogProps) {
               Click Update Item when you are done.
             </SheetDescription>
             <UpdateItemForm
-              itemId={row.id!}
-              itemName={row.name}
-              itemPrice={row.price}
+              itemId={row.id ?? 0}
+              itemName={row.name ?? null}
+              itemPrice={row.price ?? null}
               setIsSheetOpen={setIsSheetOpen}
             />
           </SheetHeader>

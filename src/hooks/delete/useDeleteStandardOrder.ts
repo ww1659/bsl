@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/services/supabase";
 
-type DeleteStandardOrder = {
+type DeleteStandardOrderInput = {
   standardOrderId: number;
 };
 
 const deleteStandardOrder = async ({
   standardOrderId,
-}: DeleteStandardOrder) => {
+}: DeleteStandardOrderInput) => {
   const { error: deleteItemsError } = await supabase
     .from("standard_order_items")
     .delete()

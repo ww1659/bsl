@@ -1,7 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils';
+import { z } from 'zod';
 
-type UpdateCustomerArgs = {
+type UpdateCustomerInput = {
   customerId: string;
   customerName: string;
   customerHouseNumber: string;
@@ -11,6 +13,15 @@ type UpdateCustomerArgs = {
   customerDiscount: number;
 };
 
+const customerUpdateSchema = z.object({
+  customer_name: z.string(),
+  house_number: z.string(),
+  street_name: z.string(),
+  postcode: z.string(),
+  email: z.string(),
+  discount: z.number(),
+});
+
 const updateCustomer = async ({
   customerId,
   customerName,
@@ -19,18 +30,22 @@ const updateCustomer = async ({
   customerPostcode,
   customerEmail,
   customerDiscount,
-}: UpdateCustomerArgs) => {
+}: UpdateCustomerInput) => {
+  const payload = {
+    customerName,
+    customerHouseNumber,
+    customerStreet,
+    customerPostcode,
+    customerEmail,
+    customerDiscount,
+  };
+  const customerSnakeCaseData = toSnakeCase(payload);
+  const parsedCustomerData = customerUpdateSchema.parse(customerSnakeCaseData);
+
   const { data, error } = await supabase
-    .from("customers")
-    .update({
-      customer_name: customerName,
-      house_number: customerHouseNumber,
-      street_name: customerStreet,
-      postcode: customerPostcode,
-      email: customerEmail,
-      discount: customerDiscount,
-    })
-    .eq("id", customerId);
+    .from('customers')
+    .update(parsedCustomerData)
+    .eq('id', customerId);
 
   if (error) throw new Error(error.message);
   return data;
@@ -42,11 +57,11 @@ export const useUpdateCustomer = () => {
   return useMutation({
     mutationFn: updateCustomer,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer-by-id"] });
-      queryClient.invalidateQueries({ queryKey: ["groups-id"] });
+      queryClient.invalidateQueries({ queryKey: ['customer-by-id'] });
+      queryClient.invalidateQueries({ queryKey: ['groups-id'] });
     },
     onError: (error) => {
-      console.error("Failed to update customer:", error);
+      console.error('Failed to update customer:', error);
     },
   });
 };

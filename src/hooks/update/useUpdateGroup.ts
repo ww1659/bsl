@@ -1,7 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils';
+import { z } from 'zod';
+import { toast } from '../use-toast';
 
-type UpdateGroupArgs = {
+type UpdateGroupInput = {
   groupId: string;
   groupName: string;
   groupHouseNumber: string;
@@ -11,6 +14,15 @@ type UpdateGroupArgs = {
   groupStandardDiscount: number;
 };
 
+const groupUpdateSchema = z.object({
+  group_name: z.string(),
+  house_number: z.string(),
+  street_name: z.string(),
+  postcode: z.string(),
+  email: z.string(),
+  standard_discount: z.number(),
+});
+
 const updateGroup = async ({
   groupId,
   groupName,
@@ -19,18 +31,22 @@ const updateGroup = async ({
   groupPostcode,
   groupEmail,
   groupStandardDiscount,
-}: UpdateGroupArgs) => {
+}: UpdateGroupInput) => {
+  const payload = {
+    groupName,
+    groupHouseNumber,
+    groupStreet,
+    groupPostcode,
+    groupEmail,
+    groupStandardDiscount,
+  };
+  const groupSnakeCaseData = toSnakeCase(payload);
+  const parsedGroupData = groupUpdateSchema.parse(groupSnakeCaseData);
+
   const { data, error } = await supabase
-    .from("groups")
-    .update({
-      group_name: groupName,
-      house_number: groupHouseNumber,
-      street_name: groupStreet,
-      postcode: groupPostcode,
-      email: groupEmail,
-      standard_discount: groupStandardDiscount,
-    })
-    .eq("id", groupId);
+    .from('groups')
+    .update(parsedGroupData)
+    .eq('id', groupId);
 
   if (error) throw new Error(error.message);
   return data;
@@ -42,12 +58,15 @@ export const useUpdateGroup = () => {
   return useMutation({
     mutationFn: updateGroup,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["groups-id"] });
-      queryClient.invalidateQueries({ queryKey: ["groups"] });
-      console.log("Group Update Successfully");
+      queryClient.invalidateQueries({ queryKey: ['groups-id'] });
+      queryClient.invalidateQueries({ queryKey: ['groups'] });
     },
     onError: (error) => {
-      console.error("Failed to update group:", error);
+      toast({
+        title: 'Error',
+        description: `Failed to update group: ${error.message}`,
+        variant: 'destructive',
+      });
     },
   });
 };

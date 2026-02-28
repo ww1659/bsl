@@ -1,14 +1,14 @@
 //router
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 //redux
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from '@/redux/hooks';
 
 //components
-import CustomerList from "@/components/customers/CustomerList";
-import GroupDetailsCard from "@/components/customers/GroupDetailsCard";
-import GroupOrdersCard from "@/components/customers/GroupOrdersCard";
-import GroupPendingOrdersCard from "@/components/customers/GroupPendingOrdersCard";
+import CustomerList from '@/components/customers/CustomerList';
+import GroupDetailsCard from '@/components/customers/GroupDetailsCard';
+import GroupOrdersCard from '@/components/customers/GroupOrdersCard';
+import GroupPendingOrdersCard from '@/components/customers/GroupPendingOrdersCard';
 
 //ui
 import {
@@ -18,17 +18,17 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from '@/components/ui/breadcrumb';
 
 //utils
-import { removeDashes, toTitleCase } from "@/lib/utils";
+import { removeDashes, toTitleCase } from '@/lib/utils';
 function CustomerGroupPage() {
   const { groupName } = useParams();
   const groupId = useAppSelector((state) => state.group.groupId);
 
   const formattedGroupName = toTitleCase(
     removeDashes(
-      groupName === "privates" ? "Private Customers" : groupName || ""
+      groupName === 'privates' ? 'Private Customers' : groupName || ''
     )
   );
 
@@ -41,7 +41,7 @@ function CustomerGroupPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>{removeDashes(groupName || "")}</BreadcrumbPage>
+            <BreadcrumbPage>{removeDashes(groupName || '')}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -50,14 +50,18 @@ function CustomerGroupPage() {
       <div className="space-y-4 my-2">
         <div
           className={`${
-            groupId !== "null"
-              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"
-              : ""
+            groupId !== 'null'
+              ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'
+              : ''
           }`}
         >
-          {groupId !== "private" && <GroupDetailsCard />}
-          {groupId !== "private" && <GroupOrdersCard />}
-          {groupId !== "private" && <GroupPendingOrdersCard />}
+          {groupId !== 'private' && (
+            <>
+              <GroupDetailsCard />
+              <GroupOrdersCard />
+              <GroupPendingOrdersCard />
+            </>
+          )}
         </div>
 
         <CustomerList groupName={groupName} />

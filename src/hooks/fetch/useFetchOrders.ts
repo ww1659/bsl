@@ -1,13 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
-
-type OrderStatus =
-  | 'pending'
-  | 'ready'
-  | 'sent'
-  | 'delivered'
-  | 'archived'
-  | null;
+import type { OrderStatus } from '@/schemas';
 
 type FetchOrdersParams = {
   month?: string;
@@ -117,8 +110,8 @@ const fetchOrders = async ({
     id: order.id,
     orderItems: order.order_items.map((item) => ({
       id: item.items?.id ?? null,
-      itemName: item.items?.item_name ?? '',
-      price: item.items?.price ?? 0,
+      name: item.items?.item_name ?? null,
+      price: item.items?.price ?? null,
       quantity: item.quantity,
       picked: item.picked,
     })),

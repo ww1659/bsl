@@ -1,4 +1,4 @@
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
 
 type CreateOrderCard = {
   customerId: string | null;

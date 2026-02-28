@@ -1,16 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
+import { toSnakeCase } from '@/lib/utils';
+import { z } from 'zod';
 
-type UpdateStandardOrderArgs = {
+type UpdateStandardOrderInput = {
   orderId: number;
   orderItems: OrderItem[];
 };
 
+const standardOrderItemInsertSchema = z.object({
+  standard_order_id: z.number(),
+  item_id: z.number().nullable(),
+  quantity: z.number(),
+});
+
 const updateStandardOrder = async ({
   orderId,
   orderItems,
-}: UpdateStandardOrderArgs) => {
+}: UpdateStandardOrderInput) => {
   const { error: deleteError } = await supabase
     .from('standard_order_items')
     .delete()
@@ -18,13 +26,18 @@ const updateStandardOrder = async ({
 
   if (deleteError) throw new Error(deleteError.message);
 
-  const { data, error } = await supabase.from('standard_order_items').insert(
-    orderItems.map((item) => ({
-      standard_order_id: orderId,
-      item_id: item.id,
-      quantity: item.quantity!,
-    }))
-  );
+  const parsedItems = orderItems.map((item) => {
+    const itemSnakeCaseData = toSnakeCase({
+      standardOrderId: orderId,
+      itemId: item.id,
+      quantity: item.quantity ?? 0,
+    } as Record<string, unknown>) as Record<string, unknown>;
+    return standardOrderItemInsertSchema.parse(itemSnakeCaseData);
+  });
+
+  const { data, error } = await supabase
+    .from('standard_order_items')
+    .insert(parsedItems);
 
   if (error) throw new Error(error.message);
   return data;

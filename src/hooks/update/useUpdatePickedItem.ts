@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
 
-type UpdatePickedItemMutation = {
+type UpdatePickedItemInput = {
   itemId: number;
   orderId: string;
   currentPickedStatus: boolean;
@@ -11,7 +11,7 @@ const updatePickedItem = async ({
   itemId,
   orderId,
   currentPickedStatus,
-}: UpdatePickedItemMutation) => {
+}: UpdatePickedItemInput) => {
   const { data, error } = await supabase
     .from('order_items')
     .update({ picked: !currentPickedStatus })

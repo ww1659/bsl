@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/services/supabase";
 
-type ToggleCustomerArgs = {
+type ToggleCustomerInput = {
   customerId: string;
   isActive: boolean;
 };
@@ -9,7 +9,7 @@ type ToggleCustomerArgs = {
 const toggleActiveCustomer = async ({
   customerId,
   isActive,
-}: ToggleCustomerArgs) => {
+}: ToggleCustomerInput) => {
   const { data, error } = await supabase
     .from("customers")
     .update({ is_active: !isActive })
