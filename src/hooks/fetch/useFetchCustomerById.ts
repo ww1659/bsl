@@ -1,16 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
 
 const fetchCustomerById = async (customerId: string) => {
   const { data, error } = await supabase
-    .from("customers")
-    .select("*")
-    .eq("id", customerId)
+    .from('customers')
+    .select('*')
+    .eq('id', customerId)
     .single();
 
   if (error) {
     throw new Error(error.message);
   }
+
+  // Could use Lodash for this
 
   const customerData = {
     id: data.id,
@@ -33,7 +35,7 @@ const fetchCustomerById = async (customerId: string) => {
 
 export const useFetchCustomerById = (customerId: string) => {
   return useQuery({
-    queryKey: ["customer-by-id", customerId],
+    queryKey: ['customer-by-id', customerId],
     queryFn: () => fetchCustomerById(customerId),
     enabled: !!customerId,
   });

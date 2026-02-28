@@ -30,7 +30,7 @@ import { Edit, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
 import { Textarea } from '@/components/ui/textarea';
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
 import AddItemsDropdown from '@/components/orders/AddItemsDropdown';
 import { useUpdateOrder } from '@/hooks/update/useUpdateOrder';
 import { format } from 'date-fns';

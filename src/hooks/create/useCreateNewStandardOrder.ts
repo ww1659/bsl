@@ -1,29 +1,40 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/services/supabase";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils';
+import { z } from 'zod';
 
-type StandardOrderItem = {
-  id: number;
-  quantity: number;
-};
-
-type CreateStandardOrder = {
+type CreateStandardOrderInput = {
   customerId: string | null;
   orderName: string;
-  orderItems: StandardOrderItem[];
+  orderItems: { id: number; quantity: number }[];
 };
+
+const standardOrderInsertSchema = z.object({
+  customer_id: z.string().nullable(),
+  order_name: z.string(),
+});
+
+const standardOrderItemInsertSchema = z.object({
+  standard_order_id: z.number(),
+  item_id: z.number(),
+  quantity: z.number(),
+});
 
 const createStandardOrder = async ({
   customerId,
   orderName,
   orderItems,
-}: CreateStandardOrder) => {
+}: CreateStandardOrderInput) => {
+  const orderSnakeCaseData = toSnakeCase({
+    customerId,
+    orderName,
+  });
+  const parsedOrder = standardOrderInsertSchema.parse(orderSnakeCaseData);
+
   const { data: orderData, error: orderError } = await supabase
-    .from("standard_order")
-    .insert({
-      customer_id: customerId,
-      order_name: orderName,
-    })
-    .select("*")
+    .from('standard_order')
+    .insert(parsedOrder)
+    .select('*')
     .single();
 
   if (orderError) {
@@ -32,17 +43,17 @@ const createStandardOrder = async ({
 
   const standardOrderId = orderData.id;
 
+  const parsedItems = orderItems.map((item) => {
+    const itemSnakeCaseData = toSnakeCase({
+      standardOrderId,
+      itemId: item.id,
+      quantity: item.quantity,
+    });
+    return standardOrderItemInsertSchema.parse(itemSnakeCaseData);
+  });
+
   const { data: standardOrderItemsData, error: standardOrderItemsError } =
-    await supabase
-      .from("standard_order_items")
-      .insert(
-        orderItems.map((item) => ({
-          standard_order_id: standardOrderId,
-          item_id: item.id,
-          quantity: item.quantity,
-        }))
-      )
-      .select("*");
+    await supabase.from('standard_order_items').insert(parsedItems).select('*');
 
   if (standardOrderItemsError) {
     throw new Error(standardOrderItemsError.message);
@@ -56,7 +67,7 @@ export const useCreateStandardOrder = () => {
   return useMutation({
     mutationFn: createStandardOrder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer-standard-orders"] });
+      queryClient.invalidateQueries({ queryKey: ['customer-standard-orders'] });
     },
   });
 };

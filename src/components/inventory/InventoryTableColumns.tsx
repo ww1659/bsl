@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 import { toTitleCase } from '@/lib/utils';
 import UpdateItemDropdown from './UpdateItemDropdown';
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
 
 export const inventoryTableColumns: ColumnDef<OrderItem>[] = [
   {

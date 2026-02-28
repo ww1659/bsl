@@ -1,6 +1,7 @@
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
 import { clsx, type ClassValue } from 'clsx';
 import { addDays, format } from 'date-fns';
+import { camelCase, mapKeys, snakeCase } from 'lodash';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -128,3 +129,17 @@ export function sortCustomOrder(items: OrderItem[]): OrderItem[] {
     return priorityA - priorityB;
   });
 }
+
+// Convert object keys from camelCase to snake_case
+export const toSnakeCase = <T extends Record<string, unknown>>(
+  obj: T
+): Record<string, unknown> => {
+  return mapKeys(obj, (_, key) => snakeCase(key));
+};
+
+// Convert object keys from snake_case to camelCase
+export const toCamelCase = <T extends Record<string, unknown>>(
+  obj: T
+): Record<string, unknown> => {
+  return mapKeys(obj, (_, key) => camelCase(key));
+};

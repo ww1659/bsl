@@ -1,35 +1,40 @@
-import { supabase } from "@/services/supabase";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../use-toast";
+import { supabase } from '@/services/supabase';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../use-toast';
+import { toSnakeCase } from '@/lib/utils';
+import { z } from 'zod';
 
-type CreateGroupMutation = {
-  groupData: {
-    groupName: string;
-    email: string;
-    standardDiscount: number;
-    houseNumber: string | undefined;
-    streetName: string | undefined;
-    town: string | undefined;
-    postcode: string | undefined;
-    country: string;
-  };
+type CreateGroupInput = {
+  groupName: string;
+  email: string;
+  standardDiscount: number;
+  houseNumber?: string;
+  streetName?: string;
+  town?: string;
+  postcode?: string;
+  country: string;
 };
 
-const createGroup = async ({ groupData }: CreateGroupMutation) => {
+const groupInsertSchema = z.object({
+  group_name: z.string(),
+  email: z.string(),
+  standard_discount: z.number(),
+  house_number: z.string().optional(),
+  street_name: z.string().optional(),
+  town: z.string().optional(),
+  postcode: z.string().optional(),
+  country: z.string(),
+});
+
+const createGroup = async ({ groupData }: { groupData: CreateGroupInput }) => {
+  const groupSnakeCaseData = toSnakeCase(groupData);
+  const parsedGroup = groupInsertSchema.parse(groupSnakeCaseData);
+
   const { data, error } = await supabase
-    .from("groups")
-    .insert({
-      group_name: groupData.groupName,
-      email: groupData.email,
-      standard_discount: groupData.standardDiscount,
-      house_number: groupData.houseNumber,
-      street_name: groupData.streetName,
-      town: groupData.town,
-      postcode: groupData.postcode,
-      country: groupData.country,
-    })
-    .select("*")
+    .from('groups')
+    .insert(parsedGroup)
+    .select('*')
     .single();
 
   if (error) {
@@ -46,13 +51,13 @@ export const useCreateGroup = () => {
     mutationFn: createGroup,
     onSuccess: (data) => {
       toast({
-        title: "Success!",
+        title: 'Success!',
         description: `Group ${data.group_name} created!`,
       });
-      navigate("/customers");
+      navigate('/customers');
     },
     onError: (error) => {
-      console.error("Error creating order:", error.message);
+      console.error('Error creating order:', error.message);
     },
   });
 };

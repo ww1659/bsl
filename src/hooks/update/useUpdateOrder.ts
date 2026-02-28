@@ -1,26 +1,39 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
-import { OrderItem } from '@/types';
+import type { OrderItem } from '@/schemas';
+import { toSnakeCase } from '@/lib/utils';
+import { z } from 'zod';
 
-type UpdateOrderData = {
+type UpdateOrderInput = {
   orderId: string;
   items?: OrderItem[];
   notes?: string;
   deliveryDate?: Date;
 };
 
+const orderUpdateSchema = z.object({
+  notes: z.string().optional(),
+  delivery_date: z.string().optional(),
+});
+
 const updateOrder = async ({
   orderId,
   items,
   notes,
   deliveryDate,
-}: UpdateOrderData) => {
+}: UpdateOrderInput) => {
+  const payload: Record<string, unknown> = {};
+
+  if (notes !== undefined) payload.notes = notes;
+  if (deliveryDate !== undefined)
+    payload.deliveryDate = deliveryDate.toISOString();
+
+  const orderSnakeCaseData = toSnakeCase(payload);
+  const parsedOrderData = orderUpdateSchema.parse(orderSnakeCaseData);
+
   const { data: order, error: orderError } = await supabase
     .from('orders')
-    .update({
-      ...(notes && { notes }),
-      ...(deliveryDate && { delivery_date: deliveryDate.toISOString() }),
-    })
+    .update(parsedOrderData)
     .eq('id', orderId)
     .select()
     .single();

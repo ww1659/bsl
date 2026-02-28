@@ -8,27 +8,9 @@ import { Button } from '@/components/ui/button';
 
 import OrdersTableDropdown from './OrdersTableDropdown';
 import { Badge } from '../ui/badge';
+import type { Order, OrderItem } from '@/schemas';
 
-export type OrderItem = {
-  id: number | null;
-  itemName: string | null;
-  price: number | null;
-  quantity: number | null;
-  picked: boolean | null;
-};
-
-export type Order = {
-  total: number | null;
-  number: number | null;
-  deliveryDate: string | null;
-  status: 'pending' | 'ready' | 'sent' | 'delivered' | 'archived' | null;
-  notes: string | null;
-  groupId: string | null;
-  id: string;
-  orderItems: OrderItem[] | null;
-  groupName?: string | null | undefined;
-  customerName?: string | null | undefined;
-};
+export type { Order, OrderItem };
 
 export const ordersTableColumns: ColumnDef<Order>[] = [
   {

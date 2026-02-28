@@ -1,4 +1,4 @@
-import { OrderItem, OrderStatus } from '@/types';
+import type { OrderItem, OrderStatus } from '@/schemas';
 type OrderSummaryCard = {
   currentOrderItems: OrderItem[];
   date: Date | undefined;

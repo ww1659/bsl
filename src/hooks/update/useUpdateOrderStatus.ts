@@ -1,23 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
+import type { OrderStatus } from '@/schemas';
 
-type OrderStatus =
-  | 'pending'
-  | 'ready'
-  | 'sent'
-  | 'delivered'
-  | 'archived'
-  | undefined;
-
-type UpdateOrderStatusMutation = {
+type UpdateOrderStatusInput = {
   orderId: string;
-  newStatus: OrderStatus;
+  newStatus?: OrderStatus;
 };
 
 const updateOrderStatus = async ({
   orderId,
   newStatus,
-}: UpdateOrderStatusMutation) => {
+}: UpdateOrderStatusInput) => {
   const { data, error } = await supabase
     .from('orders')
     .update({ status: newStatus })

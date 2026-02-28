@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 //router
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from 'react-router-dom';
 
 //redux
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setGroupId } from "@/redux/features/groups/groupSlice";
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setGroupId } from '@/redux/features/groups/groupSlice';
 
 //components
-import StandardOrderCard from "@/components/customers/StandardOrderCard";
-import UpdateCustomerForm from "@/components/customers/UpdateCustomerForm";
+import StandardOrderCard from '@/components/customers/StandardOrderCard';
+import UpdateCustomerForm from '@/components/customers/UpdateCustomerForm';
 
 //ui
 import {
@@ -19,17 +19,17 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from '@/components/ui/breadcrumb';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -37,16 +37,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Spinner } from "@/components/ui/loading";
+} from '@/components/ui/dialog';
+import { Spinner } from '@/components/ui/loading';
 
 //utils
-import { toTitleCase } from "@/lib/utils";
+import { toTitleCase } from '@/lib/utils';
 
 //supabase hooks
-import { useFetchCustomerById } from "@/hooks/fetch/useFetchCustomerById";
-import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
-import { useToggleActiveCustomer } from "@/hooks/update/useToggleActiveCustomer";
+import { useFetchCustomerById } from '@/hooks/fetch/useFetchCustomerById';
+import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
+import { useToggleActiveCustomer } from '@/hooks/update/useToggleActiveCustomer';
 
 function CustomerDetailPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -64,14 +64,14 @@ function CustomerDetailPage() {
     isLoading: isCustomerLoading,
     isError: isCustomerError,
     error: customerError,
-  } = useFetchCustomerById(customerId || "");
+  } = useFetchCustomerById(customerId || '');
 
   const {
     data: groupData,
     isLoading: isGroupLoading,
     isError: isGroupError,
     error: groupError,
-  } = useFetchGroupById(groupId || "");
+  } = useFetchGroupById(groupId || '');
 
   const dispatch = useAppDispatch();
 
@@ -86,7 +86,7 @@ function CustomerDetailPage() {
   const handleToggleActive = () => {
     toggleActiveCustomer.mutate(
       {
-        customerId: customerId || "",
+        customerId: customerId || '',
         isActive: customerData?.isActive || false,
       },
       {
@@ -94,7 +94,7 @@ function CustomerDetailPage() {
           setDialogOpen(false);
         },
         onError: (error) => {
-          console.log("Error:", error);
+          console.log('Error:', error);
         },
       }
     );
@@ -128,20 +128,20 @@ function CustomerDetailPage() {
         <div>
           <div className="flex flex-row items-center gap-4">
             <h1 className="py-2">
-              {toTitleCase(customerData?.customerName || "")}
+              {toTitleCase(customerData?.customerName || '')}
             </h1>
           </div>
 
           <p className="text-muted-foreground text-base">
             {customerData?.houseNumber &&
-              `${toTitleCase(customerData.houseNumber || "")} `}
-            {toTitleCase(customerData?.streetName || "")}
+              `${toTitleCase(customerData.houseNumber || '')} `}
+            {toTitleCase(customerData?.streetName || '')}
           </p>
           <p className="text-muted-foreground text-base">
-            {toTitleCase(customerData?.town || "")}
+            {toTitleCase(customerData?.town || '')}
           </p>
           <p className="text-muted-foreground text-base">
-            {(customerData?.postcode || "").toUpperCase()}
+            {(customerData?.postcode || '').toUpperCase()}
           </p>
           {customerData?.email ? (
             <p className="text-muted-foreground text-base">
@@ -173,12 +173,6 @@ function CustomerDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-        {/* <div className="grid">
-          <AnalyticsCard customerId={customerId} />
-        </div>
-        <div className="grid">
-          <AnalyticsCard customerId={customerId} />
-        </div> */}
         <div className="grid col-span-2">
           <StandardOrderCard customerId={customerId} />
         </div>
@@ -194,11 +188,11 @@ function CustomerDetailPage() {
           </SheetHeader>
           <UpdateCustomerForm
             customerId={customerId}
-            customerName={customerData?.customerName || ""}
-            customerHouseNumber={customerData?.houseNumber || ""}
-            customerStreet={customerData?.streetName || ""}
-            customerPostcode={customerData?.postcode || ""}
-            customerEmail={customerData?.email || ""}
+            customerName={customerData?.customerName || ''}
+            customerHouseNumber={customerData?.houseNumber || ''}
+            customerStreet={customerData?.streetName || ''}
+            customerPostcode={customerData?.postcode || ''}
+            customerEmail={customerData?.email || ''}
             customerDiscount={customerData?.discount || null}
             setIsSheetOpen={setIsSheetOpen}
           />
@@ -209,8 +203,8 @@ function CustomerDetailPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              Set the customer {toTitleCase(customerData?.customerName || "")}{" "}
-              to {customerData?.isActive ? "inactive" : "active"}?
+              Set the customer {toTitleCase(customerData?.customerName || '')}{' '}
+              to {customerData?.isActive ? 'inactive' : 'active'}?
             </DialogTitle>
             {customerData?.isActive ? (
               <DialogDescription>
@@ -232,7 +226,7 @@ function CustomerDetailPage() {
                 {toggleActiveCustomer.isPending ? (
                   <Spinner className="text-secondary" size="sm" />
                 ) : (
-                  "Confirm"
+                  'Confirm'
                 )}
               </Button>
             </div>
