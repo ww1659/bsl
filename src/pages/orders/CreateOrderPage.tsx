@@ -2,19 +2,14 @@ import { MoveLeftIcon } from 'lucide-react'
 import { useState } from 'react'
 
 import LoadingWheel from '@/components/LoadingWheel'
-//components
 import CreateOrderCard from '@/components/orders/CreateOrderCard'
 import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker'
 import OrderSummaryCard from '@/components/orders/OrderSummaryCard'
-//ui
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-//supabase hooks
 import { useFetchCustomers } from '@/hooks/customer/useFetchCustomers'
-//utils
 import { toTitleCase } from '@/lib/utils'
-import type { CustomerListItem } from '@/schemas'
-import type { OrderItem } from '@/schemas'
+import type { Customer, OrderItem } from '@/schemas'
 
 function CreateOrderPage() {
   const { data, isLoading, isError, error } = useFetchCustomers()
@@ -121,7 +116,7 @@ function CreateOrderPage() {
             ) : isError ? (
               <p>Error fetching customers: {error.message}</p>
             ) : (
-              filteredCustomers?.map((customer: CustomerListItem) => (
+              filteredCustomers?.map((customer: Customer) => (
                 <Button
                   key={customer.id}
                   onClick={() =>
