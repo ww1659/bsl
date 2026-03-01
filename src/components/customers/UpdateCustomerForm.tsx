@@ -25,11 +25,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-//utils
-import { toTitleCase } from "@/lib/utils";
 import { useUpdateCustomer } from "@/hooks/customer/useUpdateCustomer";
 import { useToast } from "@/hooks/use-toast";
+//utils
+import { toTitleCase } from "@/lib/utils";
+
 import { Spinner } from "../ui/loading";
 
 const customerDetailsSchema = z.object({

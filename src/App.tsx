@@ -1,28 +1,26 @@
 //Routing
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import CustomersRoutes from './routes/CustomerRoutes';
-import OrderRoutes from './routes/OrderRoutes';
-
-//Providers
-import { ThemeProvider } from './components/ThemeProvider';
-
-//Pages
-import HomePage from './pages/HomePage';
-import SignUpPage from './pages/SignUpPage';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
 
 //Components
 import Layout from './components/layout/Layout';
-import WelcomePage from './pages/WelcomePage';
-import { useAppDispatch } from './redux/hooks';
-import { useEffect } from 'react';
-import { supabase } from './services/supabase';
-import { clearSession, setSession } from './redux/features/auth/authslice';
 import ProtectedRoute from './components/ProtectedRoute';
-import NotFoundPage from './pages/NotFoundPage';
 import PublicRoute from './components/PublicRoute';
-import PickingListPage from './pages/pickingList/PickingListPage';
+//Providers
+import { ThemeProvider } from './components/ThemeProvider';
+//Pages
+import HomePage from './pages/HomePage';
 import InventoryPage from './pages/inventory/InventoryPage';
+import NotFoundPage from './pages/NotFoundPage';
+import PickingListPage from './pages/pickingList/PickingListPage';
+import SignUpPage from './pages/SignUpPage';
+import WelcomePage from './pages/WelcomePage';
+import { clearSession, setSession } from './redux/features/auth/authslice';
+import { useAppDispatch } from './redux/hooks';
+import CustomersRoutes from './routes/CustomerRoutes';
 import LoginRoutes from './routes/LoginRoutes';
+import OrderRoutes from './routes/OrderRoutes';
+import { supabase } from './services/supabase';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();

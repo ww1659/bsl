@@ -4,12 +4,6 @@ type CustomerDetailsCard = {
 };
 
 //redux
-import { useAppDispatch } from "@/redux/hooks";
-import { openDialog } from "@/redux/features/customers/updateCustomerSlice";
-
-//supabase hooks
-import { useFetchCustomerById } from "@/hooks/customer/useFetchCustomerById";
-
 //ui
 import {
   Card,
@@ -18,13 +12,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "../ui/button";
-
+//supabase hooks
+import { useFetchCustomerById } from "@/hooks/customer/useFetchCustomerById";
+import { useFetchGroupById } from "@/hooks/group/useFetchGroupById";
 //components
-
 //utils
 import { toTitleCase } from "@/lib/utils";
-import { useFetchGroupById } from "@/hooks/group/useFetchGroupById";
+import { openDialog } from "@/redux/features/customers/updateCustomerSlice";
+import { useAppDispatch } from "@/redux/hooks";
+
+import { Button } from "../ui/button";
 
 function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
   const dispatch = useAppDispatch();

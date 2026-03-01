@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
-import { NavBar } from './NavBar';
-import { Header } from './Header';
 import { useLocation } from 'react-router-dom';
+
 import { Toaster } from '../ui/toaster';
+import { Header } from './Header';
+import { NavBar } from './NavBar';
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const location = useLocation();

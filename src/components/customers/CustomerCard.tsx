@@ -5,10 +5,11 @@ type CustomerCardProps = {
 };
 
 import { Link } from "react-router-dom";
-import { toTitleCase } from "@/lib/utils";
-import { useAppDispatch } from "@/redux/hooks";
-import { setCustomerId } from "@/redux/features/customers/customersSlice";
+
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { toTitleCase } from "@/lib/utils";
+import { setCustomerId } from "@/redux/features/customers/customersSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
 function CustomerCard({
   groupName,

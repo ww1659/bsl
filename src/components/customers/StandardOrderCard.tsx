@@ -5,7 +5,7 @@ type StandardOrderCard = {
   customerId: string | null;
 };
 
-import type { OrderItem } from '@/schemas';
+import { Plus, Trash2, Trash2Icon } from 'lucide-react';
 
 //ui
 import {
@@ -15,7 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '../ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -31,29 +38,20 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Spinner } from '../ui/loading';
-
-//utils
-import { sortCustomOrder, toTitleCase } from '@/lib/utils';
+import { useDeleteStandardOrder } from '@/hooks/standardOrder/useDeleteStandardOrder';
 import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders';
-import { Plus, Trash2, Trash2Icon } from 'lucide-react';
-
-//components
-import NewStandardOrderForm from './NewStandardOrderForm';
-import AddItemsDropdown from '../orders/AddItemsDropdown';
-
+import { useUpdateStandardOrder } from '@/hooks/standardOrder/useUpdateStandardOrder';
 //hooks
 import { useToast } from '@/hooks/use-toast';
-import { useUpdateStandardOrder } from '@/hooks/standardOrder/useUpdateStandardOrder';
-import { useDeleteStandardOrder } from '@/hooks/standardOrder/useDeleteStandardOrder';
+//utils
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
+import type { OrderItem } from '@/schemas';
+
+import AddItemsDropdown from '../orders/AddItemsDropdown';
+import { Button } from '../ui/button';
+import { Spinner } from '../ui/loading';
+//components
+import NewStandardOrderForm from './NewStandardOrderForm';
 
 function StandardOrderCard({ customerId }: StandardOrderCard) {
   const { toast } = useToast();

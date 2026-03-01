@@ -25,11 +25,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-//utils
-import { toTitleCase } from "@/lib/utils";
 import { useUpdateGroup } from "@/hooks/group/useUpdateGroup";
 import { useToast } from "@/hooks/use-toast";
+//utils
+import { toTitleCase } from "@/lib/utils";
 
 const groupDetailsSchema = z.object({
   name: z.string().min(2, {

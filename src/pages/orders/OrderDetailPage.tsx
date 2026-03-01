@@ -1,10 +1,13 @@
+import { format } from 'date-fns';
+import { Edit, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { useFetchOrderById } from '@/hooks/order/useFetchOrderById';
-import { sortCustomOrder, toSentenceCase, toTitleCase } from '@/lib/utils';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 
+import AddItemsDropdown from '@/components/orders/AddItemsDropdown';
+import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -12,9 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useUpdateOrderStatus } from '@/hooks/order/useUpdateOrderStatus';
-import { Badge } from '@/components/ui/badge';
-
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import {
   Table,
   TableBody,
@@ -24,17 +26,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId';
-import { Input } from '@/components/ui/input';
-import { Edit, Trash2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
 import { Textarea } from '@/components/ui/textarea';
-import type { OrderItem } from '@/schemas';
-import AddItemsDropdown from '@/components/orders/AddItemsDropdown';
+import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId';
+import { useFetchOrderById } from '@/hooks/order/useFetchOrderById';
 import { useUpdateOrder } from '@/hooks/order/useUpdateOrder';
-import { format } from 'date-fns';
+import { useUpdateOrderStatus } from '@/hooks/order/useUpdateOrderStatus';
 import { useToast } from '@/hooks/use-toast';
+import { sortCustomOrder, toSentenceCase, toTitleCase } from '@/lib/utils';
+import type { OrderItem } from '@/schemas';
 
 function OrderDetailPage() {
   const { orderId } = useParams<{ orderId: string }>();

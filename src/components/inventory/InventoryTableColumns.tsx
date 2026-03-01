@@ -1,10 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
+import { Button } from '@/components/ui/button';
 import { toTitleCase } from '@/lib/utils';
-import UpdateItemDropdown from './UpdateItemDropdown';
 import type { OrderItem } from '@/schemas';
+
+import UpdateItemDropdown from './UpdateItemDropdown';
 
 export const inventoryTableColumns: ColumnDef<OrderItem>[] = [
   {

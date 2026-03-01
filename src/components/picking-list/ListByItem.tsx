@@ -5,11 +5,9 @@ type ListByItemProps = {
 };
 
 //supabase hooks
-import { useFetchPickingListByItem } from '@/hooks/order/useFetchPickingListByItem';
+import { format } from 'date-fns';
+import { Check, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { useState } from 'react';
-
-//utils
-import { toTitleCase } from '@/lib/utils';
 
 //ui
 import {
@@ -20,14 +18,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -35,16 +25,24 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { useFetchPickingListByItem } from '@/hooks/order/useFetchPickingListByItem';
+//utils
+import { toTitleCase } from '@/lib/utils';
 
-import { Check, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Button } from '../ui/button';
-import { format } from 'date-fns';
 
 function ListByItem({ date }: ListByItemProps) {
   const [activeRow, setActiveRow] = useState<number | null>(null);

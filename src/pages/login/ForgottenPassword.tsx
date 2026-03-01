@@ -1,5 +1,11 @@
 //components
-import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+//zod form validation
+import { z } from 'zod';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -9,17 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
-//zod form validation
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/loading';
 //connect to Supabase client
 import { supabase } from '@/services/supabase';
-import { Spinner } from '@/components/ui/loading';
-import { Link } from 'react-router-dom';
 
 const forgottenPasswordSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).min(2).max(50),

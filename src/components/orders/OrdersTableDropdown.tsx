@@ -3,6 +3,9 @@ type OrdersTableDropdownProps = {
   orderStatus: 'pending' | 'ready' | 'sent' | 'delivered' | 'archived' | null;
 };
 
+import { ListOrderedIcon, MoreHorizontal, SquareCheckBig } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
-import { ListOrderedIcon, MoreHorizontal, SquareCheckBig } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useUpdateOrderStatus } from '@/hooks/order/useUpdateOrderStatus';
+
+import { Button } from '../ui/button';
 
 function OrdersTableDropdown({
   orderId,

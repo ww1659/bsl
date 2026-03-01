@@ -1,11 +1,5 @@
 import { useState } from "react";
 
-//Redux
-import { useAppSelector } from "@/redux/hooks";
-
-//Supabase Hooks
-import { useFetchGroupById } from "@/hooks/group/useFetchGroupById";
-
 //UI
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -15,11 +9,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Button } from "../ui/button";
-
+//Supabase Hooks
+import { useFetchGroupById } from "@/hooks/group/useFetchGroupById";
 //Utils
 import { toTitleCase } from "@/lib/utils";
+//Redux
+import { useAppSelector } from "@/redux/hooks";
 
+import { Button } from "../ui/button";
 //Components
 import UpdateGroupForm from "./UpdateGroupForm";
 

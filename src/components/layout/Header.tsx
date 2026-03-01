@@ -1,6 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
 import {
   AlignStartVertical,
   List,
@@ -9,9 +6,10 @@ import {
   ShoppingCart,
   Users2,
 } from "lucide-react";
+import React from "react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +18,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { supabase } from "@/services/supabase";
+
 import {
   Sheet,
   SheetClose,
@@ -29,7 +29,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { supabase } from "@/services/supabase";
 
 export const Header: React.FC = () => {
   // const session: Session | null = useAppSelector((state) => state.auth.session);

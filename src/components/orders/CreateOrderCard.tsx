@@ -11,10 +11,7 @@ type CreateOrderCard = {
 };
 
 //utils
-import { sortCustomOrder, toTitleCase } from '@/lib/utils';
-
-//supabase hooks
-import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders';
+import { MoreHorizontal, Trash2Icon } from 'lucide-react';
 
 //ui
 import {
@@ -24,6 +21,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
@@ -42,21 +47,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { MoreHorizontal, Trash2Icon } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
-import { Button } from '../ui/button';
-import AddItemsDropdown from './AddItemsDropdown';
-import { Input } from '../ui/input';
-import LoadingWheel from '../LoadingWheel';
 import { useFetchGroupById } from '@/hooks/group/useFetchGroupById';
+//supabase hooks
+import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils';
+
+import LoadingWheel from '../LoadingWheel';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import AddItemsDropdown from './AddItemsDropdown';
 import { NewOrderNotes } from './NewOrderNotes';
 
 function CreateOrderCard({

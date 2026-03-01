@@ -28,12 +28,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
 //utils
 import { sortCustomOrder, toTitleCase } from '@/lib/utils';
-import { Switch } from '../ui/switch';
-import { Label } from '../ui/label';
 import type { OrderItem } from '@/schemas';
+
+import { Label } from '../ui/label';
+import { Switch } from '../ui/switch';
 
 function ItemsSheet({
   selectedOrder,

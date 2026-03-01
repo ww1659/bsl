@@ -5,9 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { useFetchOrderStatsByGroup } from "@/hooks/order/useFetchOrderStatsByGroup";
 import { useAppSelector } from "@/redux/hooks";
+
 import { Progress } from "../ui/progress";
 
 function GroupOrdersCard() {

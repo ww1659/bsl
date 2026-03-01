@@ -1,15 +1,11 @@
 //router
 import { useParams } from 'react-router-dom';
 
-//redux
-import { useAppSelector } from '@/redux/hooks';
-
 //components
 import CustomerList from '@/components/customers/CustomerList';
 import GroupDetailsCard from '@/components/customers/GroupDetailsCard';
 import GroupOrdersCard from '@/components/customers/GroupOrdersCard';
 import GroupPendingOrdersCard from '@/components/customers/GroupPendingOrdersCard';
-
 //ui
 import {
   Breadcrumb,
@@ -19,9 +15,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-
 //utils
 import { removeDashes, toTitleCase } from '@/lib/utils';
+//redux
+import { useAppSelector } from '@/redux/hooks';
 function CustomerGroupPage() {
   const { groupName } = useParams();
   const groupId = useAppSelector((state) => state.group.groupId);

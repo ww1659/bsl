@@ -1,14 +1,13 @@
-import { toTitleCase } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
-
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-
-import OrdersTableDropdown from './OrdersTableDropdown';
-import { Badge } from '../ui/badge';
+import { toTitleCase } from '@/lib/utils';
 import type { Order, OrderItem } from '@/schemas';
+
+import { Badge } from '../ui/badge';
+import OrdersTableDropdown from './OrdersTableDropdown';
 
 export type { Order, OrderItem };
 

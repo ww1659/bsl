@@ -1,3 +1,4 @@
+import { Session } from '@supabase/supabase-js';
 import {
   AlignStartVertical,
   List,
@@ -6,7 +7,9 @@ import {
   UserCircle2,
   Users2,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,13 +18,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-import { Link } from 'react-router-dom';
-import { supabase } from '@/services/supabase';
-import { DarkModeToggle } from '../DarkModeToggle';
-import { Session } from '@supabase/supabase-js';
 import { useAppSelector } from '@/redux/hooks';
+import { supabase } from '@/services/supabase';
+
+import { DarkModeToggle } from '../DarkModeToggle';
 
 export const NavBar: React.FC = () => {
   async function handleSignOut() {

@@ -1,33 +1,35 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAppSelector } from "@/redux/hooks";
-import { useFetchGroupedCustomers } from "@/hooks/customer/useFetchCustomersByGroup";
-import CustomerCard from "./CustomerCard";
+import debounce from 'lodash.debounce';
+import { useCallback, useEffect, useState } from 'react';
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "../ui/input";
-import debounce from "lodash.debounce";
+} from '@/components/ui/card';
+import { useFetchGroupedCustomers } from '@/hooks/customer/useFetchCustomersByGroup';
+import { useAppSelector } from '@/redux/hooks';
+
+import { Input } from '../ui/input';
+import CustomerCard from './CustomerCard';
 
 type CustomerListProps = {
   groupName: string | undefined;
 };
 
 function CustomerList({ groupName }: CustomerListProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const groupId = useAppSelector((state) => state.group.groupId);
 
   const { data, isLoading, isError, error } = useFetchGroupedCustomers(
-    groupId || "",
+    groupId || '',
     debouncedSearchTerm
   );
 
   const sortedData = data?.sort((a, b) =>
-    (a.customer_name ?? "").localeCompare(b.customer_name ?? "")
+    (a.customer_name ?? '').localeCompare(b.customer_name ?? '')
   );
 
   const debouncedSetSearchTerm = useCallback((value: string) => {

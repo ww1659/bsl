@@ -1,13 +1,12 @@
 //supabase queries
-import { useFetchOrders } from '@/hooks/order/useFetchOrders';
+import { useSearchParams } from 'react-router-dom';
 
 //components
 import NewOrderButton from '@/components/orders/NewOrderButton';
-
 //utils
 import { OrdersTable } from '@/components/orders/OrdersTable';
 import { ordersTableColumns } from '@/components/orders/OrdersTableColumns';
-import { useSearchParams } from 'react-router-dom';
+import { useFetchOrders } from '@/hooks/order/useFetchOrders';
 
 function OrdersPage() {
   const [searchParams, setSearchParams] = useSearchParams();

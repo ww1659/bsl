@@ -1,11 +1,12 @@
+import { Link } from "react-router-dom";
+
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 
 function HomePage() {
   return (

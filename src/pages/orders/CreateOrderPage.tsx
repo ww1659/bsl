@@ -1,22 +1,19 @@
+import { MoveLeftIcon } from 'lucide-react';
 import { useState } from 'react';
-import type { Customer, OrderItem } from '@/schemas';
 
+import LoadingWheel from '@/components/LoadingWheel';
 //components
 import CreateOrderCard from '@/components/orders/CreateOrderCard';
-
+import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
+import OrderSummaryCard from '@/components/orders/OrderSummaryCard';
 //ui
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
 //supabase hooks
 import { useFetchCustomers } from '@/hooks/customer/useFetchCustomers';
-
 //utils
 import { toTitleCase } from '@/lib/utils';
-import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
-import { MoveLeftIcon } from 'lucide-react';
-import OrderSummaryCard from '@/components/orders/OrderSummaryCard';
-import LoadingWheel from '@/components/LoadingWheel';
+import type { Customer, OrderItem } from '@/schemas';
 
 function CreateOrderPage() {
   const { data, isLoading, isError, error } = useFetchCustomers();

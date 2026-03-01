@@ -5,6 +5,13 @@ type OrderItemsTableProps = {
 };
 
 import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
   Table,
   TableBody,
   TableCell,
@@ -12,15 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId';
 import { toTitleCase } from '@/lib/utils';
+
 import { Separator } from '../ui/separator';
 
 function OrderItemsTable({

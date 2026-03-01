@@ -1,6 +1,7 @@
 // import ForgottenPassword from '@/pages/login/ForgottenPassword';
+import { Route,Routes } from 'react-router-dom';
+
 import LoginPage from '@/pages/login/LoginPage';
-import { Routes, Route } from 'react-router-dom';
 
 function LoginRoutes() {
   return (

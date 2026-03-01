@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Session, AuthApiError } from "@supabase/supabase-js";
+import { AuthApiError,Session } from "@supabase/supabase-js";
 
 interface AuthState {
   session: Session | null;

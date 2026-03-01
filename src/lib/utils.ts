@@ -1,8 +1,9 @@
-import type { OrderItem } from '@/schemas';
-import { clsx, type ClassValue } from 'clsx';
+import { type ClassValue,clsx } from 'clsx';
 import { addDays, format } from 'date-fns';
 import { camelCase, mapKeys, snakeCase } from 'lodash';
 import { twMerge } from 'tailwind-merge';
+
+import type { OrderItem } from '@/schemas';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

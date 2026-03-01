@@ -1,8 +1,14 @@
 //router
+import { zodResolver } from "@hookform/resolvers/zod";
+//supabase client
+import { createClient } from "@supabase/supabase-js";
+import { Database } from "database.types";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+//zod form validation
+import { z } from "zod";
 
-//components
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,16 +18,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-//supabase client
-import { createClient } from "@supabase/supabase-js";
-import { Database } from "database.types";
-
-//zod form validation
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
+//components
+import { Input } from "@/components/ui/input";
 
 //connect to Supabase client
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;

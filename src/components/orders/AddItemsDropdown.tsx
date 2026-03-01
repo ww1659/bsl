@@ -6,6 +6,9 @@ type ItemsDropDown = {
   disabled?: boolean;
 };
 
+import { SelectSeparator } from '@radix-ui/react-select';
+import { Plus } from 'lucide-react';
+
 import {
   Select,
   SelectContent,
@@ -14,12 +17,8 @@ import {
   SelectLabel,
   SelectTrigger,
 } from '@/components/ui/select';
-
 import { useFetchItems } from '@/hooks/item/useFetchItems';
-
 import { toTitleCase } from '@/lib/utils';
-import { SelectSeparator } from '@radix-ui/react-select';
-import { Plus } from 'lucide-react';
 
 function AddItemsDropdown({
   currentOrderItems,

@@ -1,9 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../use-toast';
-import { supabase } from '@/services/supabase';
-import { toSnakeCase } from '@/lib/utils';
 import { z } from 'zod';
+
+import { toSnakeCase } from '@/lib/utils';
+import { supabase } from '@/services/supabase';
+
+import { useToast } from '../use-toast';
 
 type CreateCustomerInput = {
   customerName: string;

@@ -1,16 +1,10 @@
 import { useState } from 'react';
-
 //router
 import { Link, useParams } from 'react-router-dom';
-
-//redux
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setGroupId } from '@/redux/features/groups/groupSlice';
 
 //components
 import StandardOrderCard from '@/components/customers/StandardOrderCard';
 import UpdateCustomerForm from '@/components/customers/UpdateCustomerForm';
-
 //ui
 import {
   Breadcrumb,
@@ -20,16 +14,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -38,15 +23,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/loading';
-
-//utils
-import { toTitleCase } from '@/lib/utils';
-
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import { Switch } from '@/components/ui/switch';
 //supabase hooks
 import { useFetchCustomerById } from '@/hooks/customer/useFetchCustomerById';
-import { useFetchGroupById } from '@/hooks/group/useFetchGroupById';
 import { useToggleActiveCustomer } from '@/hooks/customer/useToggleActiveCustomer';
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById';
+//utils
+import { toTitleCase } from '@/lib/utils';
+import { setGroupId } from '@/redux/features/groups/groupSlice';
+//redux
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
 function CustomerDetailPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);

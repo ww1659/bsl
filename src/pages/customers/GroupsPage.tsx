@@ -1,13 +1,12 @@
 //components
-import GroupCard from "@/components/customers/GroupCard";
-
 //ui
 import { Plus } from "lucide-react";
-import { ButtonLink } from "@/components/ui/button-link";
 
+import GroupCard from "@/components/customers/GroupCard";
+import LoadingWheel from "@/components/LoadingWheel";
+import { ButtonLink } from "@/components/ui/button-link";
 //database hooks
 import { useFetchGroups } from "@/hooks/group/useFetchGroups";
-import LoadingWheel from "@/components/LoadingWheel";
 
 function GroupsPage() {
   const { data, isLoading, isError, error } = useFetchGroups();

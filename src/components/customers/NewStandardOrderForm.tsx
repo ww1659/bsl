@@ -1,6 +1,8 @@
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +22,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFetchItems } from "@/hooks/item/useFetchItems";
-import { toTitleCase } from "@/lib/utils";
-import { Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
 import { useCreateStandardOrder } from "@/hooks/standardOrder/useCreateStandardOrder";
 import { useToast } from "@/hooks/use-toast";
+import { toTitleCase } from "@/lib/utils";
 
 type StandardOrderForm = {
   customerId: string;

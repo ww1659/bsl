@@ -1,10 +1,11 @@
+import { Plus } from 'lucide-react';
+import { useMemo, useState } from 'react';
+
 import { InventoryTable } from '@/components/inventory/InventoryTable';
 import { inventoryTableColumns } from '@/components/inventory/InventoryTableColumns';
+import NewItemDialog from '@/components/inventory/NewItemDialog';
 import { Button } from '@/components/ui/button';
 import { useFetchItems } from '@/hooks/item/useFetchItems';
-import { useMemo, useState } from 'react';
-import NewItemDialog from '@/components/inventory/NewItemDialog';
-import { Plus } from 'lucide-react';
 import { sortCustomOrder } from '@/lib/utils';
 
 function InventoryPage() {

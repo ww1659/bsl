@@ -1,11 +1,11 @@
 //router
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+//zod form validation
+import { z } from 'zod';
 
-//redux
-import { useAppDispatch } from '@/redux/hooks';
-
-//components
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -15,17 +15,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
-//zod form validation
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+//components
+import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/loading';
 import { setSession } from '@/redux/features/auth/authslice';
-
+//redux
+import { useAppDispatch } from '@/redux/hooks';
 //connect to Supabase client
 import { supabase } from '@/services/supabase';
-import { Spinner } from '@/components/ui/loading';
 // import { Link } from 'react-router-dom';
 
 const loginSchema = z.object({

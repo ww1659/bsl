@@ -1,4 +1,9 @@
+import { format, parseISO } from "date-fns";
 import { Link } from "react-router-dom";
+
+import { toTitleCase } from "@/lib/utils";
+
+import { Badge } from "../ui/badge";
 import {
   Card,
   CardContent,
@@ -7,9 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { toTitleCase } from "@/lib/utils";
-import { format, parseISO } from "date-fns";
-import { Badge } from "../ui/badge";
 
 type OrderCardProps = {
   orderId: string | null;

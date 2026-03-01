@@ -1,7 +1,8 @@
-import { Routes, Route } from "react-router-dom";
+import { Route,Routes } from "react-router-dom";
+
 import CreateOrderPage from "@/pages/orders/CreateOrderPage";
-import OrdersPage from "@/pages/orders/OrdersPage";
 import OrderDetailPage from "@/pages/orders/OrderDetailPage";
+import OrdersPage from "@/pages/orders/OrdersPage";
 
 function OrderRoutes() {
   return (

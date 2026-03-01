@@ -1,4 +1,5 @@
 import { supabase } from "@/services/supabase";
+
 import { Button } from "./ui/button";
 
 async function handleSignOut() {
