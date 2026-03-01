@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { OrderStatus } from '@/schemas';
-import { supabase } from '@/services/supabase';
+import { OrderStatus } from '@/schemas'
+import { supabase } from '@/services/supabase'
 
 type UpdateOrderStatusInput = {
   orderId: string;
@@ -17,21 +17,21 @@ const updateOrderStatus = async ({
     .update({ status: newStatus })
     .eq('id', orderId)
     .select()
-    .single();
+    .single()
 
-  if (error) throw new Error(error.message);
-  return data;
-};
+  if (error) throw new Error(error.message)
+  return data
+}
 
 export const useUpdateOrderStatus = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: updateOrderStatus,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
     },
     onError: (error) => {
-      console.error('Failed to update order status:', error);
+      console.error('Failed to update order status:', error)
     },
-  });
-};
+  })
+}

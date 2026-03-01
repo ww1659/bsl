@@ -1,15 +1,15 @@
 //supabase queries
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom'
 
 //components
-import NewOrderButton from '@/components/orders/NewOrderButton';
+import NewOrderButton from '@/components/orders/NewOrderButton'
 //utils
-import { OrdersTable } from '@/components/orders/OrdersTable';
-import { ordersTableColumns } from '@/components/orders/OrdersTableColumns';
-import { useFetchOrders } from '@/hooks/order/useFetchOrders';
+import { OrdersTable } from '@/components/orders/OrdersTable'
+import { ordersTableColumns } from '@/components/orders/OrdersTableColumns'
+import { useFetchOrders } from '@/hooks/order/useFetchOrders'
 
 function OrdersPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const {
     data: currentOrders,
@@ -19,7 +19,7 @@ function OrdersPage() {
   } = useFetchOrders({
     status: ['pending', 'ready', 'sent', 'delivered', 'archived'],
     month: searchParams.get('month') ?? undefined,
-  });
+  })
 
   return (
     <>
@@ -47,7 +47,7 @@ function OrdersPage() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default OrdersPage;
+export default OrdersPage

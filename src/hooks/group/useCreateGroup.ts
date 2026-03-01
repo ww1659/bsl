@@ -1,11 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils';
-import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils'
+import { supabase } from '@/services/supabase'
 
-import { useToast } from '../use-toast';
+import { useToast } from '../use-toast'
 
 type CreateGroupInput = {
   groupName: string;
@@ -27,39 +27,39 @@ const groupInsertSchema = z.object({
   town: z.string().optional(),
   postcode: z.string().optional(),
   country: z.string(),
-});
+})
 
 const createGroup = async ({ groupData }: { groupData: CreateGroupInput }) => {
-  const groupSnakeCaseData = toSnakeCase(groupData);
-  const parsedGroup = groupInsertSchema.parse(groupSnakeCaseData);
+  const groupSnakeCaseData = toSnakeCase(groupData)
+  const parsedGroup = groupInsertSchema.parse(groupSnakeCaseData)
 
   const { data, error } = await supabase
     .from('groups')
     .insert(parsedGroup)
     .select('*')
-    .single();
+    .single()
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(error.message)
   }
 
-  return data;
-};
+  return data
+}
 
 export const useCreateGroup = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const navigate = useNavigate()
+  const { toast } = useToast()
   return useMutation({
     mutationFn: createGroup,
     onSuccess: (data) => {
       toast({
         title: 'Success!',
         description: `Group ${data.group_name} created!`,
-      });
-      navigate('/customers');
+      })
+      navigate('/customers')
     },
     onError: (error) => {
-      console.error('Error creating order:', error.message);
+      console.error('Error creating order:', error.message)
     },
-  });
-};
+  })
+}

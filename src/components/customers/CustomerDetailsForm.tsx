@@ -1,14 +1,14 @@
 type CustomerDetailsForm = {
-  customerId: string | null;
-};
+  customerId: string | null
+}
 
 //zod forms
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 //components
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -16,31 +16,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 //supabase hooks
-import { useFetchCustomerById } from "@/hooks/customer/useFetchCustomerById";
-import { toTitleCase } from "@/lib/utils";
+import { useFetchCustomerById } from '@/hooks/customer/useFetchCustomerById'
+import { toTitleCase } from '@/lib/utils'
 
 const customerDetailsSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: 'Name must be at least 2 characters.',
   }),
   houseNumber: z.union([
     z
       .string()
       .min(1, {
-        message: "House Number must be at least 1 character.",
+        message: 'House Number must be at least 1 character.',
       })
       .optional(),
     z.null(),
-    z.literal("0"),
+    z.literal('0'),
   ]),
   street: z.union([
     z
       .string()
       .min(1, {
-        message: "Street name must be at least 1 character.",
+        message: 'Street name must be at least 1 character.',
       })
       .optional(),
     z.null(),
@@ -49,7 +49,7 @@ const customerDetailsSchema = z.object({
     z
       .string()
       .regex(/^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i, {
-        message: "Invalid UK postcode format.",
+        message: 'Invalid UK postcode format.',
       })
       .optional(),
     z.null(),
@@ -58,36 +58,36 @@ const customerDetailsSchema = z.object({
     z
       .string()
       .email({
-        message: "Invalid email address.",
+        message: 'Invalid email address.',
       })
       .optional()
-      .or(z.literal("")),
+      .or(z.literal('')),
     z.null(),
   ]),
-});
+})
 
 function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
   const { data, isLoading, isError, error } = useFetchCustomerById(
-    customerId || ""
-  );
+    customerId || ''
+  )
 
   const form = useForm<z.infer<typeof customerDetailsSchema>>({
     resolver: zodResolver(customerDetailsSchema),
     defaultValues: {
-      name: "",
-      houseNumber: "",
-      street: "",
-      postcode: "",
-      email: "",
+      name: '',
+      houseNumber: '',
+      street: '',
+      postcode: '',
+      email: '',
     },
-  });
+  })
 
   function onSubmit(values: z.infer<typeof customerDetailsSchema>) {
-    console.log(values);
+    console.log(values)
   }
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   if (data)
     return (
@@ -101,7 +101,7 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
                 <FormLabel>Customer Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={toTitleCase(data.customerName || "")}
+                    placeholder={toTitleCase(data.customerName || '')}
                     {...field}
                   />
                 </FormControl>
@@ -117,9 +117,9 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
                 <FormLabel>House Number</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={data.houseNumber || ""}
+                    placeholder={data.houseNumber || ''}
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value ?? ''}
                   />
                 </FormControl>
                 <FormMessage />
@@ -134,15 +134,15 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
                 <FormLabel>Street Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={data.streetName || ""}
+                    placeholder={data.streetName || ''}
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value ?? ''}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          />{" "}
+          />{' '}
           <FormField
             control={form.control}
             name="postcode"
@@ -151,9 +151,9 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
                 <FormLabel>Postcode</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={data.postcode || ""}
+                    placeholder={data.postcode || ''}
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value ?? ''}
                   />
                 </FormControl>
                 <FormMessage />
@@ -168,9 +168,9 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
                 <FormLabel>Customer Email</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={data.email || ""}
+                    placeholder={data.email || ''}
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value ?? ''}
                   />
                 </FormControl>
                 <FormMessage />
@@ -182,7 +182,7 @@ function CustomerDetailsForm({ customerId }: CustomerDetailsForm) {
           </Button>
         </form>
       </Form>
-    );
+    )
 }
 
-export default CustomerDetailsForm;
+export default CustomerDetailsForm

@@ -1,40 +1,40 @@
-import { MoveLeftIcon } from 'lucide-react';
-import { useState } from 'react';
+import { MoveLeftIcon } from 'lucide-react'
+import { useState } from 'react'
 
-import LoadingWheel from '@/components/LoadingWheel';
+import LoadingWheel from '@/components/LoadingWheel'
 //components
-import CreateOrderCard from '@/components/orders/CreateOrderCard';
-import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
-import OrderSummaryCard from '@/components/orders/OrderSummaryCard';
+import CreateOrderCard from '@/components/orders/CreateOrderCard'
+import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker'
+import OrderSummaryCard from '@/components/orders/OrderSummaryCard'
 //ui
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 //supabase hooks
-import { useFetchCustomers } from '@/hooks/customer/useFetchCustomers';
+import { useFetchCustomers } from '@/hooks/customer/useFetchCustomers'
 //utils
-import { toTitleCase } from '@/lib/utils';
-import type { Customer, OrderItem } from '@/schemas';
+import { toTitleCase } from '@/lib/utils'
+import type { Customer, OrderItem } from '@/schemas'
 
 function CreateOrderPage() {
-  const { data, isLoading, isError, error } = useFetchCustomers();
+  const { data, isLoading, isError, error } = useFetchCustomers()
 
-  const [currentStep, setCurrentStep] = useState(1);
-  const [customerId, setCustomerId] = useState<string | null>(null);
-  const [groupId, setGroupId] = useState<string | null>(null);
-  const [customerName, setCustomerName] = useState<string | null>(null);
-  const [customerDiscount, setCustomerDiscount] = useState<number | null>(0);
-  const [date, setDate] = useState<Date | undefined>();
-  const [currentOrderItems, setCurrentOrderItems] = useState<OrderItem[]>([]);
-  const [orderNotes, setOrderNotes] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [currentStep, setCurrentStep] = useState(1)
+  const [customerId, setCustomerId] = useState<string | null>(null)
+  const [groupId, setGroupId] = useState<string | null>(null)
+  const [customerName, setCustomerName] = useState<string | null>(null)
+  const [customerDiscount, setCustomerDiscount] = useState<number | null>(0)
+  const [date, setDate] = useState<Date | undefined>()
+  const [currentOrderItems, setCurrentOrderItems] = useState<OrderItem[]>([])
+  const [orderNotes, setOrderNotes] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const handleNextStep = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
+    setCurrentStep((prevStep) => prevStep + 1)
+  }
 
   const handlePrevStep = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
-  };
+    setCurrentStep((prevStep) => prevStep - 1)
+  }
 
   const handleCustomerSelection = (
     id: string,
@@ -42,24 +42,24 @@ function CreateOrderPage() {
     customerDiscount: number | null,
     groupId: string
   ) => {
-    setCustomerId(id);
-    setCustomerName(customerName);
-    setCustomerDiscount(customerDiscount);
-    setGroupId(groupId);
-    handleNextStep();
-  };
+    setCustomerId(id)
+    setCustomerName(customerName)
+    setCustomerDiscount(customerDiscount)
+    setGroupId(groupId)
+    handleNextStep()
+  }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value.toLowerCase());
-  };
+    setSearchTerm(e.target.value.toLowerCase())
+  }
 
   const sortedCustomers = data?.sort((a, b) =>
     (a.customer_name || '').localeCompare(b.customer_name || '')
-  );
+  )
 
   const filteredCustomers = sortedCustomers?.filter((customer) =>
     (customer.customer_name || '').toLowerCase().includes(searchTerm)
-  );
+  )
 
   return (
     <div>
@@ -215,7 +215,7 @@ function CreateOrderPage() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default CreateOrderPage;
+export default CreateOrderPage

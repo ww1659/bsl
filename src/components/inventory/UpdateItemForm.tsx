@@ -1,8 +1,8 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -10,11 +10,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useUpdateItem } from '@/hooks/item/useUpdateItem';
-import { useToast } from '@/hooks/use-toast';
-import { toTitleCase } from '@/lib/utils';
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { useUpdateItem } from '@/hooks/item/useUpdateItem'
+import { useToast } from '@/hooks/use-toast'
+import { toTitleCase } from '@/lib/utils'
 
 type UpdateItemFormProps = {
   itemId: number;
@@ -36,7 +36,7 @@ const updateItemSchema = z.object({
       message:
         'Price must be a valid currency value with up to 2 decimal places',
     }),
-});
+})
 
 function UpdateItemForm({
   itemId,
@@ -44,8 +44,8 @@ function UpdateItemForm({
   itemPrice,
   setIsSheetOpen,
 }: UpdateItemFormProps) {
-  const updateItem = useUpdateItem();
-  const { toast } = useToast();
+  const updateItem = useUpdateItem()
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof updateItemSchema>>({
     resolver: zodResolver(updateItemSchema),
@@ -53,7 +53,7 @@ function UpdateItemForm({
       itemName: toTitleCase(itemName || ''),
       itemPrice: itemPrice || 0,
     },
-  });
+  })
 
   function onSubmit(values: z.infer<typeof updateItemSchema>) {
     updateItem.mutate(
@@ -64,24 +64,24 @@ function UpdateItemForm({
       },
       {
         onSuccess: (data) => {
-          setIsSheetOpen(false);
+          setIsSheetOpen(false)
           toast({
             title: 'Item Updated',
             description: `Item "${toTitleCase(
               data.item_name || ''
             )}" updated successfully`,
             duration: 5000,
-          });
+          })
         },
         onError: (error) => {
           toast({
             title: 'Failed to Update Item',
             description: error.message,
             duration: 5000,
-          });
+          })
         },
       }
-    );
+    )
   }
 
   return (
@@ -128,7 +128,7 @@ function UpdateItemForm({
         </Button>
       </form>
     </Form>
-  );
+  )
 }
 
-export default UpdateItemForm;
+export default UpdateItemForm

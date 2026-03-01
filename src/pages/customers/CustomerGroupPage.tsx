@@ -1,11 +1,11 @@
 //router
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'
 
 //components
-import CustomerList from '@/components/customers/CustomerList';
-import GroupDetailsCard from '@/components/customers/GroupDetailsCard';
-import GroupOrdersCard from '@/components/customers/GroupOrdersCard';
-import GroupPendingOrdersCard from '@/components/customers/GroupPendingOrdersCard';
+import CustomerList from '@/components/customers/CustomerList'
+import GroupDetailsCard from '@/components/customers/GroupDetailsCard'
+import GroupOrdersCard from '@/components/customers/GroupOrdersCard'
+import GroupPendingOrdersCard from '@/components/customers/GroupPendingOrdersCard'
 //ui
 import {
   Breadcrumb,
@@ -14,20 +14,20 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from '@/components/ui/breadcrumb'
 //utils
-import { removeDashes, toTitleCase } from '@/lib/utils';
+import { removeDashes, toTitleCase } from '@/lib/utils'
 //redux
-import { useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks'
 function CustomerGroupPage() {
-  const { groupName } = useParams();
-  const groupId = useAppSelector((state) => state.group.groupId);
+  const { groupName } = useParams()
+  const groupId = useAppSelector((state) => state.group.groupId)
 
   const formattedGroupName = toTitleCase(
     removeDashes(
       groupName === 'privates' ? 'Private Customers' : groupName || ''
     )
-  );
+  )
 
   return (
     <div>
@@ -64,7 +64,7 @@ function CustomerGroupPage() {
         <CustomerList groupName={groupName} />
       </div>
     </div>
-  );
+  )
 }
 
-export default CustomerGroupPage;
+export default CustomerGroupPage

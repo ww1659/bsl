@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const orderStatusSchema = z.enum([
   'pending',
@@ -6,7 +6,7 @@ export const orderStatusSchema = z.enum([
   'sent',
   'delivered',
   'archived',
-]);
+])
 export type OrderStatus = z.infer<typeof orderStatusSchema>;
 
 export const customerSchema = z.object({
@@ -24,7 +24,7 @@ export const customerSchema = z.object({
   reference: z.string().nullable(),
   street_name: z.string().nullable(),
   town: z.string().nullable(),
-});
+})
 export type Customer = z.infer<typeof customerSchema>;
 
 export const groupSchema = z.object({
@@ -38,7 +38,7 @@ export const groupSchema = z.object({
   standard_discount: z.number().nullable(),
   street_name: z.string().nullable(),
   town: z.string().nullable(),
-});
+})
 export type Group = z.infer<typeof groupSchema>;
 
 export const itemSchema = z.object({
@@ -48,7 +48,7 @@ export const itemSchema = z.object({
   stock: z.number().nullable().optional(),
   loanedOut: z.number().nullable().optional(),
   createdAt: z.string().nullable().optional(),
-});
+})
 export type Item = z.infer<typeof itemSchema>;
 
 export const orderItemSchema = z.object({
@@ -60,7 +60,7 @@ export const orderItemSchema = z.object({
   stock: z.number().nullable().optional(),
   createdAt: z.string().nullable().optional(),
   picked: z.boolean().nullable().optional(),
-});
+})
 export type OrderItem = z.infer<typeof orderItemSchema>;
 
 export const orderSchema = z.object({
@@ -74,5 +74,5 @@ export const orderSchema = z.object({
   orderItems: z.array(orderItemSchema).nullish(),
   groupName: z.string().nullable().optional(),
   customerName: z.string().nullable().optional(),
-});
+})
 export type Order = z.infer<typeof orderSchema>;

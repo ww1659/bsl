@@ -1,10 +1,10 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Plus, Trash2 } from "lucide-react"
+import { useState } from "react"
+import { useFieldArray, useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -12,19 +12,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useFetchItems } from "@/hooks/item/useFetchItems";
-import { useCreateStandardOrder } from "@/hooks/standardOrder/useCreateStandardOrder";
-import { useToast } from "@/hooks/use-toast";
-import { toTitleCase } from "@/lib/utils";
+} from "@/components/ui/select"
+import { useFetchItems } from "@/hooks/item/useFetchItems"
+import { useCreateStandardOrder } from "@/hooks/standardOrder/useCreateStandardOrder"
+import { useToast } from "@/hooks/use-toast"
+import { toTitleCase } from "@/lib/utils"
 
 type StandardOrderForm = {
   customerId: string;
@@ -34,7 +34,7 @@ type StandardOrderForm = {
 const orderItemSchema = z.object({
   id: z.number().min(1, "Item must be selected"),
   quantity: z.coerce.number().min(1, "Must be at least 1"),
-});
+})
 
 const newStandardOrderSchema = z.object({
   orderName: z
@@ -44,23 +44,23 @@ const newStandardOrderSchema = z.object({
   orderItems: z
     .array(orderItemSchema)
     .min(1, "Must have at least one order item"),
-});
+})
 
 function NewStandardOrderForm({
   customerId,
   handleSaveNewOrder,
 }: StandardOrderForm) {
-  const { toast } = useToast();
+  const { toast } = useToast()
   const [selectedItemNames, setSelectedItemNames] = useState<{
     [key: string]: string;
-  }>({});
+  }>({})
 
-  const { data, isLoading, isError, error } = useFetchItems();
-  const createStandardOrder = useCreateStandardOrder();
+  const { data, isLoading, isError, error } = useFetchItems()
+  const createStandardOrder = useCreateStandardOrder()
 
   const sortedItems = data?.sort((a, b) =>
     (a.name || "").localeCompare(b.name || "")
-  );
+  )
 
   const form = useForm<z.infer<typeof newStandardOrderSchema>>({
     resolver: zodResolver(newStandardOrderSchema),
@@ -68,38 +68,38 @@ function NewStandardOrderForm({
       orderName: "",
       orderItems: [],
     },
-  });
+  })
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "orderItems",
-  });
+  })
 
   const handleSelectChange = (
     index: number,
     value: number,
     itemName: string
   ) => {
-    form.setValue(`orderItems.${index}.id`, value);
-    setSelectedItemNames((prev) => ({ ...prev, [index]: itemName }));
-  };
+    form.setValue(`orderItems.${index}.id`, value)
+    setSelectedItemNames((prev) => ({ ...prev, [index]: itemName }))
+  }
 
   const handleRemoveItem = (index: number) => {
-    remove(index);
+    remove(index)
     setSelectedItemNames((prev) => {
-      const newSelectedItemNames = { ...prev };
-      delete newSelectedItemNames[index];
+      const newSelectedItemNames = { ...prev }
+      delete newSelectedItemNames[index]
 
-      const updatedSelectedItemNames: { [key: string]: string } = {};
+      const updatedSelectedItemNames: { [key: string]: string } = {}
       Object.keys(newSelectedItemNames).forEach((key) => {
         const newIndex =
-          parseInt(key) > index ? parseInt(key) - 1 : parseInt(key);
-        updatedSelectedItemNames[newIndex] = newSelectedItemNames[key];
-      });
+          parseInt(key) > index ? parseInt(key) - 1 : parseInt(key)
+        updatedSelectedItemNames[newIndex] = newSelectedItemNames[key]
+      })
 
-      return updatedSelectedItemNames;
-    });
-  };
+      return updatedSelectedItemNames
+    })
+  }
 
   function onSubmit(values: z.infer<typeof newStandardOrderSchema>) {
     createStandardOrder.mutate(
@@ -116,17 +116,17 @@ function NewStandardOrderForm({
               data.order.order_name || ""
             )}" created successfully`,
             duration: 5000,
-          });
-          handleSaveNewOrder();
+          })
+          handleSaveNewOrder()
         },
       }
-    );
+    )
   }
 
-  const selectedOrderItems = form.watch("orderItems");
+  const selectedOrderItems = form.watch("orderItems")
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isLoading) return <div>Loading...</div>
+  if (isError) return <div>Error: {error.message}</div>
 
   return (
     <Form {...form}>
@@ -272,7 +272,7 @@ function NewStandardOrderForm({
         </div>
       </form>
     </Form>
-  );
+  )
 }
 
-export default NewStandardOrderForm;
+export default NewStandardOrderForm

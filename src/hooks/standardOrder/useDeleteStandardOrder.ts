@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
-import { supabase } from "@/services/supabase";
+import { supabase } from "@/services/supabase"
 
 type DeleteStandardOrderInput = {
   standardOrderId: number;
@@ -12,29 +12,29 @@ const deleteStandardOrder = async ({
   const { error: deleteItemsError } = await supabase
     .from("standard_order_items")
     .delete()
-    .eq("standard_order_id", standardOrderId);
+    .eq("standard_order_id", standardOrderId)
 
-  if (deleteItemsError) throw new Error(deleteItemsError.message);
+  if (deleteItemsError) throw new Error(deleteItemsError.message)
 
   const { error: deleteOrderError } = await supabase
     .from("standard_order")
     .delete()
-    .eq("id", standardOrderId);
+    .eq("id", standardOrderId)
 
-  if (deleteOrderError) throw new Error(deleteOrderError.message);
+  if (deleteOrderError) throw new Error(deleteOrderError.message)
 
-  return { success: true };
-};
+  return { success: true }
+}
 
 export const useDeleteStandardOrder = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: deleteStandardOrder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer-standard-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["customer-standard-orders"] })
     },
     onError: (error) => {
-      console.error("Failed to delete Standard Order:", error);
+      console.error("Failed to delete Standard Order:", error)
     },
-  });
-};
+  })
+}

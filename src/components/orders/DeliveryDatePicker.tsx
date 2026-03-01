@@ -5,18 +5,18 @@ type DeliveryDatePickerProps = {
   disabled?: boolean;
 };
 
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns'
+import { Calendar as CalendarIcon } from 'lucide-react'
 
-import { Calendar } from '@/components/ui/calendar';
+import { Calendar } from '@/components/ui/calendar'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 function DeliveryDatePicker({
   date,
@@ -49,7 +49,7 @@ function DeliveryDatePicker({
         />
       </PopoverContent>
     </Popover>
-  );
+  )
 
   return label ? (
     <div className="my-2 flex flex-row items-center gap-4">
@@ -58,7 +58,7 @@ function DeliveryDatePicker({
     </div>
   ) : (
     <DatePickerContent />
-  );
+  )
 }
 
-export default DeliveryDatePicker;
+export default DeliveryDatePicker

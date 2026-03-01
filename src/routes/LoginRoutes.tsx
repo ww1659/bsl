@@ -1,7 +1,7 @@
 // import ForgottenPassword from '@/pages/login/ForgottenPassword';
-import { Route,Routes } from 'react-router-dom';
+import { Route,Routes } from 'react-router-dom'
 
-import LoginPage from '@/pages/login/LoginPage';
+import LoginPage from '@/pages/login/LoginPage'
 
 function LoginRoutes() {
   return (
@@ -9,7 +9,7 @@ function LoginRoutes() {
       <Route path="/" element={<LoginPage />} />
       {/* <Route path="/forgotten-password" element={<ForgottenPassword />} /> */}
     </Routes>
-  );
+  )
 }
 
-export default LoginRoutes;
+export default LoginRoutes

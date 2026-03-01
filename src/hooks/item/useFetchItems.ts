@@ -1,15 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query"
 
-import { supabase } from "@/services/supabase";
+import { supabase } from "@/services/supabase"
 
 const fetchItems = async () => {
   const { data, error } = await supabase
     .from("items")
     .select("*")
-    .order("item_name", { ascending: true });
+    .order("item_name", { ascending: true })
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(error.message)
   }
 
   const itemsData = data.map((item) => {
@@ -20,12 +20,12 @@ const fetchItems = async () => {
       price: item.price,
       stock: item.stock,
       createdAt: item.created_at,
-    };
-  });
+    }
+  })
 
-  return itemsData;
-};
+  return itemsData
+}
 
 export const useFetchItems = () => {
-  return useQuery({ queryKey: ["items"], queryFn: fetchItems });
-};
+  return useQuery({ queryKey: ["items"], queryFn: fetchItems })
+}

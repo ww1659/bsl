@@ -6,9 +6,9 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 
-import NewItemForm from "./NewItemForm";
+import NewItemForm from "./NewItemForm"
 
 function NewItemDialog({ open, setOpen }: AddItemDialogProps) {
   return (
@@ -23,7 +23,7 @@ function NewItemDialog({ open, setOpen }: AddItemDialogProps) {
         <NewItemForm setDialogOpen={setOpen} />
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 
-export default NewItemDialog;
+export default NewItemDialog

@@ -1,15 +1,15 @@
 //components
 //ui
-import { Plus } from "lucide-react";
+import { Plus } from "lucide-react"
 
-import GroupCard from "@/components/customers/GroupCard";
-import LoadingWheel from "@/components/LoadingWheel";
-import { ButtonLink } from "@/components/ui/button-link";
+import GroupCard from "@/components/customers/GroupCard"
+import LoadingWheel from "@/components/LoadingWheel"
+import { ButtonLink } from "@/components/ui/button-link"
 //database hooks
-import { useFetchGroups } from "@/hooks/group/useFetchGroups";
+import { useFetchGroups } from "@/hooks/group/useFetchGroups"
 
 function GroupsPage() {
-  const { data, isLoading, isError, error } = useFetchGroups();
+  const { data, isLoading, isError, error } = useFetchGroups()
 
   return (
     <>
@@ -52,7 +52,7 @@ function GroupsPage() {
         </div>
       )}
     </>
-  );
+  )
 }
 
-export default GroupsPage;
+export default GroupsPage

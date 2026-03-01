@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils';
-import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils'
+import { supabase } from '@/services/supabase'
 
-import { toast } from '../use-toast';
+import { toast } from '../use-toast'
 
 type UpdateGroupInput = {
   groupId: string;
@@ -23,7 +23,7 @@ const groupUpdateSchema = z.object({
   postcode: z.string(),
   email: z.string(),
   standard_discount: z.number(),
-});
+})
 
 const updateGroup = async ({
   groupId,
@@ -41,34 +41,34 @@ const updateGroup = async ({
     groupPostcode,
     groupEmail,
     groupStandardDiscount,
-  };
-  const groupSnakeCaseData = toSnakeCase(payload);
-  const parsedGroupData = groupUpdateSchema.parse(groupSnakeCaseData);
+  }
+  const groupSnakeCaseData = toSnakeCase(payload)
+  const parsedGroupData = groupUpdateSchema.parse(groupSnakeCaseData)
 
   const { data, error } = await supabase
     .from('groups')
     .update(parsedGroupData)
-    .eq('id', groupId);
+    .eq('id', groupId)
 
-  if (error) throw new Error(error.message);
-  return data;
-};
+  if (error) throw new Error(error.message)
+  return data
+}
 
 export const useUpdateGroup = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: updateGroup,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['groups-id'] });
-      queryClient.invalidateQueries({ queryKey: ['groups'] });
+      queryClient.invalidateQueries({ queryKey: ['groups-id'] })
+      queryClient.invalidateQueries({ queryKey: ['groups'] })
     },
     onError: (error) => {
       toast({
         title: 'Error',
         description: `Failed to update group: ${error.message}`,
         variant: 'destructive',
-      });
+      })
     },
-  });
-};
+  })
+}

@@ -1,18 +1,18 @@
-import { Plus } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { Plus } from 'lucide-react'
+import { useMemo, useState } from 'react'
 
-import { InventoryTable } from '@/components/inventory/InventoryTable';
-import { inventoryTableColumns } from '@/components/inventory/InventoryTableColumns';
-import NewItemDialog from '@/components/inventory/NewItemDialog';
-import { Button } from '@/components/ui/button';
-import { useFetchItems } from '@/hooks/item/useFetchItems';
-import { sortCustomOrder } from '@/lib/utils';
+import { InventoryTable } from '@/components/inventory/InventoryTable'
+import { inventoryTableColumns } from '@/components/inventory/InventoryTableColumns'
+import NewItemDialog from '@/components/inventory/NewItemDialog'
+import { Button } from '@/components/ui/button'
+import { useFetchItems } from '@/hooks/item/useFetchItems'
+import { sortCustomOrder } from '@/lib/utils'
 
 function InventoryPage() {
-  const { data, isLoading, isError } = useFetchItems();
-  const [itemDialogOpen, setItemDialogOpen] = useState(false);
+  const { data, isLoading, isError } = useFetchItems()
+  const [itemDialogOpen, setItemDialogOpen] = useState(false)
 
-  const sortedItems = useMemo(() => sortCustomOrder(data ?? []), [data]);
+  const sortedItems = useMemo(() => sortCustomOrder(data ?? []), [data])
 
   return (
     <div className="space-y-4">
@@ -39,7 +39,7 @@ function InventoryPage() {
 
       <NewItemDialog open={itemDialogOpen} setOpen={setItemDialogOpen} />
     </div>
-  );
+  )
 }
 
-export default InventoryPage;
+export default InventoryPage

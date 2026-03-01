@@ -1,15 +1,15 @@
 //router
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod"
 //supabase client
-import { createClient } from "@supabase/supabase-js";
-import { Database } from "database.types";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js"
+import { Database } from "database.types"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { Link, useNavigate } from "react-router-dom"
 //zod form validation
-import { z } from "zod";
+import { z } from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -17,14 +17,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/components/ui/form"
 //components
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"
 
 //connect to Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address").min(1),
@@ -39,11 +39,11 @@ const formSchema = z.object({
       /[@$!%*?&_]/,
       "Password must contain at least one special character"
     ),
-});
+})
 
 function LoginPage() {
-  const [signUpError, setSignUpError] = useState("");
-  const navigate = useNavigate();
+  const [signUpError, setSignUpError] = useState("")
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +51,7 @@ function LoginPage() {
       email: "",
       password: "",
     },
-  });
+  })
 
   async function signUpNewUser(values: z.infer<typeof formSchema>) {
     const { data, error } = await supabase.auth.signUp({
@@ -60,15 +60,15 @@ function LoginPage() {
       options: {
         emailRedirectTo: "/",
       },
-    });
+    })
 
     if (data.session !== null && data.user !== null) {
-      navigate("/");
+      navigate("/")
     } else if (error) {
       if (error.status === 422) {
-        setSignUpError("User already exists. Please try logging in.");
+        setSignUpError("User already exists. Please try logging in.")
       } else {
-        setSignUpError(error.message);
+        setSignUpError(error.message)
       }
     }
   }
@@ -159,7 +159,7 @@ function LoginPage() {
         /> */}
       </div>
     </div>
-  );
+  )
 }
 
-export default LoginPage;
+export default LoginPage

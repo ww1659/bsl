@@ -1,8 +1,8 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -10,11 +10,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useCreateItem } from '@/hooks/item/useCreateItem';
-import { useToast } from '@/hooks/use-toast';
-import { toTitleCase } from '@/lib/utils';
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { useCreateItem } from '@/hooks/item/useCreateItem'
+import { useToast } from '@/hooks/use-toast'
+import { toTitleCase } from '@/lib/utils'
 
 type NewItemFormProps = { setDialogOpen: (open: boolean) => void };
 
@@ -31,15 +31,15 @@ const newItemSchema = z.object({
     .number()
     .gte(0, 'Stock must be greater than 0')
     .int('Value must be a whole number'),
-});
+})
 
 function NewItemForm({ setDialogOpen }: NewItemFormProps) {
-  const createNewItem = useCreateItem();
-  const { toast } = useToast();
+  const createNewItem = useCreateItem()
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof newItemSchema>>({
     resolver: zodResolver(newItemSchema),
-  });
+  })
 
   function onSubmit(values: z.infer<typeof newItemSchema>) {
     createNewItem.mutate(
@@ -50,17 +50,17 @@ function NewItemForm({ setDialogOpen }: NewItemFormProps) {
       },
       {
         onSuccess: (data) => {
-          setDialogOpen(false);
+          setDialogOpen(false)
           toast({
             title: 'New Item Created',
             description: `Item "${toTitleCase(
               data.itemName || ''
             )}" created successfully`,
             duration: 5000,
-          });
+          })
         },
       }
-    );
+    )
   }
 
   return (
@@ -127,7 +127,7 @@ function NewItemForm({ setDialogOpen }: NewItemFormProps) {
         </Button>
       </form>
     </Form>
-  );
+  )
 }
 
-export default NewItemForm;
+export default NewItemForm

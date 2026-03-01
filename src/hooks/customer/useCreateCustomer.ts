@@ -1,11 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils';
-import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils'
+import { supabase } from '@/services/supabase'
 
-import { useToast } from '../use-toast';
+import { useToast } from '../use-toast'
 
 type CreateCustomerInput = {
   customerName: string;
@@ -31,47 +31,47 @@ const customerInsertSchema = z.object({
   country: z.string(),
   group_id: z.string().nullable(),
   reference: z.string(),
-});
+})
 
 const createCustomer = async ({
   customerData,
 }: {
   customerData: CreateCustomerInput;
 }) => {
-  const customerSnakeCaseData = toSnakeCase(customerData);
-  const parsedCustomer = customerInsertSchema.parse(customerSnakeCaseData);
+  const customerSnakeCaseData = toSnakeCase(customerData)
+  const parsedCustomer = customerInsertSchema.parse(customerSnakeCaseData)
 
   if (parsedCustomer.group_id === 'private') {
-    parsedCustomer.group_id = null;
+    parsedCustomer.group_id = null
   }
 
   const { data, error } = await supabase
     .from('customers')
     .insert(parsedCustomer)
     .select('*')
-    .single();
+    .single()
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(error.message)
   }
 
-  return data;
-};
+  return data
+}
 
 export const useCreateCustomer = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const navigate = useNavigate()
+  const { toast } = useToast()
   return useMutation({
     mutationFn: createCustomer,
     onSuccess: (data) => {
       toast({
         title: 'Success!',
         description: `Customer ${data.customer_name} created!`,
-      });
-      navigate('/customers');
+      })
+      navigate('/customers')
     },
     onError: (error) => {
-      console.error('Error creating Customer:', error.message);
+      console.error('Error creating Customer:', error.message)
     },
-  });
-};
+  })
+}

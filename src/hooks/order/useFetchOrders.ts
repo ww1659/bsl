@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query'
 
-import { OrderStatus } from '@/schemas';
-import { supabase } from '@/services/supabase';
+import { OrderStatus } from '@/schemas'
+import { supabase } from '@/services/supabase'
 
 type FetchOrdersParams = {
   month?: string;
@@ -24,15 +24,15 @@ const monthDates = (month: string): { startDate: string; endDate: string } => {
     october: 9,
     november: 10,
     december: 11,
-  };
+  }
 
-  const year = new Date().getFullYear();
-  const monthIndex = monthMap[month.toLowerCase()];
-  const startDate = new Date(year, monthIndex, 1).toISOString();
-  const endDate = new Date(year, monthIndex + 1, 0).toISOString();
+  const year = new Date().getFullYear()
+  const monthIndex = monthMap[month.toLowerCase()]
+  const startDate = new Date(year, monthIndex, 1).toISOString()
+  const endDate = new Date(year, monthIndex + 1, 0).toISOString()
 
-  return { startDate, endDate };
-};
+  return { startDate, endDate }
+}
 
 const fetchOrders = async ({
   month,
@@ -66,32 +66,32 @@ const fetchOrders = async ({
       customers!inner(customer_name)
     `
     )
-    .order('delivery_date', { ascending: false });
+    .order('delivery_date', { ascending: false })
 
   if (status && status.length > 0) {
-    query = query.in('status', status);
+    query = query.in('status', status)
   }
 
   if (month) {
-    query = query.gte('delivery_date', monthDates(month).startDate);
-    query = query.lte('delivery_date', monthDates(month).endDate);
+    query = query.gte('delivery_date', monthDates(month).startDate)
+    query = query.lte('delivery_date', monthDates(month).endDate)
   }
 
   if (groupId) {
     query =
       groupId === 'private'
         ? query.is('group_id', null)
-        : query.eq('group_id', groupId);
+        : query.eq('group_id', groupId)
   }
 
   if (customerName) {
-    query = query.ilike('customers.customer_name', `%${customerName}%`);
+    query = query.ilike('customers.customer_name', `%${customerName}%`)
   }
 
-  const { data, error } = await query;
+  const { data, error } = await query
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(error.message)
   }
 
   const orderData = data.map((order) => ({
@@ -111,14 +111,14 @@ const fetchOrders = async ({
     })),
     groupName: order.groups?.group_name,
     customerName: order.customers?.customer_name,
-  }));
+  }))
 
-  return orderData;
-};
+  return orderData
+}
 
 export const useFetchOrders = (params: FetchOrdersParams) => {
   return useQuery({
     queryKey: ['orders', params],
     queryFn: () => fetchOrders(params),
-  });
-};
+  })
+}

@@ -1,4 +1,4 @@
-import { Session } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js'
 import {
   AlignStartVertical,
   List,
@@ -6,10 +6,10 @@ import {
   ShoppingCart,
   UserCircle2,
   Users2,
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+} from 'lucide-react'
+import { Link } from 'react-router-dom'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,22 +17,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useAppSelector } from '@/redux/hooks';
-import { supabase } from '@/services/supabase';
+} from '@/components/ui/dropdown-menu'
+import { useAppSelector } from '@/redux/hooks'
+import { supabase } from '@/services/supabase'
 
-import { DarkModeToggle } from '../DarkModeToggle';
+import { DarkModeToggle } from '../DarkModeToggle'
 
 export const NavBar: React.FC = () => {
   async function handleSignOut() {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut()
     if (error) {
-      console.error('Error signing out:', error.message);
+      console.error('Error signing out:', error.message)
     }
   }
 
-  const session: Session | null = useAppSelector((state) => state.auth.session);
-  const userEmail = session?.user.email;
+  const session: Session | null = useAppSelector((state) => state.auth.session)
+  const userEmail = session?.user.email
 
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-40 flex-col border-r bg-background md:flex">
@@ -153,5 +153,5 @@ export const NavBar: React.FC = () => {
         </DropdownMenu>
       </nav>
     </aside>
-  );
-};
+  )
+}

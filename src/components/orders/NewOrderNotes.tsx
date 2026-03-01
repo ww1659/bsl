@@ -1,5 +1,5 @@
-import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
+import { Label } from '../ui/label'
+import { Textarea } from '../ui/textarea'
 
 type NewOrderNotesProps = {
   setOrderNotes: React.Dispatch<React.SetStateAction<string>>;
@@ -15,5 +15,5 @@ export function NewOrderNotes({ setOrderNotes }: NewOrderNotesProps) {
         placeholder="Add any extra notes to the order here"
       />
     </div>
-  );
+  )
 }

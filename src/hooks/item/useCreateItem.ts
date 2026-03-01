@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils';
-import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils'
+import { supabase } from '@/services/supabase'
 
 type CreateItemInput = {
   itemName: string;
@@ -15,7 +15,7 @@ const itemInsertSchema = z.object({
   price: z.number(),
   stock: z.number(),
   loaned_out: z.number(),
-});
+})
 
 const createItem = async ({ itemName, price, stock }: CreateItemInput) => {
   const itemSnakeCaseData = toSnakeCase({
@@ -23,17 +23,17 @@ const createItem = async ({ itemName, price, stock }: CreateItemInput) => {
     price,
     stock,
     loanedOut: 0,
-  });
-  const parsedItemData = itemInsertSchema.parse(itemSnakeCaseData);
+  })
+  const parsedItemData = itemInsertSchema.parse(itemSnakeCaseData)
 
   const { data, error } = await supabase
     .from('items')
     .insert(parsedItemData)
     .select('*')
-    .single();
+    .single()
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(error.message)
   }
 
   const newItem = {
@@ -42,17 +42,17 @@ const createItem = async ({ itemName, price, stock }: CreateItemInput) => {
     price: data.price,
     stock: data.stock,
     loanedOut: data.loaned_out,
-  };
+  }
 
-  return newItem;
-};
+  return newItem
+}
 
 export const useCreateItem = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: createItem,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['items'] });
+      queryClient.invalidateQueries({ queryKey: ['items'] })
     },
-  });
-};
+  })
+}

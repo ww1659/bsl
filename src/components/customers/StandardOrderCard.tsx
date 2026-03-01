@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
 //types
 type StandardOrderCard = {
   customerId: string | null;
 };
 
-import { Plus, Trash2, Trash2Icon } from 'lucide-react';
+import { Plus, Trash2, Trash2Icon } from 'lucide-react'
 
 //ui
 import {
@@ -14,7 +14,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -22,14 +22,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/components/ui/dialog'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/ui/select'
 import {
   Table,
   TableBody,
@@ -37,42 +37,42 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useDeleteStandardOrder } from '@/hooks/standardOrder/useDeleteStandardOrder';
-import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders';
-import { useUpdateStandardOrder } from '@/hooks/standardOrder/useUpdateStandardOrder';
+} from '@/components/ui/table'
+import { useDeleteStandardOrder } from '@/hooks/standardOrder/useDeleteStandardOrder'
+import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders'
+import { useUpdateStandardOrder } from '@/hooks/standardOrder/useUpdateStandardOrder'
 //hooks
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast'
 //utils
-import { sortCustomOrder, toTitleCase } from '@/lib/utils';
-import type { OrderItem } from '@/schemas';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils'
+import type { OrderItem } from '@/schemas'
 
-import AddItemsDropdown from '../orders/AddItemsDropdown';
-import { Button } from '../ui/button';
-import { Spinner } from '../ui/loading';
+import AddItemsDropdown from '../orders/AddItemsDropdown'
+import { Button } from '../ui/button'
+import { Spinner } from '../ui/loading'
 //components
-import NewStandardOrderForm from './NewStandardOrderForm';
+import NewStandardOrderForm from './NewStandardOrderForm'
 
 function StandardOrderCard({ customerId }: StandardOrderCard) {
-  const { toast } = useToast();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<number | null>(null);
-  const [orderName, setOrderName] = useState<string | null>('');
-  const [selectedOrderItems, setSelectedOrderItems] = useState<OrderItem[]>([]);
-  const [selectValue, setSelectValue] = useState<string | undefined>(undefined);
-  const [isNewOrder, setIsNewOrder] = useState<boolean>(false);
+  const { toast } = useToast()
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [selectedOrder, setSelectedOrder] = useState<number | null>(null)
+  const [orderName, setOrderName] = useState<string | null>('')
+  const [selectedOrderItems, setSelectedOrderItems] = useState<OrderItem[]>([])
+  const [selectValue, setSelectValue] = useState<string | undefined>(undefined)
+  const [isNewOrder, setIsNewOrder] = useState<boolean>(false)
 
-  const updateStandardOrder = useUpdateStandardOrder();
-  const deleteStandardOrder = useDeleteStandardOrder();
+  const updateStandardOrder = useUpdateStandardOrder()
+  const deleteStandardOrder = useDeleteStandardOrder()
 
   const { data, isLoading, isError, error } = useFetchStandardOrders(
     customerId || ''
-  );
+  )
 
   const handleSelectChange = (value: number | undefined) => {
-    setSelectValue(value?.toString());
-    setSelectedOrder(value ?? null);
-    const selectedOrderData = data?.find((order) => order.id === value);
+    setSelectValue(value?.toString())
+    setSelectedOrder(value ?? null)
+    const selectedOrderData = data?.find((order) => order.id === value)
     const sortedItems = sortCustomOrder(
       (selectedOrderData?.orderItems ?? []).map((item) => ({
         id: item.id ?? null,
@@ -80,12 +80,12 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
         price: item.price ?? null,
         quantity: item.quantity,
       }))
-    );
-    const orderName = selectedOrderData?.orderName;
-    setOrderName(orderName || null);
-    setSelectedOrderItems(sortedItems || []);
-    setIsNewOrder(false);
-  };
+    )
+    const orderName = selectedOrderData?.orderName
+    setOrderName(orderName || null)
+    setSelectedOrderItems(sortedItems || [])
+    setIsNewOrder(false)
+  }
 
   const updateQuantity = (itemId: number, quantity: number) => {
     setSelectedOrderItems((prevItems) =>
@@ -94,20 +94,20 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
           ? { ...item, quantity: Math.max(1, item.quantity! + quantity) }
           : item
       )
-    );
-  };
+    )
+  }
 
   const handleRemoveItem = (itemId: number) => {
-    const itemToRemove = selectedOrderItems.find((item) => item.id === itemId);
+    const itemToRemove = selectedOrderItems.find((item) => item.id === itemId)
     setSelectedOrderItems((prevItems) =>
       prevItems.filter((prevItem) => prevItem.id !== itemId)
-    );
+    )
     toast({
       title: `Removed ${toTitleCase(itemToRemove?.name || '')}`,
       description: `From Order: ${toTitleCase(orderName || '')}`,
       duration: 2000,
-    });
-  };
+    })
+  }
 
   const handleUpdateOrder = () => {
     updateStandardOrder.mutate(
@@ -123,21 +123,21 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
               orderName || ''
             )}" updated successfully`,
             duration: 5000,
-          });
-          setSelectValue('');
-          setSelectedOrder(null);
-          setSelectedOrderItems([]);
-          setOrderName(null);
+          })
+          setSelectValue('')
+          setSelectedOrder(null)
+          setSelectedOrderItems([])
+          setOrderName(null)
         },
         onError: (error) => {
           toast({
             title: 'Error',
             description: `Failed to update order: ${error.message}`,
-          });
+          })
         },
       }
-    );
-  };
+    )
+  }
 
   const handleDeleteOrder = () => {
     deleteStandardOrder.mutate(
@@ -152,45 +152,45 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
               orderName || ''
             )}" deleted successfully`,
             duration: 5000,
-          });
-          setSelectValue('');
-          setSelectedOrder(null);
-          setSelectedOrderItems([]);
-          setOrderName(null);
-          setDialogOpen(false);
+          })
+          setSelectValue('')
+          setSelectedOrder(null)
+          setSelectedOrderItems([])
+          setOrderName(null)
+          setDialogOpen(false)
         },
         onError: (error) => {
           toast({
             title: 'Error',
             description: `Failed to update order: ${error.message}`,
-          });
+          })
         },
       }
-    );
-  };
+    )
+  }
 
   const handleNewStandardOrder = () => {
-    setSelectValue('');
-    setSelectedOrder(null);
-    setSelectedOrderItems([]);
-    setOrderName(null);
-    setIsNewOrder(true);
-  };
+    setSelectValue('')
+    setSelectedOrder(null)
+    setSelectedOrderItems([])
+    setOrderName(null)
+    setIsNewOrder(true)
+  }
 
   const handleSaveNewOrder = () => {
-    setIsNewOrder(false);
-    setSelectValue('');
-    setSelectedOrder(null);
-    setSelectedOrderItems([]);
-    setOrderName(null);
-  };
+    setIsNewOrder(false)
+    setSelectValue('')
+    setSelectedOrder(null)
+    setSelectedOrderItems([])
+    setOrderName(null)
+  }
 
   const handleDialogOpen = () => {
-    setDialogOpen(true);
-  };
+    setDialogOpen(true)
+  }
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   if (data)
     return (
@@ -361,7 +361,7 @@ function StandardOrderCard({ customerId }: StandardOrderCard) {
           </DialogContent>
         </Dialog>
       </>
-    );
+    )
 }
 
-export default StandardOrderCard;
+export default StandardOrderCard

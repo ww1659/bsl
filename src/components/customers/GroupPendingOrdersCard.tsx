@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
-import { useMemo } from 'react';
+import { format } from 'date-fns'
+import { useMemo } from 'react'
 
 import {
   Card,
@@ -7,33 +7,33 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { useFetchOrders } from '@/hooks/order/useFetchOrders';
-import { toTitleCase } from '@/lib/utils';
-import { useAppSelector } from '@/redux/hooks';
+} from '@/components/ui/card'
+import { useFetchOrders } from '@/hooks/order/useFetchOrders'
+import { toTitleCase } from '@/lib/utils'
+import { useAppSelector } from '@/redux/hooks'
 
 function GroupPendingOrdersCard() {
-  const groupId = useAppSelector((state) => state.group.groupId);
+  const groupId = useAppSelector((state) => state.group.groupId)
 
   const { data, isLoading, isError, error } = useFetchOrders({
     groupId: groupId ?? undefined,
-  });
+  })
 
   const sortedData = useMemo(
     () =>
       data
         ?.sort((a, b) => {
           // Defensive sort to ensure delivery date ordering
-          const dateA = a.deliveryDate ? new Date(a.deliveryDate).getTime() : 0;
-          const dateB = b.deliveryDate ? new Date(b.deliveryDate).getTime() : 0;
-          return dateA - dateB;
+          const dateA = a.deliveryDate ? new Date(a.deliveryDate).getTime() : 0
+          const dateB = b.deliveryDate ? new Date(b.deliveryDate).getTime() : 0
+          return dateA - dateB
         })
         .slice(0, 3),
     [data]
-  );
+  )
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   return (
     <Card className="grid gap-1 col-span-1 sm:col-span-2 xl:col-span-1">
@@ -74,7 +74,7 @@ function GroupPendingOrdersCard() {
       )}
       <CardFooter />
     </Card>
-  );
+  )
 }
 
-export default GroupPendingOrdersCard;
+export default GroupPendingOrdersCard

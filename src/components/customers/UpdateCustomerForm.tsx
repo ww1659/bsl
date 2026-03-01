@@ -10,12 +10,12 @@ type CustomerDetailsForm = {
 };
 
 //zod forms
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 //components
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -23,14 +23,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useUpdateCustomer } from "@/hooks/customer/useUpdateCustomer";
-import { useToast } from "@/hooks/use-toast";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useUpdateCustomer } from "@/hooks/customer/useUpdateCustomer"
+import { useToast } from "@/hooks/use-toast"
 //utils
-import { toTitleCase } from "@/lib/utils";
+import { toTitleCase } from "@/lib/utils"
 
-import { Spinner } from "../ui/loading";
+import { Spinner } from "../ui/loading"
 
 const customerDetailsSchema = z.object({
   name: z.string().min(2, {
@@ -76,7 +76,7 @@ const customerDetailsSchema = z.object({
     .number()
     .gte(0, "Discount must be positive!")
     .lte(100, "Discount cannot exceed 100%"),
-});
+})
 
 function UpdateCustomerForm({
   customerId,
@@ -88,8 +88,8 @@ function UpdateCustomerForm({
   customerDiscount,
   setIsSheetOpen,
 }: CustomerDetailsForm) {
-  const { toast } = useToast();
-  const updateCustomer = useUpdateCustomer();
+  const { toast } = useToast()
+  const updateCustomer = useUpdateCustomer()
 
   const form = useForm<z.infer<typeof customerDetailsSchema>>({
     resolver: zodResolver(customerDetailsSchema),
@@ -101,7 +101,7 @@ function UpdateCustomerForm({
       email: customerEmail || "",
       discount: customerDiscount || 0,
     },
-  });
+  })
 
   function onSubmit(values: z.infer<typeof customerDetailsSchema>) {
     const customerData = {
@@ -112,17 +112,17 @@ function UpdateCustomerForm({
       customerPostcode: (values.postcode || "").toLowerCase(),
       customerEmail: values.email?.toLowerCase() || "",
       customerDiscount: values.discount,
-    };
+    }
     updateCustomer.mutate(customerData, {
       onSuccess: () => {
-        setIsSheetOpen(false);
+        setIsSheetOpen(false)
         toast({
           title: "Success!",
           description: "Customer Details Updated",
           duration: 3000,
-        });
+        })
       },
-    });
+    })
   }
 
   return (
@@ -243,7 +243,7 @@ function UpdateCustomerForm({
         </div>
       </form>
     </Form>
-  );
+  )
 }
 
-export default UpdateCustomerForm;
+export default UpdateCustomerForm

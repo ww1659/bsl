@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface GroupState {
   groupId: string | null;
@@ -6,17 +6,17 @@ export interface GroupState {
 
 const initialState: GroupState = {
   groupId: null,
-};
+}
 
 const groupSlice = createSlice({
   name: 'group',
   initialState,
   reducers: {
     setGroupId: (state, action: PayloadAction<string | null>) => {
-      state.groupId = action.payload;
+      state.groupId = action.payload
     },
   },
-});
+})
 
-export const { setGroupId } = groupSlice.actions;
-export default groupSlice.reducer;
+export const { setGroupId } = groupSlice.actions
+export default groupSlice.reducer

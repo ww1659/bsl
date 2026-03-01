@@ -10,7 +10,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -18,11 +18,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId';
-import { toTitleCase } from '@/lib/utils';
+} from '@/components/ui/table'
+import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId'
+import { toTitleCase } from '@/lib/utils'
 
-import { Separator } from '../ui/separator';
+import { Separator } from '../ui/separator'
 
 function OrderItemsTable({
   orderId,
@@ -31,23 +31,23 @@ function OrderItemsTable({
 }: OrderItemsTableProps) {
   const { data, isLoading, isError, error } = useFetchItemsByOrderId(
     orderId || ''
-  );
+  )
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   if (isError) {
-    return <div>Error: {error?.message}</div>;
+    return <div>Error: {error?.message}</div>
   }
 
   const orderTotal =
     (data ?? []).reduce((total, item) => {
-      const itemPrice = item.price || 0;
-      const quantity = item.quantity;
-      return total + itemPrice * (quantity || 0);
+      const itemPrice = item.price || 0
+      const quantity = item.quantity
+      return total + itemPrice * (quantity || 0)
     }, 0) *
-    ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100);
+    ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100)
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -114,7 +114,7 @@ function OrderItemsTable({
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }
 
-export default OrderItemsTable;
+export default OrderItemsTable

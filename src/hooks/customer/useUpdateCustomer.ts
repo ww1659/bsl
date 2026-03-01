@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils';
-import { supabase } from '@/services/supabase';
+import { toSnakeCase } from '@/lib/utils'
+import { supabase } from '@/services/supabase'
 
 type UpdateCustomerInput = {
   customerId: string;
@@ -21,7 +21,7 @@ const customerUpdateSchema = z.object({
   postcode: z.string(),
   email: z.string(),
   discount: z.number(),
-});
+})
 
 const updateCustomer = async ({
   customerId,
@@ -39,30 +39,30 @@ const updateCustomer = async ({
     customerPostcode,
     customerEmail,
     customerDiscount,
-  };
-  const customerSnakeCaseData = toSnakeCase(payload);
-  const parsedCustomerData = customerUpdateSchema.parse(customerSnakeCaseData);
+  }
+  const customerSnakeCaseData = toSnakeCase(payload)
+  const parsedCustomerData = customerUpdateSchema.parse(customerSnakeCaseData)
 
   const { data, error } = await supabase
     .from('customers')
     .update(parsedCustomerData)
-    .eq('id', customerId);
+    .eq('id', customerId)
 
-  if (error) throw new Error(error.message);
-  return data;
-};
+  if (error) throw new Error(error.message)
+  return data
+}
 
 export const useUpdateCustomer = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: updateCustomer,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customer-by-id'] });
-      queryClient.invalidateQueries({ queryKey: ['groups-id'] });
+      queryClient.invalidateQueries({ queryKey: ['customer-by-id'] })
+      queryClient.invalidateQueries({ queryKey: ['groups-id'] })
     },
     onError: (error) => {
-      console.error('Failed to update customer:', error);
+      console.error('Failed to update customer:', error)
     },
-  });
-};
+  })
+}

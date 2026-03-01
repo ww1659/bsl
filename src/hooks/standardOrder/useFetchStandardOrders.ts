@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query"
 
-import { supabase } from "@/services/supabase";
+import { supabase } from "@/services/supabase"
 
 const fetchStandardOrders = async (customerId: string) => {
   const { data, error } = await supabase
@@ -17,14 +17,14 @@ const fetchStandardOrders = async (customerId: string) => {
       )
     `
     )
-    .eq("id", customerId);
+    .eq("id", customerId)
 
   if (error) {
-    throw new Error(`Error fetching data: ${error.message}`);
+    throw new Error(`Error fetching data: ${error.message}`)
   }
 
   if (!data || data.length === 0) {
-    return [];
+    return []
   }
 
   const standardOrders = data[0].standard_order.map((order) => ({
@@ -36,15 +36,15 @@ const fetchStandardOrders = async (customerId: string) => {
       price: item.items?.price,
       quantity: item.quantity,
     })),
-  }));
+  }))
 
-  return standardOrders;
-};
+  return standardOrders
+}
 
 export const useFetchStandardOrders = (customerId: string) => {
   return useQuery({
     queryKey: ["customer-standard-orders", customerId],
     queryFn: () => fetchStandardOrders(customerId),
     enabled: !!customerId,
-  });
-};
+  })
+}

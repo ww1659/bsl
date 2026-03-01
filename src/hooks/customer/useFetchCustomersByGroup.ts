@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query"
 
-import { supabase } from "@/services/supabase";
+import { supabase } from "@/services/supabase"
 
 const fetchGroupedCustomers = async (
   groupId: string,
@@ -14,20 +14,20 @@ const fetchGroupedCustomers = async (
       groupId === "private" ? "is" : "eq",
       groupId === "private" ? null : groupId
     )
-    .eq("is_active", true);
+    .eq("is_active", true)
 
   if (customerName) {
-    query = query.ilike("customer_name", `%${customerName}%`);
+    query = query.ilike("customer_name", `%${customerName}%`)
   }
 
-  const { data: customersData, error: customersError } = await query;
+  const { data: customersData, error: customersError } = await query
 
   if (customersError) {
-    throw new Error(`Error fetching customers: ${customersError.message}`);
+    throw new Error(`Error fetching customers: ${customersError.message}`)
   }
 
-  return customersData;
-};
+  return customersData
+}
 
 export const useFetchGroupedCustomers = (
   groupId: string,
@@ -37,5 +37,5 @@ export const useFetchGroupedCustomers = (
     queryKey: ["customer-groups", groupId, customerName],
     queryFn: () => fetchGroupedCustomers(groupId, customerName),
     enabled: !!groupId,
-  });
-};
+  })
+}

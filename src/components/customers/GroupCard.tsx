@@ -3,25 +3,25 @@ type GroupCardProps = {
   groupId: string;
 };
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { toTitleCase } from "@/lib/utils";
-import { setGroupId } from "@/redux/features/groups/groupSlice";
-import { useAppDispatch } from "@/redux/hooks";
+} from "@/components/ui/card"
+import { toTitleCase } from "@/lib/utils"
+import { setGroupId } from "@/redux/features/groups/groupSlice"
+import { useAppDispatch } from "@/redux/hooks"
 
 function GroupCard({ groupName, groupId }: GroupCardProps) {
-  const dispatch = useAppDispatch();
-  const formattedGroupName = groupName.toLowerCase().replace(/\s+/g, "-");
+  const dispatch = useAppDispatch()
+  const formattedGroupName = groupName.toLowerCase().replace(/\s+/g, "-")
 
   const handleClick = () => {
-    dispatch(setGroupId(groupId));
-  };
+    dispatch(setGroupId(groupId))
+  }
 
   return (
     <Link to={`/customers/${formattedGroupName}`} onClick={handleClick}>
@@ -34,7 +34,7 @@ function GroupCard({ groupName, groupId }: GroupCardProps) {
         </CardHeader>
       </Card>
     </Link>
-  );
+  )
 }
 
-export default GroupCard;
+export default GroupCard

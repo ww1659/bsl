@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query"
 
-import { supabase } from "@/services/supabase";
+import { supabase } from "@/services/supabase"
 
 const fetchGroupById = async (groupId: string) => {
   if (groupId !== "private") {
@@ -8,10 +8,10 @@ const fetchGroupById = async (groupId: string) => {
       .from("groups")
       .select("*")
       .eq("id", groupId)
-      .single();
+      .single()
 
     if (error) {
-      throw new Error(error.message);
+      throw new Error(error.message)
     }
 
     const groupData = {
@@ -24,15 +24,15 @@ const fetchGroupById = async (groupId: string) => {
       email: data.email,
       standardDiscount: data.standard_discount,
       createdAt: data.created_at,
-    };
-    return groupData;
-  } else return null;
-};
+    }
+    return groupData
+  } else return null
+}
 
 export const useFetchGroupById = (groupId: string) => {
   return useQuery({
     queryKey: ["groups-id", groupId],
     queryFn: () => fetchGroupById(groupId),
     enabled: !!groupId,
-  });
-};
+  })
+}

@@ -1,5 +1,5 @@
-import { MoreHorizontal } from 'lucide-react';
-import { useState } from 'react';
+import { MoreHorizontal } from 'lucide-react'
+import { useState } from 'react'
 
 import {
   DropdownMenu,
@@ -8,26 +8,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu'
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet';
-import { toTitleCase } from '@/lib/utils';
-import type { OrderItem } from '@/schemas';
+} from '@/components/ui/sheet'
+import { toTitleCase } from '@/lib/utils'
+import type { OrderItem } from '@/schemas'
 
-import { Button } from '../ui/button';
-import UpdateItemForm from './UpdateItemForm';
+import { Button } from '../ui/button'
+import UpdateItemForm from './UpdateItemForm'
 
 type UpdateItemDialogProps = {
   row: OrderItem;
 };
 
 function UpdateItemDropdown({ row }: UpdateItemDialogProps) {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
   return (
     <>
@@ -43,7 +43,7 @@ function UpdateItemDropdown({ row }: UpdateItemDialogProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              setIsSheetOpen(true);
+              setIsSheetOpen(true)
             }}
           >
             Update Item
@@ -70,7 +70,7 @@ function UpdateItemDropdown({ row }: UpdateItemDialogProps) {
         </SheetContent>
       </Sheet>
     </>
-  );
+  )
 }
 
-export default UpdateItemDropdown;
+export default UpdateItemDropdown

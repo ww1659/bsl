@@ -4,26 +4,26 @@ type CustomerCardProps = {
   customerId: string | null;
 };
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { toTitleCase } from "@/lib/utils";
-import { setCustomerId } from "@/redux/features/customers/customersSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import { toTitleCase } from "@/lib/utils"
+import { setCustomerId } from "@/redux/features/customers/customersSlice"
+import { useAppDispatch } from "@/redux/hooks"
 
 function CustomerCard({
   groupName,
   customerName,
   customerId,
 }: CustomerCardProps) {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   const formattedCustomerName = customerName
     ?.toLowerCase()
-    .replace(/\s+/g, "-");
+    .replace(/\s+/g, "-")
 
   const handleClick = () => {
-    dispatch(setCustomerId(customerId));
-  };
+    dispatch(setCustomerId(customerId))
+  }
 
   return (
     <div>
@@ -40,7 +40,7 @@ function CustomerCard({
         </Card>
       </Link>
     </div>
-  );
+  )
 }
 
-export default CustomerCard;
+export default CustomerCard

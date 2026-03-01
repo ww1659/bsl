@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query'
 
-import { supabase } from '@/services/supabase';
+import { supabase } from '@/services/supabase'
 
 const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
   const { data, error } = await supabase
@@ -29,11 +29,11 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
     .gte('delivery_date', startDate)
     .lte('delivery_date', endDate)
     .in('status', ['pending', 'ready'])
-    .order('delivery_date', { ascending: true });
+    .order('delivery_date', { ascending: true })
 
   if (error) {
-    console.error(error);
-    throw new Error(error.message);
+    console.error(error)
+    throw new Error(error.message)
   }
 
   const orderData = data.map((order) => ({
@@ -52,10 +52,10 @@ const fetchPickingListByOrder = async (startDate: string, endDate: string) => {
       quantity: item.quantity ?? 0,
       picked: item.picked ?? true,
     })),
-  }));
+  }))
 
-  return orderData;
-};
+  return orderData
+}
 
 export const useFetchPickingListByOrder = (
   startDate: string,
@@ -64,5 +64,5 @@ export const useFetchPickingListByOrder = (
   return useQuery({
     queryKey: ['picking-list-orders', startDate, endDate],
     queryFn: () => fetchPickingListByOrder(startDate, endDate),
-  });
-};
+  })
+}

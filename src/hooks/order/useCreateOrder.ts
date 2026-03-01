@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
-import { OrderStatus } from '@/schemas';
-import { supabase } from '@/services/supabase';
+import { OrderStatus } from '@/schemas'
+import { supabase } from '@/services/supabase'
 
-import { useToast } from '../use-toast';
+import { useToast } from '../use-toast'
 
 type CreateOrderInput = {
   orderData: {
@@ -28,42 +28,42 @@ const createOrder = async ({ orderData, orderItems }: CreateOrderInput) => {
     .from('orders')
     .insert(orderData)
     .select('*')
-    .single();
+    .single()
 
   if (orderError) {
-    throw new Error(orderError.message);
+    throw new Error(orderError.message)
   }
 
   const orderItemsData = orderItems.map((item) => ({
     ...item,
     order_id: order.id,
-  }));
+  }))
 
   const { error: orderItemsError } = await supabase
     .from('order_items')
-    .insert(orderItemsData);
+    .insert(orderItemsData)
 
   if (orderItemsError) {
-    throw new Error(orderItemsError.message);
+    throw new Error(orderItemsError.message)
   }
 
-  return order;
-};
+  return order
+}
 
 export const useCreateOrder = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const navigate = useNavigate()
+  const { toast } = useToast()
   return useMutation({
     mutationFn: createOrder,
     onSuccess: (order) => {
       toast({
         title: 'Success!',
         description: `Order number ${order.number} created, £${order.total}`,
-      });
-      navigate('/');
+      })
+      navigate('/')
     },
     onError: (error) => {
-      console.error('Error creating order:', error.message);
+      console.error('Error creating order:', error.message)
     },
-  });
-};
+  })
+}

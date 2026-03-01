@@ -1,5 +1,5 @@
-import debounce from 'lodash.debounce';
-import { useCallback, useEffect, useState } from 'react';
+import debounce from 'lodash.debounce'
+import { useCallback, useEffect, useState } from 'react'
 
 import {
   Card,
@@ -7,38 +7,38 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { useFetchGroupedCustomers } from '@/hooks/customer/useFetchCustomersByGroup';
-import { useAppSelector } from '@/redux/hooks';
+} from '@/components/ui/card'
+import { useFetchGroupedCustomers } from '@/hooks/customer/useFetchCustomersByGroup'
+import { useAppSelector } from '@/redux/hooks'
 
-import { Input } from '../ui/input';
-import CustomerCard from './CustomerCard';
+import { Input } from '../ui/input'
+import CustomerCard from './CustomerCard'
 
 type CustomerListProps = {
-  groupName: string | undefined;
-};
+  groupName: string | undefined
+}
 
 function CustomerList({ groupName }: CustomerListProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  const groupId = useAppSelector((state) => state.group.groupId);
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const groupId = useAppSelector((state) => state.group.groupId)
 
   const { data, isLoading, isError, error } = useFetchGroupedCustomers(
     groupId || '',
     debouncedSearchTerm
-  );
+  )
 
   const sortedData = data?.sort((a, b) =>
     (a.customer_name ?? '').localeCompare(b.customer_name ?? '')
-  );
+  )
 
   const debouncedSetSearchTerm = useCallback((value: string) => {
-    debounce(() => setDebouncedSearchTerm(value), 300)();
-  }, []);
+    debounce(() => setDebouncedSearchTerm(value), 300)()
+  }, [])
 
   useEffect(() => {
-    debouncedSetSearchTerm(searchTerm);
-  }, [searchTerm, debouncedSetSearchTerm]);
+    debouncedSetSearchTerm(searchTerm)
+  }, [searchTerm, debouncedSetSearchTerm])
 
   return (
     <Card className="w-full">
@@ -70,7 +70,7 @@ function CustomerList({ groupName }: CustomerListProps) {
           ))}
       </CardContent>
     </Card>
-  );
+  )
 }
 
-export default CustomerList;
+export default CustomerList

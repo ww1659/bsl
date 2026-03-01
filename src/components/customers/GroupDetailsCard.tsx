@@ -1,36 +1,36 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 //UI
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet'
 //Supabase Hooks
-import { useFetchGroupById } from "@/hooks/group/useFetchGroupById";
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById'
 //Utils
-import { toTitleCase } from "@/lib/utils";
+import { toTitleCase } from '@/lib/utils'
 //Redux
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from '@/redux/hooks'
 
-import { Button } from "../ui/button";
+import { Button } from '../ui/button'
 //Components
-import UpdateGroupForm from "./UpdateGroupForm";
+import UpdateGroupForm from './UpdateGroupForm'
 
 function GroupDetailsCard() {
-  const [isOpen, setIsOpen] = useState(false);
-  const groupId = useAppSelector((state) => state.group.groupId);
-  const { data, isLoading, isError, error } = useFetchGroupById(groupId || "");
+  const [isOpen, setIsOpen] = useState(false)
+  const groupId = useAppSelector((state) => state.group.groupId)
+  const { data, isLoading, isError, error } = useFetchGroupById(groupId || '')
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   const handleEditGroup = () => {
-    setIsOpen(true);
-  };
+    setIsOpen(true)
+  }
 
   return (
     <>
@@ -68,7 +68,7 @@ function GroupDetailsCard() {
                 <div className="flex flex-row align-center flex-wrap py-1">
                   <p className="pr-1 text-sm text-muted-foreground">Street:</p>
                   <p className="font-bold text-sm">
-                    {toTitleCase(data?.streetName || "")}
+                    {toTitleCase(data?.streetName || '')}
                   </p>
                 </div>
               )}
@@ -122,7 +122,7 @@ function GroupDetailsCard() {
         </SheetContent>
       </Sheet>
     </>
-  );
+  )
 }
 
-export default GroupDetailsCard;
+export default GroupDetailsCard

@@ -1,37 +1,37 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
-import { ArrowUpDown } from 'lucide-react';
+import { ColumnDef } from '@tanstack/react-table'
+import { format } from 'date-fns'
+import { ArrowUpDown } from 'lucide-react'
 
-import { Button } from '@/components/ui/button';
-import { toTitleCase } from '@/lib/utils';
-import type { Order, OrderItem } from '@/schemas';
+import { Button } from '@/components/ui/button'
+import { toTitleCase } from '@/lib/utils'
+import type { Order, OrderItem } from '@/schemas'
 
-import { Badge } from '../ui/badge';
-import OrdersTableDropdown from './OrdersTableDropdown';
+import { Badge } from '../ui/badge'
+import OrdersTableDropdown from './OrdersTableDropdown'
 
-export type { Order, OrderItem };
+export type { Order, OrderItem }
 
 export const ordersTableColumns: ColumnDef<Order>[] = [
   {
     accessorKey: 'number',
     header: () => {
-      return <p>Order Number</p>;
+      return <p>Order Number</p>
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue('number')}</div>;
+      return <div className="font-medium">{row.getValue('number')}</div>
     },
   },
   {
     accessorKey: 'customerName',
     header: () => {
-      return <p>Customer Name</p>;
+      return <p>Customer Name</p>
     },
     cell: ({ row }) => {
       return (
         <div className="font-medium">
           <p>{toTitleCase(row.getValue('customerName') || '')}</p>
         </div>
-      );
+      )
     },
   },
 
@@ -49,14 +49,14 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         </div>
-      );
+      )
     },
     cell: ({ row }) => {
       return (
         <div className="font-medium">
           {toTitleCase(row.getValue('groupName') || 'Private Customer')}
         </div>
-      );
+      )
     },
   },
   {
@@ -73,14 +73,14 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         </div>
-      );
+      )
     },
     cell: ({ row }) => {
       return (
         <div className="font-medium">
           {format(new Date(row.getValue('deliveryDate')), 'MMM d, yyyy')}
         </div>
-      );
+      )
     },
   },
   {
@@ -97,10 +97,10 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         </div>
-      );
+      )
     },
     cell: ({ row }) => {
-      const status = row.getValue('status');
+      const status = row.getValue('status')
       return (
         <div className="font-medium">
           <Badge
@@ -121,7 +121,7 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
               : toTitleCase(row.getValue('status') || '')}
           </Badge>
         </div>
-      );
+      )
     },
   },
   {
@@ -138,14 +138,14 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         </div>
-      );
+      )
     },
     cell: ({ row }) => {
       return (
         <div className="font-medium">
           £{(row.getValue('total') as number).toFixed(2)}
         </div>
-      );
+      )
     },
   },
 
@@ -158,7 +158,7 @@ export const ordersTableColumns: ColumnDef<Order>[] = [
           orderId={row.original.id}
           orderStatus={row.original.status}
         />
-      );
+      )
     },
   },
-];
+]

@@ -1,13 +1,13 @@
-import { DateRange } from 'react-day-picker';
+import { DateRange } from 'react-day-picker'
 
 type ListByItemProps = {
   date: DateRange | undefined;
 };
 
 //supabase hooks
-import { format } from 'date-fns';
-import { Check, ChevronDown, ChevronUp, X } from 'lucide-react';
-import { useState } from 'react';
+import { format } from 'date-fns'
+import { Check, ChevronDown, ChevronUp, X } from 'lucide-react'
+import { useState } from 'react'
 
 //ui
 import {
@@ -16,7 +16,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import {
   Command,
   CommandEmpty,
@@ -24,12 +24,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
+} from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@/components/ui/popover'
 import {
   Table,
   TableBody,
@@ -37,27 +37,27 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useFetchPickingListByItem } from '@/hooks/order/useFetchPickingListByItem';
+} from '@/components/ui/table'
+import { useFetchPickingListByItem } from '@/hooks/order/useFetchPickingListByItem'
 //utils
-import { toTitleCase } from '@/lib/utils';
+import { toTitleCase } from '@/lib/utils'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 function ListByItem({ date }: ListByItemProps) {
-  const [activeRow, setActiveRow] = useState<number | null>(null);
+  const [activeRow, setActiveRow] = useState<number | null>(null)
 
-  const startDate = date?.from?.toISOString();
-  const endDate = date?.to?.toISOString();
+  const startDate = date?.from?.toISOString()
+  const endDate = date?.to?.toISOString()
 
   const { data, isLoading, isError, error } = useFetchPickingListByItem(
     startDate || '',
     endDate || ''
-  );
+  )
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
-  if (!data) return null;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
+  if (!data) return null
 
   if (data)
     return (
@@ -196,7 +196,7 @@ function ListByItem({ date }: ListByItemProps) {
           </CardContent>
         </Card>
       </div>
-    );
+    )
 }
 
-export default ListByItem;
+export default ListByItem

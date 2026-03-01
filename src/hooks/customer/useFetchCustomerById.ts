@@ -1,16 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query'
 
-import { supabase } from '@/services/supabase';
+import { supabase } from '@/services/supabase'
 
 const fetchCustomerById = async (customerId: string) => {
   const { data, error } = await supabase
     .from('customers')
     .select('*')
     .eq('id', customerId)
-    .single();
+    .single()
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(error.message)
   }
 
   const customerData = {
@@ -27,15 +27,15 @@ const fetchCustomerById = async (customerId: string) => {
     createdAt: data.created_at,
     groupId: data.group_id,
     isActive: data.is_active,
-  };
+  }
 
-  return customerData;
-};
+  return customerData
+}
 
 export const useFetchCustomerById = (customerId: string) => {
   return useQuery({
     queryKey: ['customer-by-id', customerId],
     queryFn: () => fetchCustomerById(customerId),
     enabled: !!customerId,
-  });
-};
+  })
+}
