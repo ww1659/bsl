@@ -1,18 +1,24 @@
-import React from 'react';
-
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  SortingState,
-  ColumnFiltersState,
-  VisibilityState,
-  getSortedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-} from '@tanstack/react-table';
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from '@tanstack/react-table'
+import { ChevronDown } from 'lucide-react'
+import React from 'react'
 
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   Table,
   TableBody,
@@ -20,18 +26,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/table'
 
-import { DataTablePagination } from '../DataTablePagination';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { ChevronDown } from 'lucide-react';
+import { DataTablePagination } from '../DataTablePagination'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,15 +43,15 @@ export function OrdersTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  );
+  )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
       groupName: false,
       pickedStatus: false,
-    });
+    })
 
   const table = useReactTable({
     data,
@@ -69,7 +68,7 @@ export function OrdersTable<TData, TValue>({
       columnFilters,
       columnVisibility,
     },
-  });
+  })
 
   return (
     <div className="space-y-4">
@@ -109,16 +108,16 @@ export function OrdersTable<TData, TValue>({
                     (match) => {
                       switch (match) {
                         case 'customerName':
-                          return 'Customer Name';
+                          return 'Customer Name'
                         case 'groupName':
-                          return 'Group Name';
+                          return 'Group Name'
                         case 'deliveryDate':
-                          return 'Delivery Date';
+                          return 'Delivery Date'
                         default:
-                          return match;
+                          return match
                       }
                     }
-                  );
+                  )
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
@@ -130,7 +129,7 @@ export function OrdersTable<TData, TValue>({
                     >
                       {displayName}
                     </DropdownMenuCheckboxItem>
-                  );
+                  )
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -151,7 +150,7 @@ export function OrdersTable<TData, TValue>({
                             header.getContext()
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -189,5 +188,5 @@ export function OrdersTable<TData, TValue>({
       </div>
       <DataTablePagination table={table} />
     </div>
-  );
+  )
 }

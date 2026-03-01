@@ -1,8 +1,8 @@
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -11,20 +11,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { useFetchGroups } from '@/hooks/fetch/useFetchGroups';
-import { toTitleCase } from '@/lib/utils';
-import { useCreateCustomer } from '@/hooks/create/useCreateCustomer';
+} from '@/components/ui/select'
+import { useCreateCustomer } from '@/hooks/customer/useCreateCustomer'
+import { useFetchGroups } from '@/hooks/group/useFetchGroups'
+import { toTitleCase } from '@/lib/utils'
 
-const ukPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i;
+const ukPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i
 
 const newCustomerSchema = z.object({
   customerName: z
@@ -60,12 +60,12 @@ const newCustomerSchema = z.object({
     .string()
     .min(1, 'No reference')
     .max(50, 'Reference must be less than 50 characters'),
-});
+})
 
 function NewCustomerForm() {
-  const { mutate: createCustomer } = useCreateCustomer();
+  const { mutate: createCustomer } = useCreateCustomer()
 
-  const { data } = useFetchGroups();
+  const { data } = useFetchGroups()
 
   const form = useForm<z.infer<typeof newCustomerSchema>>({
     resolver: zodResolver(newCustomerSchema),
@@ -80,7 +80,7 @@ function NewCustomerForm() {
       group: '',
       reference: '',
     },
-  });
+  })
 
   function onSubmit(values: z.infer<typeof newCustomerSchema>) {
     const customerData = {
@@ -94,8 +94,8 @@ function NewCustomerForm() {
       country: 'uk',
       groupId: values.group,
       reference: values.reference,
-    };
-    createCustomer({ customerData });
+    }
+    createCustomer({ customerData })
   }
 
   return (
@@ -149,7 +149,7 @@ function NewCustomerForm() {
                   <SelectContent>
                     {data?.map((group) => (
                       <SelectItem key={group.id} value={group.id}>
-                        {toTitleCase(group.group_name || '')}
+                        {toTitleCase(group.groupName || '')}
                       </SelectItem>
                     ))}
                     <SelectItem value="private">Private Customer</SelectItem>
@@ -255,7 +255,7 @@ function NewCustomerForm() {
         </Button>
       </form>
     </Form>
-  );
+  )
 }
 
-export default NewCustomerForm;
+export default NewCustomerForm

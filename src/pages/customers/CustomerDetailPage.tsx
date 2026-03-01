@@ -1,16 +1,10 @@
-import { useState } from 'react';
-
+import { useState } from 'react'
 //router
-import { Link, useParams } from 'react-router-dom';
-
-//redux
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setGroupId } from '@/redux/features/groups/groupSlice';
+import { Link, useParams } from 'react-router-dom'
 
 //components
-import StandardOrderCard from '@/components/customers/StandardOrderCard';
-import UpdateCustomerForm from '@/components/customers/UpdateCustomerForm';
-
+import StandardOrderCard from '@/components/customers/StandardOrderCard'
+import UpdateCustomerForm from '@/components/customers/UpdateCustomerForm'
 //ui
 import {
   Breadcrumb,
@@ -19,17 +13,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+} from '@/components/ui/breadcrumb'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -37,51 +22,61 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Spinner } from '@/components/ui/loading';
-
-//utils
-import { toTitleCase } from '@/lib/utils';
-
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/loading'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
+import { Switch } from '@/components/ui/switch'
 //supabase hooks
-import { useFetchCustomerById } from '@/hooks/fetch/useFetchCustomerById';
-import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
-import { useToggleActiveCustomer } from '@/hooks/update/useToggleActiveCustomer';
+import { useFetchCustomerById } from '@/hooks/customer/useFetchCustomerById'
+import { useToggleActiveCustomer } from '@/hooks/customer/useToggleActiveCustomer'
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById'
+//utils
+import { toTitleCase } from '@/lib/utils'
+import { setGroupId } from '@/redux/features/groups/groupSlice'
+//redux
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 
 function CustomerDetailPage() {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false)
 
-  const { groupName, customerName } = useParams();
+  const { groupName, customerName } = useParams()
 
-  const customerId = useAppSelector((state) => state.customer.customerId);
-  const groupId = useAppSelector((state) => state.group.groupId);
+  const customerId = useAppSelector((state) => state.customer.customerId)
+  const groupId = useAppSelector((state) => state.group.groupId)
 
-  const toggleActiveCustomer = useToggleActiveCustomer();
+  const toggleActiveCustomer = useToggleActiveCustomer()
 
   const {
     data: customerData,
     isLoading: isCustomerLoading,
     isError: isCustomerError,
     error: customerError,
-  } = useFetchCustomerById(customerId || '');
+  } = useFetchCustomerById(customerId || '')
 
   const {
     data: groupData,
     isLoading: isGroupLoading,
     isError: isGroupError,
     error: groupError,
-  } = useFetchGroupById(groupId || '');
+  } = useFetchGroupById(groupId || '')
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   const handleClick = () => {
-    dispatch(setGroupId(groupId));
-  };
+    dispatch(setGroupId(groupId))
+  }
 
   const handleDialogOpen = () => {
-    setDialogOpen(true);
-  };
+    setDialogOpen(true)
+  }
 
   const handleToggleActive = () => {
     toggleActiveCustomer.mutate(
@@ -91,18 +86,18 @@ function CustomerDetailPage() {
       },
       {
         onSuccess: () => {
-          setDialogOpen(false);
+          setDialogOpen(false)
         },
         onError: (error) => {
-          console.log('Error:', error);
+          console.log('Error:', error)
         },
       }
-    );
-  };
+    )
+  }
 
-  if (isCustomerLoading || isGroupLoading) return <p>Loading...</p>;
+  if (isCustomerLoading || isGroupLoading) return <p>Loading...</p>
   if (isCustomerError || isGroupError)
-    return <p>Error: {customerError?.message || groupError?.message}</p>;
+    return <p>Error: {customerError?.message || groupError?.message}</p>
 
   return (
     <div>
@@ -234,7 +229,7 @@ function CustomerDetailPage() {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }
 
-export default CustomerDetailPage;
+export default CustomerDetailPage

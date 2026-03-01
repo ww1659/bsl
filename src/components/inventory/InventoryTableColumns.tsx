@@ -1,10 +1,11 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ColumnDef } from '@tanstack/react-table'
+import { ArrowUpDown } from 'lucide-react'
 
-import { toTitleCase } from '@/lib/utils';
-import UpdateItemDropdown from './UpdateItemDropdown';
-import type { OrderItem } from '@/schemas';
+import { Button } from '@/components/ui/button'
+import { toTitleCase } from '@/lib/utils'
+import type { OrderItem } from '@/schemas'
+
+import UpdateItemDropdown from './UpdateItemDropdown'
 
 export const inventoryTableColumns: ColumnDef<OrderItem>[] = [
   {
@@ -21,14 +22,14 @@ export const inventoryTableColumns: ColumnDef<OrderItem>[] = [
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         </div>
-      );
+      )
     },
     cell: ({ row }) => {
       return (
         <div className="font-medium">
           {toTitleCase(row.getValue('name') || '')}
         </div>
-      );
+      )
     },
   },
   {
@@ -48,20 +49,20 @@ export const inventoryTableColumns: ColumnDef<OrderItem>[] = [
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         </div>
-      );
+      )
     },
     cell: ({ row }) => {
       return (
         <div className="font-medium">
           <p>{Number(row.getValue('price')).toFixed(2)}</p>
         </div>
-      );
+      )
     },
   },
   {
     id: 'actions',
     cell: ({ row }) => {
-      return <UpdateItemDropdown row={row.original} />;
+      return <UpdateItemDropdown row={row.original} />
     },
   },
-];
+]

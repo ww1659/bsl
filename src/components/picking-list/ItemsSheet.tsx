@@ -9,7 +9,7 @@ type ItemsSheetProps = {
   orderPicked: string | null;
 };
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react'
 
 //components
 import {
@@ -19,7 +19,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet';
+} from '@/components/ui/sheet'
 import {
   Table,
   TableBody,
@@ -27,13 +27,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-
+} from '@/components/ui/table'
 //utils
-import { sortCustomOrder, toTitleCase } from '@/lib/utils';
-import { Switch } from '../ui/switch';
-import { Label } from '../ui/label';
-import type { OrderItem } from '@/schemas';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils'
+import type { OrderItem } from '@/schemas'
+
+import { Label } from '../ui/label'
+import { Switch } from '../ui/switch'
 
 function ItemsSheet({
   selectedOrder,
@@ -45,27 +45,27 @@ function ItemsSheet({
   onIndividualPicked,
   orderPicked,
 }: ItemsSheetProps) {
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 1536);
-    };
+      setIsSmallScreen(window.innerWidth < 1536)
+    }
 
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
 
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   useEffect(() => {
     if (isSmallScreen && selectedOrder !== null) {
-      setOpen(true);
+      setOpen(true)
     } else {
-      setOpen(false);
+      setOpen(false)
     }
-  }, [isSmallScreen, selectedOrder]);
+  }, [isSmallScreen, selectedOrder])
 
   // const sortedItems = orderItems.sort((a, b) => {
   //   const nameA = a?.name?.toLowerCase() || '';
@@ -75,14 +75,14 @@ function ItemsSheet({
   //   return 0;
   // });
 
-  const sortedItems = useMemo(() => sortCustomOrder(orderItems), [orderItems]);
+  const sortedItems = useMemo(() => sortCustomOrder(orderItems), [orderItems])
 
   const handleSheetOpenChange = (isOpen: boolean) => {
-    setOpen(isOpen);
+    setOpen(isOpen)
     if (!isOpen) {
-      setSelectedOrder(null);
+      setSelectedOrder(null)
     }
-  };
+  }
 
   return (
     <div>
@@ -153,7 +153,7 @@ function ItemsSheet({
         </SheetContent>
       </Sheet>
     </div>
-  );
+  )
 }
 
-export default ItemsSheet;
+export default ItemsSheet

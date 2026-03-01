@@ -1,4 +1,4 @@
-import type { OrderItem } from '@/schemas';
+import type { OrderItem } from '@/schemas'
 
 type CreateOrderCard = {
   customerId: string | null;
@@ -11,10 +11,7 @@ type CreateOrderCard = {
 };
 
 //utils
-import { sortCustomOrder, toTitleCase } from '@/lib/utils';
-
-//supabase hooks
-import { useFetchStandardOrders } from '@/hooks/fetch/useFetchStandardOrder';
+import { MoreHorizontal, Trash2Icon } from 'lucide-react'
 
 //ui
 import {
@@ -23,7 +20,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   Select,
   SelectContent,
@@ -32,7 +37,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/components/ui/select'
 import {
   Table,
   TableBody,
@@ -41,23 +46,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { MoreHorizontal, Trash2Icon } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/table'
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById'
+//supabase hooks
+import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders'
+import { sortCustomOrder, toTitleCase } from '@/lib/utils'
 
-import { Button } from '../ui/button';
-import AddItemsDropdown from './AddItemsDropdown';
-import { Input } from '../ui/input';
-import LoadingWheel from '../LoadingWheel';
-import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
-import { NewOrderNotes } from './NewOrderNotes';
+import LoadingWheel from '../LoadingWheel'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import AddItemsDropdown from './AddItemsDropdown'
+import { NewOrderNotes } from './NewOrderNotes'
 
 function CreateOrderCard({
   customerId,
@@ -70,26 +69,26 @@ function CreateOrderCard({
 }: CreateOrderCard) {
   const { data, isLoading, isError, error } = useFetchStandardOrders(
     customerId || ''
-  );
+  )
 
   const { data: groupData, isLoading: isGroupLoading } = useFetchGroupById(
     groupId || ''
-  );
+  )
 
   const handleOrderChange = (selectedOrderName: string) => {
     const selectedOrderItems =
       data?.find((order) => order.orderName === selectedOrderName)
-        ?.orderItems || [];
+        ?.orderItems || []
     setCurrentOrderItems(
       selectedOrderItems.filter((item) => item.id !== undefined) as OrderItem[]
-    );
-  };
+    )
+  }
 
   const removeItem = (itemId: number) => {
     setCurrentOrderItems((prevItems) =>
       prevItems.filter((item) => item.id !== itemId)
-    );
-  };
+    )
+  }
 
   const updateQuantity = (itemId: number, newQuantity: number) => {
     setCurrentOrderItems((prevItems) =>
@@ -98,26 +97,26 @@ function CreateOrderCard({
           ? { ...orderItem, quantity: newQuantity > 0 ? newQuantity : 1 }
           : orderItem
       )
-    );
-  };
+    )
+  }
 
-  const standardOrderNames = data?.map((order) => order.orderName) || [];
-  const groupDiscount = groupData?.standardDiscount || 0;
+  const standardOrderNames = data?.map((order) => order.orderName) || []
+  const groupDiscount = groupData?.standardDiscount || 0
 
-  const sortedItems = sortCustomOrder(currentOrderItems);
+  const sortedItems = sortCustomOrder(currentOrderItems)
 
   const orderTotal =
     currentOrderItems.reduce((total, item) => {
-      const itemPrice = item.price || 0;
-      const quantity = item.quantity;
+      const itemPrice = item.price || 0
+      const quantity = item.quantity
 
-      return total + itemPrice * quantity!;
+      return total + itemPrice * quantity!
     }, 0) *
-    ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100);
+    ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100)
 
   if (isLoading || isGroupLoading)
-    return <LoadingWheel text="Customer Info Loading" />;
-  if (isError) return <p>Error: {error.message}</p>;
+    return <LoadingWheel text="Customer Info Loading" />
+  if (isError) return <p>Error: {error.message}</p>
 
   return (
     <div className="my-2">
@@ -297,7 +296,7 @@ function CreateOrderCard({
         </div>
       </Card>
     </div>
-  );
+  )
 }
 
-export default CreateOrderCard;
+export default CreateOrderCard

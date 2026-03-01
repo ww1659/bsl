@@ -1,4 +1,4 @@
-import type { OrderItem, OrderStatus } from '@/schemas';
+import type { OrderItem, OrderStatus } from '@/schemas'
 type OrderSummaryCard = {
   currentOrderItems: OrderItem[];
   date: Date | undefined;
@@ -10,7 +10,8 @@ type OrderSummaryCard = {
 };
 
 //supabase hooks
-import { useCreateOrder } from '@/hooks/create/useCreateOrder';
+import { format } from 'date-fns'
+import { useMemo } from 'react'
 
 //ui
 import {
@@ -19,16 +20,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '../ui/button';
-import { Separator } from '../ui/separator';
-
+} from '@/components/ui/card'
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById'
+import { useCreateOrder } from '@/hooks/order/useCreateOrder'
 //utils
-import { sortCustomOrder, toTitleCase } from '@/lib/utils';
-import { format } from 'date-fns';
-import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
-import LoadingWheel from '../LoadingWheel';
-import { useMemo } from 'react';
+import { sortCustomOrder, toTitleCase } from '@/lib/utils'
+
+import LoadingWheel from '../LoadingWheel'
+import { Button } from '../ui/button'
+import { Separator } from '../ui/separator'
 
 function OrderSummaryCard({
   currentOrderItems,
@@ -39,19 +39,19 @@ function OrderSummaryCard({
   groupId,
   orderNotes,
 }: OrderSummaryCard) {
-  const { mutate: createOrder } = useCreateOrder();
-  const { data, isLoading } = useFetchGroupById(groupId || '');
+  const { mutate: createOrder } = useCreateOrder()
+  const { data, isLoading } = useFetchGroupById(groupId || '')
 
-  const groupDiscount = data?.standardDiscount || 0;
-  const formattedDate = format(date || '', 'EEEE do MMMM');
+  const groupDiscount = data?.standardDiscount || 0
+  const formattedDate = format(date || '', 'EEEE do MMMM')
 
   const orderTotal =
     currentOrderItems.reduce((total, item) => {
-      const itemPrice = item.price || 0;
-      const quantity = item.quantity;
-      return total + itemPrice * quantity!;
+      const itemPrice = item.price || 0
+      const quantity = item.quantity
+      return total + itemPrice * quantity!
     }, 0) *
-    ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100);
+    ((100 - Math.max(customerDiscount || 0, groupDiscount)) / 100)
 
   const handleOrderConfirmation = (
     currentOrderItems: OrderItem[],
@@ -68,24 +68,24 @@ function OrderSummaryCard({
       discount: customerDiscount,
       notes: orderNotes,
       group_id: groupId,
-    };
+    }
     const orderItems = currentOrderItems.map((item) => {
       return {
         item_id: item.id,
         quantity: item.quantity,
         price: item.price,
-      };
-    });
+      }
+    })
 
-    createOrder({ orderData, orderItems });
-  };
+    createOrder({ orderData, orderItems })
+  }
 
   const sortedItems = useMemo(
     () => sortCustomOrder(currentOrderItems),
     [currentOrderItems]
-  );
+  )
 
-  if (isLoading) return <LoadingWheel text="Order Summary Loading" />;
+  if (isLoading) return <LoadingWheel text="Order Summary Loading" />
 
   return (
     <div className="grid lg:grid-cols-2 gap-1">
@@ -195,7 +195,7 @@ function OrderSummaryCard({
         </div>
       </Card>
     </div>
-  );
+  )
 }
 
-export default OrderSummaryCard;
+export default OrderSummaryCard

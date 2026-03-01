@@ -1,5 +1,6 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "../redux/hooks";
+import { Navigate, Outlet } from "react-router-dom"
+
+import { useAppSelector } from "../redux/hooks"
 
 type ProtectedRouteProps = {
   redirectPath?: string;
@@ -8,12 +9,12 @@ type ProtectedRouteProps = {
 const ProtectedRoute: React.FC = ({
   redirectPath = "/login",
 }: ProtectedRouteProps) => {
-  const session = useAppSelector((state) => state.auth.session);
+  const session = useAppSelector((state) => state.auth.session)
 
   if (!session) {
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={redirectPath} replace />
   }
-  return <Outlet />;
-};
+  return <Outlet />
+}
 
-export default ProtectedRoute;
+export default ProtectedRoute

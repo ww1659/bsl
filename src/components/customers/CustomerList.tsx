@@ -1,42 +1,44 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAppSelector } from "@/redux/hooks";
-import { useFetchGroupedCustomers } from "@/hooks/fetch/useFetchCustomersByGroup";
-import CustomerCard from "./CustomerCard";
+import debounce from 'lodash.debounce'
+import { useCallback, useEffect, useState } from 'react'
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "../ui/input";
-import debounce from "lodash.debounce";
+} from '@/components/ui/card'
+import { useFetchGroupedCustomers } from '@/hooks/customer/useFetchCustomersByGroup'
+import { useAppSelector } from '@/redux/hooks'
+
+import { Input } from '../ui/input'
+import CustomerCard from './CustomerCard'
 
 type CustomerListProps = {
-  groupName: string | undefined;
-};
+  groupName: string | undefined
+}
 
 function CustomerList({ groupName }: CustomerListProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const groupId = useAppSelector((state) => state.group.groupId);
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const groupId = useAppSelector((state) => state.group.groupId)
 
   const { data, isLoading, isError, error } = useFetchGroupedCustomers(
-    groupId || "",
+    groupId || '',
     debouncedSearchTerm
-  );
+  )
 
   const sortedData = data?.sort((a, b) =>
-    (a.customer_name ?? "").localeCompare(b.customer_name ?? "")
-  );
+    (a.customerName ?? '').localeCompare(b.customerName ?? '')
+  )
 
   const debouncedSetSearchTerm = useCallback((value: string) => {
-    debounce(() => setDebouncedSearchTerm(value), 300)();
-  }, []);
+    debounce(() => setDebouncedSearchTerm(value), 300)()
+  }, [])
 
   useEffect(() => {
-    debouncedSetSearchTerm(searchTerm);
-  }, [searchTerm, debouncedSetSearchTerm]);
+    debouncedSetSearchTerm(searchTerm)
+  }, [searchTerm, debouncedSetSearchTerm])
 
   return (
     <Card className="w-full">
@@ -62,13 +64,13 @@ function CustomerList({ groupName }: CustomerListProps) {
             <CustomerCard
               key={customer.id}
               customerId={customer.id}
-              customerName={customer.customer_name}
+              customerName={customer.customerName ?? ''}
               groupName={groupName}
             />
           ))}
       </CardContent>
     </Card>
-  );
+  )
 }
 
-export default CustomerList;
+export default CustomerList

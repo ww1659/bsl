@@ -1,9 +1,11 @@
+import { Slot } from "@radix-ui/react-slot";
+import { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { Link, type LinkProps } from "react-router-dom";
-import { Slot } from "@radix-ui/react-slot";
+
 import { cn } from "@/lib/utils";
+
 import { buttonVariants } from "./button";
-import { VariantProps } from "class-variance-authority";
 
 export interface ButtonLinkProps
   extends LinkProps,

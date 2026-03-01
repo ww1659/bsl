@@ -10,12 +10,12 @@ type GroupDetailsForm = {
 };
 
 //zod forms
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 //components
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -23,13 +23,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useUpdateGroup } from "@/hooks/group/useUpdateGroup"
+import { useToast } from "@/hooks/use-toast"
 //utils
-import { toTitleCase } from "@/lib/utils";
-import { useUpdateGroup } from "@/hooks/update/useUpdateGroup";
-import { useToast } from "@/hooks/use-toast";
+import { toTitleCase } from "@/lib/utils"
 
 const groupDetailsSchema = z.object({
   name: z.string().min(2, {
@@ -69,7 +68,7 @@ const groupDetailsSchema = z.object({
     .number()
     .gte(0, "Discount must be positive!")
     .lte(100, "Discount cannot exceed 100%"),
-});
+})
 
 function UpdateGroupForm({
   groupId,
@@ -81,8 +80,8 @@ function UpdateGroupForm({
   groupStandardDiscount,
   setIsSheetOpen,
 }: GroupDetailsForm) {
-  const updateGroup = useUpdateGroup();
-  const { toast } = useToast();
+  const updateGroup = useUpdateGroup()
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof groupDetailsSchema>>({
     resolver: zodResolver(groupDetailsSchema),
@@ -94,7 +93,7 @@ function UpdateGroupForm({
       email: groupEmail || "",
       standardDiscount: groupStandardDiscount || 0,
     },
-  });
+  })
 
   function onSubmit(values: z.infer<typeof groupDetailsSchema>) {
     const groupData = {
@@ -105,17 +104,17 @@ function UpdateGroupForm({
       groupPostcode: (values.postcode || "").toLowerCase(),
       groupEmail: values.email.toLowerCase(),
       groupStandardDiscount: values.standardDiscount,
-    };
+    }
     updateGroup.mutate(groupData, {
       onSuccess: () => {
-        setIsSheetOpen(false);
+        setIsSheetOpen(false)
         toast({
           title: "Success!",
           description: "Group Details Updated",
           duration: 3000,
-        });
+        })
       },
-    });
+    })
   }
 
   return (
@@ -230,7 +229,7 @@ function UpdateGroupForm({
         </div>
       </form>
     </Form>
-  );
+  )
 }
 
-export default UpdateGroupForm;
+export default UpdateGroupForm

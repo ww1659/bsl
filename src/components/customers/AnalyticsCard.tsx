@@ -6,8 +6,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "../ui/button";
+} from '@/components/ui/card';
+
+import { Button } from '../ui/button';
 
 function AnalyticsCard({ customerId }: AnalyticsCardProps) {
   return (

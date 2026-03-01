@@ -1,14 +1,15 @@
-import { useAppSelector } from "@/redux/hooks";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom"
+
+import { useAppSelector } from "@/redux/hooks"
 
 const PublicRoute = () => {
-  const session = useAppSelector((state) => state.auth.session);
+  const session = useAppSelector((state) => state.auth.session)
 
   if (session) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" replace />
   }
 
-  return <Outlet />;
-};
+  return <Outlet />
+}
 
-export default PublicRoute;
+export default PublicRoute

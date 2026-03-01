@@ -1,16 +1,15 @@
 //components
-import GroupCard from "@/components/customers/GroupCard";
-
 //ui
-import { Plus } from "lucide-react";
-import { ButtonLink } from "@/components/ui/button-link";
+import { Plus } from "lucide-react"
 
+import GroupCard from "@/components/customers/GroupCard"
+import LoadingWheel from "@/components/LoadingWheel"
+import { ButtonLink } from "@/components/ui/button-link"
 //database hooks
-import { useFetchGroups } from "@/hooks/fetch/useFetchGroups";
-import LoadingWheel from "@/components/LoadingWheel";
+import { useFetchGroups } from "@/hooks/group/useFetchGroups"
 
 function GroupsPage() {
-  const { data, isLoading, isError, error } = useFetchGroups();
+  const { data, isLoading, isError, error } = useFetchGroups()
 
   return (
     <>
@@ -44,7 +43,7 @@ function GroupsPage() {
           {data &&
             data.map((group) => (
               <div className="grid" key={group.id}>
-                <GroupCard groupName={group.group_name} groupId={group.id} />
+                <GroupCard groupName={group.groupName ?? ''} groupId={group.id} />
               </div>
             ))}
           <div className="grid">
@@ -53,7 +52,7 @@ function GroupsPage() {
         </div>
       )}
     </>
-  );
+  )
 }
 
-export default GroupsPage;
+export default GroupsPage

@@ -1,20 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { useFetchOrderById } from '@/hooks/fetch/useFetchOrderById';
-import { sortCustomOrder, toSentenceCase, toTitleCase } from '@/lib/utils';
-import { useParams, useNavigate } from 'react-router-dom';
+import { format } from 'date-fns'
+import { Edit, Trash2 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate,useParams } from 'react-router-dom'
 
+import AddItemsDropdown from '@/components/orders/AddItemsDropdown'
+import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { useUpdateOrderStatus } from '@/hooks/update/useUpdateOrderStatus';
-import { Badge } from '@/components/ui/badge';
-
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 import {
   Table,
   TableBody,
@@ -23,95 +25,86 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { useFetchItemsByOrderId } from '@/hooks/fetch/useFetchItemsByOrderId';
-import { Input } from '@/components/ui/input';
-import { Edit, Trash2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
-import { Textarea } from '@/components/ui/textarea';
-import type { OrderItem } from '@/schemas';
-import AddItemsDropdown from '@/components/orders/AddItemsDropdown';
-import { useUpdateOrder } from '@/hooks/update/useUpdateOrder';
-import { format } from 'date-fns';
-import { useToast } from '@/hooks/use-toast';
+} from '@/components/ui/table'
+import { Textarea } from '@/components/ui/textarea'
+import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId'
+import { useFetchOrderById } from '@/hooks/order/useFetchOrderById'
+import { useUpdateOrder } from '@/hooks/order/useUpdateOrder'
+import { useUpdateOrderStatus } from '@/hooks/order/useUpdateOrderStatus'
+import { useToast } from '@/hooks/use-toast'
+import { sortCustomOrder, toSentenceCase, toTitleCase } from '@/lib/utils'
+import type { OrderItem } from '@/schemas'
 
 function OrderDetailPage() {
-  const { orderId } = useParams<{ orderId: string }>();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [deliveryDate, setDeliveryDate] = useState<Date | undefined>();
-  const [orderNotes, setOrderNotes] = useState<string | undefined>();
-  const [currentItems, setCurrentItems] = useState<OrderItem[]>([]);
-  const [originalItems, setOriginalItems] = useState<OrderItem[]>([]);
+  const { orderId } = useParams<{ orderId: string }>()
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [deliveryDate, setDeliveryDate] = useState<Date | undefined>()
+  const [orderNotes, setOrderNotes] = useState<string | undefined>()
+  const [currentItems, setCurrentItems] = useState<OrderItem[]>([])
+  const [originalItems, setOriginalItems] = useState<OrderItem[]>([])
 
-  const { toast } = useToast();
-  const { data: orderItems } = useFetchItemsByOrderId(orderId || '');
+  const { toast } = useToast()
+  const { data: orderItems } = useFetchItemsByOrderId(orderId || '')
   const {
     data: orderData,
     isLoading,
     isError,
     error,
-  } = useFetchOrderById(orderId || '');
-  const updateOrder = useUpdateOrder();
+  } = useFetchOrderById(orderId || '')
+  const updateOrder = useUpdateOrder()
 
-  const sortedItems = useMemo(() => {
-    const itemsCamelCase = orderItems?.map((item) => ({
-      id: item.item_id,
-      name: item.items!.item_name,
-      price: item.price,
-      quantity: item.quantity,
-    }));
+  const sortedItems = useMemo(
+    () => sortCustomOrder(orderItems || []),
+    [orderItems]
+  )
 
-    return sortCustomOrder(itemsCamelCase || []);
-  }, [orderItems]);
-
-  const navigate = useNavigate();
-  const updateOrderStatus = useUpdateOrderStatus();
+  const navigate = useNavigate()
+  const updateOrderStatus = useUpdateOrderStatus()
 
   useEffect(() => {
     if (orderData) {
-      setDeliveryDate(new Date(orderData.delivery_date!));
-      setOrderNotes(orderData.notes || '');
+      setDeliveryDate(new Date(orderData.deliveryDate!))
+      setOrderNotes(orderData.notes || '')
     }
-  }, [orderData]);
+  }, [orderData])
 
   useEffect(() => {
     if (sortedItems) {
-      setOriginalItems(sortedItems);
-      setCurrentItems(sortedItems);
+      setOriginalItems(sortedItems)
+      setCurrentItems(sortedItems)
     }
-  }, [sortedItems]);
+  }, [sortedItems])
 
   const calculateTotal = (items: OrderItem[], discount: number = 0) => {
     return (
       items.reduce((sum, item) => {
-        const itemTotal = item.price! * item.quantity!;
-        return sum + itemTotal;
+        const itemTotal = item.price! * item.quantity!
+        return sum + itemTotal
       }, 0) *
       ((100 - discount) / 100)
-    );
-  };
+    )
+  }
 
   const currentTotal = useMemo(() => {
-    return calculateTotal(currentItems, orderData?.discount || 0);
-  }, [currentItems, orderData?.discount]);
+    return calculateTotal(currentItems, orderData?.discount || 0)
+  }, [currentItems, orderData?.discount])
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   if (isError) {
-    return <div>Error: {error?.message}</div>;
+    return <div>Error: {error?.message}</div>
   }
 
   if (!orderData) {
-    return <div>No data found for this order</div>;
+    return <div>No data found for this order</div>
   }
 
   const handleOpenDialog = () => {
-    setDialogOpen(true);
-  };
+    setDialogOpen(true)
+  }
 
   const handleDeleteOrderClick = () => {
     updateOrderStatus.mutate(
@@ -121,19 +114,19 @@ function OrderDetailPage() {
       },
       {
         onSuccess: () => {
-          setDialogOpen(false);
-          navigate('/orders');
+          setDialogOpen(false)
+          navigate('/orders')
         },
         onError: (error) => {
-          console.error('Failed to archive order:', error);
+          console.error('Failed to archive order:', error)
         },
       }
-    );
-  };
+    )
+  }
 
   const handleEditOrderClick = () => {
-    setIsEditing((prev) => !prev);
-  };
+    setIsEditing((prev) => !prev)
+  }
 
   const updateQuantity = (itemId: number, newQuantity: number) => {
     setCurrentItems((prevItems) =>
@@ -142,14 +135,14 @@ function OrderDetailPage() {
           ? { ...orderItem, quantity: newQuantity > 0 ? newQuantity : 1 }
           : orderItem
       )
-    );
-  };
+    )
+  }
 
   const removeItem = (itemId: number) => {
     setCurrentItems((prevItems) =>
       prevItems.filter((item) => item.id !== itemId)
-    );
-  };
+    )
+  }
 
   const handleSave = () => {
     updateOrder.mutate(
@@ -165,26 +158,26 @@ function OrderDetailPage() {
             title: 'Success',
             description: `Order #${orderData.number} updated successfully`,
             duration: 5000,
-          });
-          setIsEditing(false);
+          })
+          setIsEditing(false)
         },
         onError: (error) => {
           toast({
             title: 'Error',
             description: 'Failed to update order: ' + error.message,
             duration: 5000,
-          });
+          })
         },
       }
-    );
-  };
+    )
+  }
 
   const handleCancel = () => {
-    setIsEditing(false);
-    setCurrentItems(originalItems);
-    setDeliveryDate(new Date(orderData.delivery_date!));
-    setOrderNotes(orderData.notes || undefined);
-  };
+    setIsEditing(false)
+    setCurrentItems(originalItems)
+    setDeliveryDate(new Date(orderData.deliveryDate!))
+    setOrderNotes(orderData.notes || undefined)
+  }
 
   return (
     <div>
@@ -247,7 +240,7 @@ function OrderDetailPage() {
             </Badge>
           )}
           <h3 className="text-muted-foreground">
-            {toTitleCase(orderData.customers!.customer_name!)}
+            {toTitleCase(orderData.customers!.customerName!)}
           </h3>
         </div>
       </div>
@@ -260,7 +253,7 @@ function OrderDetailPage() {
             <h3>Delivery Date:</h3>
             <h3 className={isEditing ? 'text-normal' : 'text-muted-foreground'}>
               {format(
-                deliveryDate || new Date(orderData.delivery_date!),
+                deliveryDate || new Date(orderData.deliveryDate!),
                 'd MMMM, yyyy'
               )}
             </h3>
@@ -433,7 +426,7 @@ function OrderDetailPage() {
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }
 
-export default OrderDetailPage;
+export default OrderDetailPage

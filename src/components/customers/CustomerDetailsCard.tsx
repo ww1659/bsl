@@ -4,12 +4,6 @@ type CustomerDetailsCard = {
 };
 
 //redux
-import { useAppDispatch } from "@/redux/hooks";
-import { openDialog } from "@/redux/features/customers/updateCustomerSlice";
-
-//supabase hooks
-import { useFetchCustomerById } from "@/hooks/fetch/useFetchCustomerById";
-
 //ui
 import {
   Card,
@@ -17,49 +11,52 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "../ui/button";
-
+} from "@/components/ui/card"
+//supabase hooks
+import { useFetchCustomerById } from "@/hooks/customer/useFetchCustomerById"
+import { useFetchGroupById } from "@/hooks/group/useFetchGroupById"
 //components
-
 //utils
-import { toTitleCase } from "@/lib/utils";
-import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
+import { toTitleCase } from "@/lib/utils"
+import { openDialog } from "@/redux/features/customers/updateCustomerSlice"
+import { useAppDispatch } from "@/redux/hooks"
+
+import { Button } from "../ui/button"
 
 function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   const {
     data: customerData,
     isLoading: isCustomerLoading,
     isError: isCustomerError,
     error: customerError,
-  } = useFetchCustomerById(customerId || "");
+  } = useFetchCustomerById(customerId || "")
 
-  const { data, isLoading, isError, error } = useFetchGroupById(groupId || "");
+  const { data, isLoading, isError, error } = useFetchGroupById(groupId || "")
 
-  let groupData = null;
-  let isGroupLoading = false;
-  let isGroupError = false;
-  let groupError = null;
+  let groupData = null
+  let isGroupLoading = false
+  let isGroupError = false
+  let groupError = null
 
   if (groupId !== "null") {
-    groupData = data;
-    isGroupLoading = isLoading;
-    isGroupError = isError;
-    groupError = error;
+    groupData = data
+    isGroupLoading = isLoading
+    isGroupError = isError
+    groupError = error
   }
 
   const handleClick = () => {
-    dispatch(openDialog());
-  };
+    dispatch(openDialog())
+  }
 
-  if (isCustomerLoading) return <p>Loading...</p>;
-  if (isCustomerError) return <p>Error: {customerError.message}</p>;
+  if (isCustomerLoading) return <p>Loading...</p>
+  if (isCustomerError) return <p>Error: {customerError.message}</p>
 
-  if (isGroupLoading) return <p>Loading...</p>;
+  if (isGroupLoading) return <p>Loading...</p>
   if (groupId && groupError) {
-    if (isGroupError) return <p>Error: {groupError.message}</p>;
+    if (isGroupError) return <p>Error: {groupError.message}</p>
   }
 
   if (customerData)
@@ -116,7 +113,7 @@ function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
                   <p className="pr-1 text-sm">Name:</p>
                   <p className="font-bold text-sm">
                     {groupData
-                      ? toTitleCase(groupData.groupName)
+                      ? toTitleCase(groupData.groupName ?? '')
                       : "Private Customer"}
                   </p>
                 </div>
@@ -148,7 +145,7 @@ function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
         </Card>
         {/* <UpdateCustomerDetailsDialog customerId={customerId} /> */}
       </>
-    );
+    )
 }
 
-export default CustomerDetailsCard;
+export default CustomerDetailsCard

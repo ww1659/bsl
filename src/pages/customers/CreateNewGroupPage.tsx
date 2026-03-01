@@ -1,4 +1,4 @@
-import NewGroupForm from "@/components/customers/NewGroupForm";
+import NewGroupForm from "@/components/customers/NewGroupForm"
 
 function CreateNewGroupPage() {
   return (
@@ -8,7 +8,7 @@ function CreateNewGroupPage() {
       </div>
       <NewGroupForm />
     </>
-  );
+  )
 }
 
-export default CreateNewGroupPage;
+export default CreateNewGroupPage

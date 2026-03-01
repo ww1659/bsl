@@ -1,14 +1,15 @@
-import { ReactNode } from 'react';
-import { NavBar } from './NavBar';
-import { Header } from './Header';
-import { useLocation } from 'react-router-dom';
-import { Toaster } from '../ui/toaster';
+import { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
+
+import { Toaster } from '../ui/toaster'
+import { Header } from './Header'
+import { NavBar } from './NavBar'
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const location = useLocation();
+  const location = useLocation()
   const hideNav =
     location.pathname.startsWith('/login') ||
-    location.pathname.startsWith('/signup');
+    location.pathname.startsWith('/signup')
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -29,7 +30,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         <Toaster />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

@@ -1,12 +1,12 @@
 //router
-import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+//zod form validation
+import { z } from 'zod'
 
-//redux
-import { useAppDispatch } from '@/redux/hooks';
-
-//components
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -14,30 +14,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-
-//zod form validation
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { setSession } from '@/redux/features/auth/authslice';
-
+} from '@/components/ui/form'
+//components
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/loading'
+import { setSession } from '@/redux/features/auth/authslice'
+//redux
+import { useAppDispatch } from '@/redux/hooks'
 //connect to Supabase client
-import { supabase } from '@/services/supabase';
-import { Spinner } from '@/components/ui/loading';
+import { supabase } from '@/services/supabase'
 // import { Link } from 'react-router-dom';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).min(2).max(50),
   password: z.string().max(32),
-});
+})
 
 function LoginPage() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const [loginError, setLoginError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const [loginError, setLoginError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -45,20 +42,20 @@ function LoginPage() {
       email: '',
       password: '',
     },
-  });
+  })
 
   async function handleSignIn(values: z.infer<typeof loginSchema>) {
-    setLoading(true);
+    setLoading(true)
     const { data, error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
-    });
-    setLoading(false);
+    })
+    setLoading(false)
     if (error) {
-      setLoginError(error.message);
+      setLoginError(error.message)
     } else if (data.session) {
-      dispatch(setSession(data.session));
-      navigate('/');
+      dispatch(setSession(data.session))
+      navigate('/')
     }
   }
 
@@ -161,7 +158,7 @@ function LoginPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default LoginPage;
+export default LoginPage

@@ -1,10 +1,13 @@
-import type { OrderItem } from '@/schemas';
+import type { OrderItem } from '@/schemas'
 
 type ItemsDropDown = {
   currentOrderItems: OrderItem[];
   setCurrentOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
   disabled?: boolean;
 };
+
+import { SelectSeparator } from '@radix-ui/react-select'
+import { Plus } from 'lucide-react'
 
 import {
   Select,
@@ -13,43 +16,39 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-} from '@/components/ui/select';
-
-import { useFetchItems } from '@/hooks/fetch/useFetchAllItems';
-
-import { toTitleCase } from '@/lib/utils';
-import { SelectSeparator } from '@radix-ui/react-select';
-import { Plus } from 'lucide-react';
+} from '@/components/ui/select'
+import { useFetchItems } from '@/hooks/item/useFetchItems'
+import { toTitleCase } from '@/lib/utils'
 
 function AddItemsDropdown({
   currentOrderItems,
   setCurrentOrderItems,
   disabled,
 }: ItemsDropDown) {
-  const { data: allItems, isLoading, isError, error } = useFetchItems();
+  const { data: allItems, isLoading, isError, error } = useFetchItems()
 
   const sortedItems = allItems?.sort((a, b) =>
     (a.name || '').localeCompare(b.name || '')
-  );
+  )
 
   const handleItemAdd = (itemId: string) => {
-    const selectedItem = allItems?.find((item) => item.id === Number(itemId));
+    const selectedItem = allItems?.find((item) => item.id === Number(itemId))
     if (selectedItem) {
       const itemExists = currentOrderItems.some(
         (orderItem) => orderItem.id === selectedItem.id
-      );
+      )
 
       if (!itemExists) {
         setCurrentOrderItems((prevItems) => [
           ...prevItems,
           { ...selectedItem, quantity: 1 },
-        ]);
+        ])
       }
     }
-  };
+  }
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   if (sortedItems)
     return (
@@ -62,7 +61,7 @@ function AddItemsDropdown({
             {sortedItems?.map((item) => {
               const itemExists = currentOrderItems.some(
                 (orderItem) => orderItem.id === item.id
-              );
+              )
 
               return (
                 <SelectItem
@@ -78,12 +77,12 @@ function AddItemsDropdown({
                   )}
                   {toTitleCase(item.name || '')}
                 </SelectItem>
-              );
+              )
             })}
           </SelectGroup>
         </SelectContent>
       </Select>
-    );
+    )
 }
 
-export default AddItemsDropdown;
+export default AddItemsDropdown

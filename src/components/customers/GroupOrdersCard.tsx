@@ -4,21 +4,21 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
+import { useFetchOrderStatsByGroup } from "@/hooks/order/useFetchOrderStatsByGroup"
+import { useAppSelector } from "@/redux/hooks"
 
-import { useFetchOrderStatsByGroup } from "@/hooks/fetch/useFetchOrderStatsByGroup";
-import { useAppSelector } from "@/redux/hooks";
-import { Progress } from "../ui/progress";
+import { Progress } from "../ui/progress"
 
 function GroupOrdersCard() {
-  const groupId = useAppSelector((state) => state.group.groupId);
+  const groupId = useAppSelector((state) => state.group.groupId)
 
   const { data, isLoading, isError, error } = useFetchOrderStatsByGroup(
     groupId || ""
-  );
+  )
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   const percentageChange =
     data &&
@@ -28,7 +28,7 @@ function GroupOrdersCard() {
       ? ((data.monthOrders - data.previousMonthOrders) /
           data.previousMonthOrders) *
         100
-      : 0;
+      : 0
 
   if (data)
     return (
@@ -57,7 +57,7 @@ function GroupOrdersCard() {
           </p>
         </CardFooter>
       </Card>
-    );
+    )
 }
 
-export default GroupOrdersCard;
+export default GroupOrdersCard

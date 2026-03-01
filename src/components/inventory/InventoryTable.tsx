@@ -1,17 +1,16 @@
-import React from "react";
-
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  SortingState,
-  ColumnFiltersState,
-  VisibilityState,
-  getSortedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-} from "@tanstack/react-table";
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table"
+import React from "react"
 
 import {
   Table,
@@ -20,9 +19,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { DataTablePagination } from "../DataTablePagination";
-import { Input } from "../ui/input";
+} from "@/components/ui/table"
+
+import { DataTablePagination } from "../DataTablePagination"
+import { Input } from "../ui/input"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,15 +33,15 @@ export function InventoryTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  );
+  )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
       groupName: false,
       pickedStatus: false,
-    });
+    })
 
   const table = useReactTable({
     data,
@@ -58,7 +58,7 @@ export function InventoryTable<TData, TValue>({
       columnFilters,
       columnVisibility,
     },
-  });
+  })
 
   return (
     <div className="space-y-4">
@@ -85,7 +85,7 @@ export function InventoryTable<TData, TValue>({
                             header.getContext()
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -123,5 +123,5 @@ export function InventoryTable<TData, TValue>({
       </div>
       <DataTablePagination table={table} />
     </div>
-  );
+  )
 }

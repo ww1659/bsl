@@ -1,8 +1,8 @@
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -10,11 +10,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useCreateGroup } from "@/hooks/create/useCreateGroup";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { useCreateGroup } from "@/hooks/group/useCreateGroup"
 
-const ukPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i;
+const ukPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i
 
 const newGroupSchema = z.object({
   groupName: z
@@ -39,10 +39,10 @@ const newGroupSchema = z.object({
     .gte(0, "Discount must be postive!")
     .lte(100, "Discount cannot exceed 100%")
     .int("Value must be a whole number"),
-});
+})
 
 function NewGroupForm() {
-  const { mutate: createGroup } = useCreateGroup();
+  const { mutate: createGroup } = useCreateGroup()
 
   const form = useForm<z.infer<typeof newGroupSchema>>({
     resolver: zodResolver(newGroupSchema),
@@ -55,7 +55,7 @@ function NewGroupForm() {
       email: "",
       discount: 10,
     },
-  });
+  })
 
   function onSubmit(values: z.infer<typeof newGroupSchema>) {
     const groupData = {
@@ -67,8 +67,8 @@ function NewGroupForm() {
       town: values.town?.toLowerCase(),
       postcode: values.postcode?.toLowerCase(),
       country: "uk",
-    };
-    createGroup({ groupData });
+    }
+    createGroup({ groupData })
   }
 
   return (
@@ -181,7 +181,7 @@ function NewGroupForm() {
         </Button>
       </form>
     </Form>
-  );
+  )
 }
 
-export default NewGroupForm;
+export default NewGroupForm

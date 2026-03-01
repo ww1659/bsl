@@ -1,30 +1,28 @@
-import { DateRange } from 'react-day-picker';
-import { useState } from 'react';
+import { format } from 'date-fns'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { useState } from 'react'
+import { DateRange } from 'react-day-picker'
 
-//ui
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+//components
+import ListByItem from '@/components/picking-list/ListByItem'
+import ListByOrder from '@/components/picking-list/ListByOrder'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Calendar as CalendarIcon } from 'lucide-react';
-
-//components
-import ListByItem from '@/components/picking-list/ListByItem';
-import ListByOrder from '@/components/picking-list/ListByOrder';
-
+} from '@/components/ui/popover'
+//ui
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 //utils
-import { cn, getFourWeekRange } from '@/lib/utils';
-import { format } from 'date-fns';
+import { cn, getFourWeekRange } from '@/lib/utils'
 
 function PickingListPage() {
   const [date, setDate] = useState<DateRange | undefined>({
     from: getFourWeekRange().dateFrom,
     to: getFourWeekRange().dateTo,
-  });
+  })
 
   return (
     <>
@@ -83,7 +81,7 @@ function PickingListPage() {
         </TabsContent>
       </Tabs>
     </>
-  );
+  )
 }
 
-export default PickingListPage;
+export default PickingListPage

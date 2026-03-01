@@ -1,4 +1,9 @@
-import { Link } from "react-router-dom";
+import { format, parseISO } from "date-fns"
+import { Link } from "react-router-dom"
+
+import { toTitleCase } from "@/lib/utils"
+
+import { Badge } from "../ui/badge"
 import {
   Card,
   CardContent,
@@ -6,10 +11,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { toTitleCase } from "@/lib/utils";
-import { format, parseISO } from "date-fns";
-import { Badge } from "../ui/badge";
+} from "../ui/card"
 
 type OrderCardProps = {
   orderId: string | null;
@@ -30,8 +32,8 @@ function OrderCard({
   customerName,
   groupName,
 }: OrderCardProps) {
-  const date = parseISO(deliveryDate || "");
-  const formattedDate = format(date, "eeee MMMM d");
+  const date = parseISO(deliveryDate || "")
+  const formattedDate = format(date, "eeee MMMM d")
   return (
     <div>
       <Link to={`/orders/${orderId}`}>
@@ -63,7 +65,7 @@ function OrderCard({
         </Card>
       </Link>
     </div>
-  );
+  )
 }
 
-export default OrderCard;
+export default OrderCard

@@ -1,6 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
 import {
   AlignStartVertical,
   List,
@@ -8,10 +5,11 @@ import {
   PanelLeft,
   ShoppingCart,
   Users2,
-} from "lucide-react";
+} from "lucide-react"
+import React from "react"
+import { Link } from "react-router-dom"
 
-import { Button } from "@/components/ui/button";
-
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +17,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
+import { supabase } from "@/services/supabase"
+
 import {
   Sheet,
   SheetClose,
@@ -28,16 +28,15 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../ui/sheet";
-import { supabase } from "@/services/supabase";
+} from "../ui/sheet"
 
 export const Header: React.FC = () => {
   // const session: Session | null = useAppSelector((state) => state.auth.session);
 
   async function handleSignOut() {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut()
     if (error) {
-      console.error("Error signing out:", error.message);
+      console.error("Error signing out:", error.message)
     }
   }
 
@@ -142,5 +141,5 @@ export const Header: React.FC = () => {
         </DropdownMenu>
       </div>
     </header>
-  );
-};
+  )
+}

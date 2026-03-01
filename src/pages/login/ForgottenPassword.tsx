@@ -1,6 +1,12 @@
 //components
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+//zod form validation
+import { z } from 'zod'
+
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -8,45 +14,38 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-
-//zod form validation
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/loading'
 //connect to Supabase client
-import { supabase } from '@/services/supabase';
-import { Spinner } from '@/components/ui/loading';
-import { Link } from 'react-router-dom';
+import { supabase } from '@/services/supabase'
 
 const forgottenPasswordSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).min(2).max(50),
-});
+})
 
 function ForgottenPassword() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof forgottenPasswordSchema>>({
     resolver: zodResolver(forgottenPasswordSchema),
     defaultValues: {
       email: '',
     },
-  });
+  })
 
   async function handleForgottenPassword(
     values: z.infer<typeof forgottenPasswordSchema>
   ) {
-    setLoading(true);
+    setLoading(true)
     const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
       redirectTo: '/login/update-password',
-    });
+    })
     if (error) {
-      alert(error.message);
+      alert(error.message)
     } else {
-      setLoading(false);
-      alert('Password recovery email sent');
+      setLoading(false)
+      alert('Password recovery email sent')
     }
   }
 
@@ -133,7 +132,7 @@ function ForgottenPassword() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default ForgottenPassword;
+export default ForgottenPassword

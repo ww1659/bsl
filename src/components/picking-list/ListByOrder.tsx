@@ -1,8 +1,10 @@
 type ListByOrderProps = {
   date: DateRange | undefined;
 };
-import { DateRange } from 'react-day-picker';
-import { useState } from 'react';
+//utils
+import { format, parseISO } from 'date-fns'
+import { useState } from 'react'
+import { DateRange } from 'react-day-picker'
 
 //ui
 import {
@@ -11,7 +13,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -19,84 +21,80 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Badge } from '../ui/badge';
-import { Switch } from '../ui/switch';
-
-//utils
-import { format, parseISO } from 'date-fns';
-import { calculateOrderPickedStatus, toTitleCase } from '@/lib/utils';
-
+} from '@/components/ui/table'
+import { useUpdatePickedItem } from '@/hooks/item/useUpdatePickedItem'
 //supabase hooks
-import { useFetchPickingListByOrder } from '@/hooks/fetch/useFetchPickingListByOrder';
-import { useUpdatePickedItem } from '@/hooks/update/useUpdatePickedItem';
-import { useUpdatePickedOrder } from '@/hooks/update/useUpdatePickedOrder';
+import { useFetchPickingListByOrder } from '@/hooks/order/useFetchPickingListByOrder'
+import { useUpdatePickedOrder } from '@/hooks/order/useUpdatePickedOrder'
+import { calculateOrderPickedStatus, toTitleCase } from '@/lib/utils'
 
+import { Badge } from '../ui/badge'
+import { Label } from '../ui/label'
+import { Switch } from '../ui/switch'
 //components
-import ItemsSheet from './ItemsSheet';
-import { Label } from '../ui/label';
+import ItemsSheet from './ItemsSheet'
 
 function ListByOrder({ date }: ListByOrderProps) {
-  const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<string | null>(null)
   const [selectedOrderNotes, setSelectedOrderNotes] = useState<string | null>(
     null
-  );
-  const { mutate: updatePickedItem } = useUpdatePickedItem();
-  const { mutate: updatePickedOrder } = useUpdatePickedOrder();
+  )
+  const { mutate: updatePickedItem } = useUpdatePickedItem()
+  const { mutate: updatePickedOrder } = useUpdatePickedOrder()
 
   const handleRowClick = (orderId: string, orderNotes: string | null) => {
-    setSelectedOrder(orderId === selectedOrder ? null : orderId);
-    setSelectedOrderNotes(orderId === selectedOrder ? null : orderNotes);
-  };
+    setSelectedOrder(orderId === selectedOrder ? null : orderId)
+    setSelectedOrderNotes(orderId === selectedOrder ? null : orderNotes)
+  }
 
-  const startDate = date?.from?.toISOString();
-  const endDate = date?.to?.toISOString();
+  const startDate = date?.from?.toISOString()
+  const endDate = date?.to?.toISOString()
 
   const { data, isLoading, isError, error } = useFetchPickingListByOrder(
     startDate || '',
     endDate || ''
-  );
+  )
 
-  let orderNumber = null;
+  let orderNumber = null
   if (selectedOrder) {
-    orderNumber = data?.filter((order) => order.id === selectedOrder)[0].number;
+    orderNumber = data?.filter((order) => order.id === selectedOrder)[0].number
   }
 
   const items = data
     ? data
         .filter((order) => order.id === selectedOrder)
         .flatMap((order) => order.orderItems)
-    : [];
+    : []
 
   const sortedItems = items.sort((a, b) => {
-    const nameA = a?.name?.toLowerCase() || '';
-    const nameB = b?.name?.toLowerCase() || '';
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-    return 0;
-  });
+    const nameA = a?.name?.toLowerCase() || ''
+    const nameB = b?.name?.toLowerCase() || ''
+    if (nameA < nameB) return -1
+    if (nameA > nameB) return 1
+    return 0
+  })
 
-  const orderPicked = calculateOrderPickedStatus(items);
+  const orderPicked = calculateOrderPickedStatus(items)
 
   const handleIndividualPicked = (itemId: number | null, orderId: string) => {
-    const currentItem = items.filter((item) => item.id === itemId)[0];
-    const currentPickedStatus = currentItem.picked;
+    const currentItem = items.filter((item) => item.id === itemId)[0]
+    const currentPickedStatus = currentItem.picked
     if (itemId !== null) {
       updatePickedItem({
         itemId,
         orderId,
         currentPickedStatus: !!currentPickedStatus,
-      });
+      })
     }
-  };
+  }
 
   const handleAllPicked = (orderId: string) => {
-    const currentPickedStatus = orderPicked === 'picked' ? true : false;
-    updatePickedOrder({ orderId, currentPickedStatus });
-  };
+    const currentPickedStatus = orderPicked === 'picked' ? true : false
+    updatePickedOrder({ orderId, currentPickedStatus })
+  }
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error: {error.message}</p>
 
   if (data)
     return (
@@ -243,7 +241,7 @@ function ListByOrder({ date }: ListByOrderProps) {
           orderPicked={orderPicked}
         />
       </div>
-    );
+    )
 }
 
-export default ListByOrder;
+export default ListByOrder
