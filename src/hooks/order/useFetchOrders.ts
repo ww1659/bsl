@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
-import type { OrderStatus } from '@/schemas';
+import { OrderStatus } from '@/schemas';
 
 type FetchOrdersParams = {
   month?: string;
@@ -74,13 +74,6 @@ const fetchOrders = async ({
   if (month) {
     query = query.gte('delivery_date', monthDates(month).startDate);
     query = query.lte('delivery_date', monthDates(month).endDate);
-  } else {
-    // const currentDate = new Date();
-    // const currentMonth = currentDate
-    //   .toLocaleString('en-US', { month: 'long' })
-    //   .toLowerCase();
-    // query = query.gte('delivery_date', monthDates(currentMonth).startDate);
-    // query = query.lte('delivery_date', monthDates(currentMonth).endDate);
   }
 
   if (groupId) {

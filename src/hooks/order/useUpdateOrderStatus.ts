@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
-import type { OrderStatus } from '@/schemas';
+import { OrderStatus } from '@/schemas';
 
 type UpdateOrderStatusInput = {
   orderId: string;

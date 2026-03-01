@@ -10,7 +10,7 @@ type OrderSummaryCard = {
 };
 
 //supabase hooks
-import { useCreateOrder } from '@/hooks/create/useCreateOrder';
+import { useCreateOrder } from '@/hooks/order/useCreateOrder';
 
 //ui
 import {
@@ -26,7 +26,7 @@ import { Separator } from '../ui/separator';
 //utils
 import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 import { format } from 'date-fns';
-import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById';
 import LoadingWheel from '../LoadingWheel';
 import { useMemo } from 'react';
 

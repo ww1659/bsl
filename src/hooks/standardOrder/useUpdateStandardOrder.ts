@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
-import type { OrderItem } from '@/schemas';
 import { toSnakeCase } from '@/lib/utils';
 import { z } from 'zod';
+import { OrderItem } from '@/schemas';
 
 type UpdateStandardOrderInput = {
   orderId: number;

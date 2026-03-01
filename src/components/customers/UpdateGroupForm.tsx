@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
-import { useUpdateGroup } from "@/hooks/update/useUpdateGroup";
+import { useUpdateGroup } from "@/hooks/group/useUpdateGroup";
 import { useToast } from "@/hooks/use-toast";
 
 const groupDetailsSchema = z.object({

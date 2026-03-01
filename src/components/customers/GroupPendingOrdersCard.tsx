@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useFetchOrders } from '@/hooks/fetch/useFetchOrders';
+import { useFetchOrders } from '@/hooks/order/useFetchOrders';
 import { toTitleCase } from '@/lib/utils';
 import { useAppSelector } from '@/redux/hooks';
 import { format } from 'date-fns';

@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { toTitleCase } from '@/lib/utils';
-import { useUpdateItem } from '@/hooks/update/useUpdateItem';
+import { useUpdateItem } from '@/hooks/item/useUpdateItem';
 
 type UpdateItemFormProps = {
   itemId: number;

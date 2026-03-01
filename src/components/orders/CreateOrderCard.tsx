@@ -14,7 +14,7 @@ type CreateOrderCard = {
 import { sortCustomOrder, toTitleCase } from '@/lib/utils';
 
 //supabase hooks
-import { useFetchStandardOrders } from '@/hooks/fetch/useFetchStandardOrder';
+import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders';
 
 //ui
 import {
@@ -56,7 +56,7 @@ import { Button } from '../ui/button';
 import AddItemsDropdown from './AddItemsDropdown';
 import { Input } from '../ui/input';
 import LoadingWheel from '../LoadingWheel';
-import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById';
 import { NewOrderNotes } from './NewOrderNotes';
 
 function CreateOrderCard({

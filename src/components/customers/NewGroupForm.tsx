@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useCreateGroup } from "@/hooks/create/useCreateGroup";
+import { useCreateGroup } from "@/hooks/group/useCreateGroup";
 
 const ukPostcodeRegex = /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i;
 

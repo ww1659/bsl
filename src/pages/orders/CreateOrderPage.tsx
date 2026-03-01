@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 //supabase hooks
-import { useFetchCustomers } from '@/hooks/fetch/useFetchCustomers';
+import { useFetchCustomers } from '@/hooks/customer/useFetchCustomers';
 
 //utils
 import { toTitleCase } from '@/lib/utils';

@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button-link";
 
 //database hooks
-import { useFetchGroups } from "@/hooks/fetch/useFetchGroups";
+import { useFetchGroups } from "@/hooks/group/useFetchGroups";
 import LoadingWheel from "@/components/LoadingWheel";
 
 function GroupsPage() {

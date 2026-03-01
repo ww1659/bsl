@@ -19,7 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useFetchItemsByOrderId } from '@/hooks/fetch/useFetchItemsByOrderId';
+import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId';
 import { toTitleCase } from '@/lib/utils';
 import { Separator } from '../ui/separator';
 

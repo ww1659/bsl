@@ -14,7 +14,7 @@ import {
 import { Button } from '../ui/button';
 import { ListOrderedIcon, MoreHorizontal, SquareCheckBig } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useUpdateOrderStatus } from '@/hooks/update/useUpdateOrderStatus';
+import { useUpdateOrderStatus } from '@/hooks/order/useUpdateOrderStatus';
 
 function OrdersTableDropdown({
   orderId,

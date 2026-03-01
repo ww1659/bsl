@@ -12,8 +12,6 @@ const fetchCustomerById = async (customerId: string) => {
     throw new Error(error.message);
   }
 
-  // Could use Lodash for this
-
   const customerData = {
     id: data.id,
     customerName: data.customer_name,

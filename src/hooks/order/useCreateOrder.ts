@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../use-toast';
-import type { OrderStatus } from '@/schemas';
+import { OrderStatus } from '@/schemas';
 
 type CreateOrderInput = {
   orderData: {

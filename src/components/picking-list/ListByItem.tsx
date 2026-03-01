@@ -5,7 +5,7 @@ type ListByItemProps = {
 };
 
 //supabase hooks
-import { useFetchPickingListByItem } from '@/hooks/fetch/useFetchPickingListByItems';
+import { useFetchPickingListByItem } from '@/hooks/order/useFetchPickingListByItem';
 import { useState } from 'react';
 
 //utils

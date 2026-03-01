@@ -20,7 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 //supabase hooks
-import { useFetchCustomerById } from "@/hooks/fetch/useFetchCustomerById";
+import { useFetchCustomerById } from "@/hooks/customer/useFetchCustomerById";
 import { toTitleCase } from "@/lib/utils";
 
 const customerDetailsSchema = z.object({

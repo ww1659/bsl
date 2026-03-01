@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useFetchOrderById } from '@/hooks/fetch/useFetchOrderById';
+import { useFetchOrderById } from '@/hooks/order/useFetchOrderById';
 import { sortCustomOrder, toSentenceCase, toTitleCase } from '@/lib/utils';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useUpdateOrderStatus } from '@/hooks/update/useUpdateOrderStatus';
+import { useUpdateOrderStatus } from '@/hooks/order/useUpdateOrderStatus';
 import { Badge } from '@/components/ui/badge';
 
 import {
@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useFetchItemsByOrderId } from '@/hooks/fetch/useFetchItemsByOrderId';
+import { useFetchItemsByOrderId } from '@/hooks/item/useFetchItemsByOrderId';
 import { Input } from '@/components/ui/input';
 import { Edit, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -32,7 +32,7 @@ import DeliveryDatePicker from '@/components/orders/DeliveryDatePicker';
 import { Textarea } from '@/components/ui/textarea';
 import type { OrderItem } from '@/schemas';
 import AddItemsDropdown from '@/components/orders/AddItemsDropdown';
-import { useUpdateOrder } from '@/hooks/update/useUpdateOrder';
+import { useUpdateOrder } from '@/hooks/order/useUpdateOrder';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 

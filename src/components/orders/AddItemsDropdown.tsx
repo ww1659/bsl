@@ -15,7 +15,7 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 
-import { useFetchItems } from '@/hooks/fetch/useFetchAllItems';
+import { useFetchItems } from '@/hooks/item/useFetchItems';
 
 import { toTitleCase } from '@/lib/utils';
 import { SelectSeparator } from '@radix-ui/react-select';

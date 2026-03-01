@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
-import type { OrderItem } from '@/schemas';
+import { OrderItem } from '@/schemas';
 import { toSnakeCase } from '@/lib/utils';
 import { z } from 'zod';
 
@@ -41,18 +41,15 @@ const updateOrder = async ({
   if (orderError) throw orderError;
 
   if (items) {
-    // 1. Get existing items
     const { data: existingItems } = await supabase
       .from('order_items')
       .select('item_id')
       .eq('order_id', orderId);
 
-    // 2. Find items to delete (exists in DB but not in new items)
     const existingIds = existingItems?.map((item) => item.item_id!) || [];
     const newItems = items.map((item) => item.id).filter(Boolean);
     const itemsToDelete = existingIds.filter((id) => !newItems.includes(id));
 
-    // 3. Delete removed items
     if (itemsToDelete.length > 0) {
       const { error: deleteError } = await supabase
         .from('order_items')
@@ -71,7 +68,6 @@ const updateOrder = async ({
       quantity: item.quantity,
     }));
 
-    // 4. Upsert new/updated items with correct ID handling
     const { error: itemsError } = await supabase
       .from('order_items')
       .upsert(itemsToBeUpserted, {

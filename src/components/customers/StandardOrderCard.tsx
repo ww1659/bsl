@@ -43,7 +43,7 @@ import { Spinner } from '../ui/loading';
 
 //utils
 import { sortCustomOrder, toTitleCase } from '@/lib/utils';
-import { useFetchStandardOrders } from '@/hooks/fetch/useFetchStandardOrder';
+import { useFetchStandardOrders } from '@/hooks/standardOrder/useFetchStandardOrders';
 import { Plus, Trash2, Trash2Icon } from 'lucide-react';
 
 //components
@@ -52,8 +52,8 @@ import AddItemsDropdown from '../orders/AddItemsDropdown';
 
 //hooks
 import { useToast } from '@/hooks/use-toast';
-import { useUpdateStandardOrder } from '@/hooks/update/useUpdateStandardOrder';
-import { useDeleteStandardOrder } from '@/hooks/delete/useDeleteStandardOrder';
+import { useUpdateStandardOrder } from '@/hooks/standardOrder/useUpdateStandardOrder';
+import { useDeleteStandardOrder } from '@/hooks/standardOrder/useDeleteStandardOrder';
 
 function StandardOrderCard({ customerId }: StandardOrderCard) {
   const { toast } = useToast();

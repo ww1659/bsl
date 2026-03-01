@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
-import { useFetchGroupedCustomers } from "@/hooks/fetch/useFetchCustomersByGroup";
+import { useFetchGroupedCustomers } from "@/hooks/customer/useFetchCustomersByGroup";
 import CustomerCard from "./CustomerCard";
 import {
   Card,

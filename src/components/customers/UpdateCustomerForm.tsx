@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
-import { useUpdateCustomer } from "@/hooks/update/useUpdateCustomer";
+import { useUpdateCustomer } from "@/hooks/customer/useUpdateCustomer";
 import { useToast } from "@/hooks/use-toast";
 import { Spinner } from "../ui/loading";
 

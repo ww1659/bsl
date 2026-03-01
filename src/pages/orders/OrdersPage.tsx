@@ -1,5 +1,5 @@
 //supabase queries
-import { useFetchOrders } from '@/hooks/fetch/useFetchOrders';
+import { useFetchOrders } from '@/hooks/order/useFetchOrders';
 
 //components
 import NewOrderButton from '@/components/orders/NewOrderButton';

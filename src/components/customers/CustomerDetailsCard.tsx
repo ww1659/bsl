@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { openDialog } from "@/redux/features/customers/updateCustomerSlice";
 
 //supabase hooks
-import { useFetchCustomerById } from "@/hooks/fetch/useFetchCustomerById";
+import { useFetchCustomerById } from "@/hooks/customer/useFetchCustomerById";
 
 //ui
 import {
@@ -24,7 +24,7 @@ import { Button } from "../ui/button";
 
 //utils
 import { toTitleCase } from "@/lib/utils";
-import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
+import { useFetchGroupById } from "@/hooks/group/useFetchGroupById";
 
 function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
   const dispatch = useAppDispatch();

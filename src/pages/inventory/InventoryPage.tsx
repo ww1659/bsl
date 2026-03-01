@@ -1,7 +1,7 @@
 import { InventoryTable } from '@/components/inventory/InventoryTable';
 import { inventoryTableColumns } from '@/components/inventory/InventoryTableColumns';
 import { Button } from '@/components/ui/button';
-import { useFetchItems } from '@/hooks/fetch/useFetchAllItems';
+import { useFetchItems } from '@/hooks/item/useFetchItems';
 import { useMemo, useState } from 'react';
 import NewItemDialog from '@/components/inventory/NewItemDialog';
 import { Plus } from 'lucide-react';

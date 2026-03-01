@@ -44,9 +44,9 @@ import { Spinner } from '@/components/ui/loading';
 import { toTitleCase } from '@/lib/utils';
 
 //supabase hooks
-import { useFetchCustomerById } from '@/hooks/fetch/useFetchCustomerById';
-import { useFetchGroupById } from '@/hooks/fetch/useFetchGroupById';
-import { useToggleActiveCustomer } from '@/hooks/update/useToggleActiveCustomer';
+import { useFetchCustomerById } from '@/hooks/customer/useFetchCustomerById';
+import { useFetchGroupById } from '@/hooks/group/useFetchGroupById';
+import { useToggleActiveCustomer } from '@/hooks/customer/useToggleActiveCustomer';
 
 function CustomerDetailPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);

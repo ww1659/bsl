@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 
 //Supabase Hooks
-import { useFetchGroupById } from "@/hooks/fetch/useFetchGroupById";
+import { useFetchGroupById } from "@/hooks/group/useFetchGroupById";
 
 //UI
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
