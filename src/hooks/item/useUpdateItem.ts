@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils'
+import { toCamelCase, toSnakeCase } from '@/lib/utils'
 import { supabase } from '@/services/supabase'
 
 type UpdateItemInput = {
@@ -28,7 +28,9 @@ const updateItem = async ({ itemId, itemName, itemPrice }: UpdateItemInput) => {
 
   if (error) throw new Error(error.message)
 
-  return data[0]
+  const row = data?.[0] as Record<string, unknown> | undefined
+  if (!row) return row
+  return toCamelCase(row) as { id: number; itemName: string; price: number }
 }
 
 export const useUpdateItem = () => {

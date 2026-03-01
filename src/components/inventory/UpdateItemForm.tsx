@@ -68,7 +68,7 @@ function UpdateItemForm({
           toast({
             title: 'Item Updated',
             description: `Item "${toTitleCase(
-              data.item_name || ''
+              data?.itemName || ''
             )}" updated successfully`,
             duration: 5000,
           })

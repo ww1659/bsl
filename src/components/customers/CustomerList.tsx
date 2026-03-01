@@ -29,7 +29,7 @@ function CustomerList({ groupName }: CustomerListProps) {
   )
 
   const sortedData = data?.sort((a, b) =>
-    (a.customer_name ?? '').localeCompare(b.customer_name ?? '')
+    (a.customerName ?? '').localeCompare(b.customerName ?? '')
   )
 
   const debouncedSetSearchTerm = useCallback((value: string) => {
@@ -64,7 +64,7 @@ function CustomerList({ groupName }: CustomerListProps) {
             <CustomerCard
               key={customer.id}
               customerId={customer.id}
-              customerName={customer.customer_name}
+              customerName={customer.customerName ?? ''}
               groupName={groupName}
             />
           ))}

@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 
+import { toCamelCase } from "@/lib/utils"
+import type { Group } from "@/schemas"
 import { supabase } from "@/services/supabase"
 
-const fetchGroupById = async (groupId: string) => {
+const fetchGroupById = async (groupId: string): Promise<Group | null> => {
   if (groupId !== "private") {
     const { data, error } = await supabase
       .from("groups")
@@ -14,19 +16,9 @@ const fetchGroupById = async (groupId: string) => {
       throw new Error(error.message)
     }
 
-    const groupData = {
-      id: data.id,
-      groupName: data.group_name,
-      houseNumber: data.house_number,
-      streetName: data.street_name,
-      town: data.town,
-      postcode: data.postcode,
-      email: data.email,
-      standardDiscount: data.standard_discount,
-      createdAt: data.created_at,
-    }
-    return groupData
-  } else return null
+    return toCamelCase(data as Record<string, unknown>) as Group
+  }
+  return null
 }
 
 export const useFetchGroupById = (groupId: string) => {

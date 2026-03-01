@@ -64,7 +64,7 @@ function OrderItemsTable({
             data.map((item) => (
               <TableRow key={item.id}>
                 <TableCell className="font-medium py-1">
-                  {toTitleCase(item.items?.item_name || '')}
+                  {toTitleCase(item.name || '')}
                 </TableCell>
                 <TableCell className="py-1">{item.quantity}</TableCell>
                 <TableCell className="text-right py-1">

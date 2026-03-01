@@ -54,23 +54,17 @@ function OrderDetailPage() {
   } = useFetchOrderById(orderId || '')
   const updateOrder = useUpdateOrder()
 
-  const sortedItems = useMemo(() => {
-    const itemsCamelCase = orderItems?.map((item) => ({
-      id: item.item_id,
-      name: item.items!.item_name,
-      price: item.price,
-      quantity: item.quantity,
-    }))
-
-    return sortCustomOrder(itemsCamelCase || [])
-  }, [orderItems])
+  const sortedItems = useMemo(
+    () => sortCustomOrder(orderItems || []),
+    [orderItems]
+  )
 
   const navigate = useNavigate()
   const updateOrderStatus = useUpdateOrderStatus()
 
   useEffect(() => {
     if (orderData) {
-      setDeliveryDate(new Date(orderData.delivery_date!))
+      setDeliveryDate(new Date(orderData.deliveryDate!))
       setOrderNotes(orderData.notes || '')
     }
   }, [orderData])
@@ -181,7 +175,7 @@ function OrderDetailPage() {
   const handleCancel = () => {
     setIsEditing(false)
     setCurrentItems(originalItems)
-    setDeliveryDate(new Date(orderData.delivery_date!))
+    setDeliveryDate(new Date(orderData.deliveryDate!))
     setOrderNotes(orderData.notes || undefined)
   }
 
@@ -246,7 +240,7 @@ function OrderDetailPage() {
             </Badge>
           )}
           <h3 className="text-muted-foreground">
-            {toTitleCase(orderData.customers!.customer_name!)}
+            {toTitleCase(orderData.customers!.customerName!)}
           </h3>
         </div>
       </div>
@@ -259,7 +253,7 @@ function OrderDetailPage() {
             <h3>Delivery Date:</h3>
             <h3 className={isEditing ? 'text-normal' : 'text-muted-foreground'}>
               {format(
-                deliveryDate || new Date(orderData.delivery_date!),
+                deliveryDate || new Date(orderData.deliveryDate!),
                 'd MMMM, yyyy'
               )}
             </h3>

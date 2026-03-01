@@ -43,7 +43,7 @@ function GroupsPage() {
           {data &&
             data.map((group) => (
               <div className="grid" key={group.id}>
-                <GroupCard groupName={group.group_name} groupId={group.id} />
+                <GroupCard groupName={group.groupName ?? ''} groupId={group.id} />
               </div>
             ))}
           <div className="grid">

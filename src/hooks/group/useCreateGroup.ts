@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils'
+import { toCamelCase, toSnakeCase } from '@/lib/utils'
 import { supabase } from '@/services/supabase'
 
 import { useToast } from '../use-toast'
@@ -43,7 +43,9 @@ const createGroup = async ({ groupData }: { groupData: CreateGroupInput }) => {
     throw new Error(error.message)
   }
 
-  return data
+  return toCamelCase(data as Record<string, unknown>) as typeof data & {
+    groupName: string
+  }
 }
 
 export const useCreateGroup = () => {
@@ -54,7 +56,7 @@ export const useCreateGroup = () => {
     onSuccess: (data) => {
       toast({
         title: 'Success!',
-        description: `Group ${data.group_name} created!`,
+        description: `Group ${data.groupName} created!`,
       })
       navigate('/customers')
     },

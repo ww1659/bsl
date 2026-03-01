@@ -2,23 +2,23 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
-import { toSnakeCase } from '@/lib/utils'
+import { toCamelCase, toSnakeCase } from '@/lib/utils'
 import { supabase } from '@/services/supabase'
 
 import { useToast } from '../use-toast'
 
 type CreateCustomerInput = {
-  customerName: string;
-  email?: string;
-  discount?: number;
-  houseNumber?: string;
-  streetName?: string;
-  town?: string;
-  postcode?: string;
-  country: string;
-  groupId: string;
-  reference: string;
-};
+  customerName: string
+  email?: string
+  discount?: number
+  houseNumber?: string
+  streetName?: string
+  town?: string
+  postcode?: string
+  country: string
+  groupId: string
+  reference: string
+}
 
 const customerInsertSchema = z.object({
   customer_name: z.string().optional(),
@@ -36,7 +36,7 @@ const customerInsertSchema = z.object({
 const createCustomer = async ({
   customerData,
 }: {
-  customerData: CreateCustomerInput;
+  customerData: CreateCustomerInput
 }) => {
   const customerSnakeCaseData = toSnakeCase(customerData)
   const parsedCustomer = customerInsertSchema.parse(customerSnakeCaseData)
@@ -55,7 +55,9 @@ const createCustomer = async ({
     throw new Error(error.message)
   }
 
-  return data
+  return toCamelCase(data) as typeof data & {
+    customerName: string
+  }
 }
 
 export const useCreateCustomer = () => {
@@ -66,7 +68,7 @@ export const useCreateCustomer = () => {
     onSuccess: (data) => {
       toast({
         title: 'Success!',
-        description: `Customer ${data.customer_name} created!`,
+        description: `Customer ${data.customerName} created!`,
       })
       navigate('/customers')
     },

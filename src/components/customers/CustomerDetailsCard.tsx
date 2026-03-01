@@ -113,7 +113,7 @@ function CustomerDetailsCard({ customerId, groupId }: CustomerDetailsCard) {
                   <p className="pr-1 text-sm">Name:</p>
                   <p className="font-bold text-sm">
                     {groupData
-                      ? toTitleCase(groupData.groupName)
+                      ? toTitleCase(groupData.groupName ?? '')
                       : "Private Customer"}
                   </p>
                 </div>

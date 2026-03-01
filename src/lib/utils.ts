@@ -1,6 +1,6 @@
-import { type ClassValue,clsx } from 'clsx'
+import { type ClassValue, clsx } from 'clsx'
 import { addDays, format } from 'date-fns'
-import { camelCase, mapKeys, snakeCase } from 'lodash'
+import { camelCase, isPlainObject, mapKeys, snakeCase, transform } from 'lodash'
 import { twMerge } from 'tailwind-merge'
 
 import type { OrderItem } from '@/schemas'
@@ -138,9 +138,21 @@ export const toSnakeCase = <T extends Record<string, unknown>>(
   return mapKeys(obj, (_, key) => snakeCase(key))
 }
 
-// Convert object keys from snake_case to camelCase
-export const toCamelCase = <T extends Record<string, unknown>>(
-  obj: T
-): Record<string, unknown> => {
-  return mapKeys(obj, (_, key) => camelCase(key))
+// Recursively convert object keys from snake_case to camelCase (arrays and nested objects)
+export const toCamelCase = <T>(value: T): T => {
+  if (Array.isArray(value)) {
+    return value.map(toCamelCase) as T
+  }
+
+  if (isPlainObject(value)) {
+    return transform(
+      value as Record<string, unknown>,
+      (result, val, key) => {
+        result[camelCase(key)] = toCamelCase(val)
+      },
+      {} as Record<string, unknown>
+    ) as T
+  }
+
+  return value
 }

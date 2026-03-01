@@ -149,7 +149,7 @@ function NewCustomerForm() {
                   <SelectContent>
                     {data?.map((group) => (
                       <SelectItem key={group.id} value={group.id}>
-                        {toTitleCase(group.group_name || '')}
+                        {toTitleCase(group.groupName || '')}
                       </SelectItem>
                     ))}
                     <SelectItem value="private">Private Customer</SelectItem>

@@ -13,7 +13,8 @@ import { Input } from '@/components/ui/input'
 import { useFetchCustomers } from '@/hooks/customer/useFetchCustomers'
 //utils
 import { toTitleCase } from '@/lib/utils'
-import type { Customer, OrderItem } from '@/schemas'
+import type { CustomerListItem } from '@/schemas'
+import type { OrderItem } from '@/schemas'
 
 function CreateOrderPage() {
   const { data, isLoading, isError, error } = useFetchCustomers()
@@ -54,11 +55,11 @@ function CreateOrderPage() {
   }
 
   const sortedCustomers = data?.sort((a, b) =>
-    (a.customer_name || '').localeCompare(b.customer_name || '')
+    (a.customerName || '').localeCompare(b.customerName || '')
   )
 
   const filteredCustomers = sortedCustomers?.filter((customer) =>
-    (customer.customer_name || '').toLowerCase().includes(searchTerm)
+    (customer.customerName || '').toLowerCase().includes(searchTerm)
   )
 
   return (
@@ -120,22 +121,22 @@ function CreateOrderPage() {
             ) : isError ? (
               <p>Error fetching customers: {error.message}</p>
             ) : (
-              filteredCustomers?.map((customer: Customer) => (
+              filteredCustomers?.map((customer: CustomerListItem) => (
                 <Button
                   key={customer.id}
                   onClick={() =>
                     handleCustomerSelection(
                       customer.id,
-                      customer.customer_name || '',
-                      customer.discount,
-                      customer.group_id || ''
+                      customer.customerName || '',
+                      customer.discount ?? null,
+                      customer.groupId || ''
                     )
                   }
                   variant="select"
                   className="p-10"
                 >
                   <p className="text-lg">
-                    {toTitleCase(customer.customer_name || '')}
+                    {toTitleCase(customer.customerName || '')}
                   </p>
                 </Button>
               ))
