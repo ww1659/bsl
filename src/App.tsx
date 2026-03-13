@@ -1,14 +1,11 @@
-//Routing
 import { useEffect } from 'react'
-import { BrowserRouter as Router, Route,Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-//Components
 import Layout from './components/layout/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
-//Providers
 import { ThemeProvider } from './components/ThemeProvider'
-//Pages
+
 import HomePage from './pages/HomePage'
 import InventoryPage from './pages/inventory/InventoryPage'
 import NotFoundPage from './pages/NotFoundPage'
